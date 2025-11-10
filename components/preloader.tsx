@@ -16,7 +16,7 @@ export function Preloader() {
   if (!isVisible) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white overflow-hidden">
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white overflow-hidden">
       {/* Subtle animated background grid */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{

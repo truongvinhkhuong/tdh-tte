@@ -2,20 +2,32 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      const currentScrollY = window.scrollY
+      
+      // Detect scroll direction for hide/show effect
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false) // Scrolling down
+      } else {
+        setIsVisible(true) // Scrolling up
+      }
+      
+      setIsScrolled(currentScrollY > 20)
+      setLastScrollY(currentScrollY)
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [lastScrollY])
 
   const navItems = [
     { label: "Trang Chủ", href: "#" },
@@ -26,75 +38,163 @@ export function Header() {
     { label: "Liên Hệ", href: "#contact" },
   ]
 
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    setIsMobileMenuOpen(false)
+  }
+
   return (
     <header
-      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-        isScrolled ? "bg-white/80 backdrop-blur-md shadow-lg" : "bg-transparent"
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${
+        isScrolled 
+          ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200/50 py-2' 
+          : 'bg-gradient-to-b from-[#2B54A7]/95 via-[#2B54A7]/90 to-[#2B54A7]/85 backdrop-blur-md shadow-xl py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className={`flex justify-between items-center transition-all duration-500 ${
+          isScrolled ? 'h-16' : 'h-20'
+        }`}>
           {/* Logo */}
-          <Link href="#" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center group-hover:shadow-lg transition-all duration-300">
-              <span className="text-white font-bold text-lg">T</span>
+          <Link 
+            href="#" 
+            className={`flex items-center gap-3 group transform transition-all duration-300 hover:scale-105 ${
+              isScrolled ? 'scale-95' : 'scale-100'
+            }`}
+          >
+            <div className={`relative transition-all duration-500 ${
+              isScrolled ? 'w-10 h-10' : 'w-12 h-12'
+            } bg-gradient-to-br from-white to-gray-100 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:rotate-6`}>
+              <span className={`font-bold transition-all duration-500 ${
+                isScrolled ? 'text-xl' : 'text-2xl'
+              } bg-gradient-to-br from-[#2B54A7] to-[#1e3a75] bg-clip-text text-transparent`}>
+                T
+              </span>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#2B54A7]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-foreground">TTE</span>
-              <span className="text-xs text-muted-foreground hidden sm:block">Kỹ Thuật Toàn Thắng</span>
+              <span className={`font-bold transition-all duration-500 ${
+                isScrolled 
+                  ? 'text-[#2B54A7] text-base' 
+                  : 'text-white text-lg drop-shadow-lg'
+              }`}>
+                TTE
+              </span>
+              <span className={`text-xs hidden sm:block transition-all duration-500 ${
+                isScrolled 
+                  ? 'text-gray-600' 
+                  : 'text-white/90 drop-shadow'
+              }`}>
+                Kỹ Thuật Toàn Thắng
+              </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex gap-1">
-            {navItems.map((item) => (
+          <nav className="hidden md:flex items-center gap-2">
+            {navItems.map((item, index) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors duration-200 relative group"
+                style={{ animationDelay: `${index * 50}ms` }}
+                className={`relative px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg group overflow-hidden ${
+                  isScrolled 
+                    ? 'text-gray-700 hover:text-[#2B54A7]' 
+                    : 'text-white/95 hover:text-white drop-shadow-sm'
+                }`}
               >
-                {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 group-hover:w-full transition-all duration-300"></span>
+                {/* Hover background effect */}
+                <span className={`absolute inset-0 rounded-lg transition-all duration-300 transform scale-0 group-hover:scale-100 ${
+                  isScrolled 
+                    ? 'bg-[#2B54A7]/10' 
+                    : 'bg-white/20 backdrop-blur-sm'
+                }`}></span>
+                
+                {/* Text */}
+                <span className="relative z-10">{item.label}</span>
+                
+                {/* Animated underline */}
+                <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 rounded-full transition-all duration-300 group-hover:w-3/4 ${
+                  isScrolled 
+                    ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]' 
+                    : 'bg-white shadow-lg'
+                }`}></span>
               </Link>
             ))}
           </nav>
 
           {/* CTA Button */}
-          <button className="hidden md:inline-flex px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300">
-            Liên Hệ Ngay
+          <button 
+            onClick={scrollToContact}
+            className={`hidden md:inline-flex items-center gap-2 px-6 py-2.5 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${
+              isScrolled 
+                ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white hover:shadow-[#2B54A7]/30' 
+                : 'bg-white text-[#2B54A7] hover:bg-gray-50 hover:shadow-white/20'
+            }`}
+          >
+            <span>Liên Hệ Ngay</span>
+            <ChevronDown className="w-4 h-4 animate-bounce" />
           </button>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className={`md:hidden p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+              isScrolled 
+                ? 'hover:bg-[#2B54A7]/10 text-gray-700' 
+                : 'hover:bg-white/20 text-white backdrop-blur-sm'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
-              <X size={24} className="text-foreground" />
+              <X size={24} className="transform rotate-0 transition-transform duration-300" />
             ) : (
-              <Menu size={24} className="text-foreground" />
+              <Menu size={24} className="transform rotate-0 transition-transform duration-300" />
             )}
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <nav className="md:hidden pb-4 animate-fade-in-up">
-            {navItems.map((item) => (
+        {/* Mobile Menu - Enhanced with better animations */}
+        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+          isMobileMenuOpen ? 'max-h-96 opacity-100 py-4' : 'max-h-0 opacity-0'
+        }`}>
+          <nav className="space-y-1">
+            {navItems.map((item, index) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-4 py-2.5 text-foreground hover:bg-gray-50 hover:text-primary transition-colors duration-200 rounded"
+                style={{ animationDelay: `${index * 50}ms` }}
+                className={`block px-4 py-3 rounded-xl font-medium transition-all duration-300 transform hover:translate-x-2 hover:scale-105 ${
+                  isMobileMenuOpen ? 'animate-fade-in-up' : ''
+                } ${
+                  isScrolled 
+                    ? 'text-gray-700 hover:bg-[#2B54A7]/10 hover:text-[#2B54A7]' 
+                    : 'text-white hover:bg-white/20 backdrop-blur-sm'
+                }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {item.label}
+                <span className="flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    isScrolled ? 'bg-[#2B54A7]' : 'bg-white'
+                  }`}></span>
+                  {item.label}
+                </span>
               </Link>
             ))}
-            <button className="w-full mt-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-300">
-              Liên Hệ Ngay
+            <button 
+              onClick={scrollToContact}
+              className={`w-full mt-3 px-4 py-3 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${
+                isScrolled 
+                  ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white' 
+                  : 'bg-white text-[#2B54A7] hover:bg-gray-50'
+              } ${isMobileMenuOpen ? 'animate-fade-in-up' : ''}`}
+            >
+              <span>Liên Hệ Ngay</span>
+              <ChevronDown className="w-4 h-4 animate-bounce" />
             </button>
           </nav>
-        )}
+        </div>
       </div>
     </header>
   )
