@@ -703,3 +703,34 @@ html {
   animation-timing-function: ease;
   animation-iteration-count: infinite;
 }
+
+/* Dot pulse animation for loading dots */
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.animate-dot-pulse {
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.animate-dot-pulse-1 {
+  animation: dotPulse 1.4s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.animate-dot-pulse-2 {
+  animation: dotPulse 1.4s ease-in-out infinite;
+  animation-delay: 0.35s;
+}
+
+.animate-dot-pulse-3 {
+  animation: dotPulse 1.4s ease-in-out infinite;
+  animation-delay: 0.7s;
+}
