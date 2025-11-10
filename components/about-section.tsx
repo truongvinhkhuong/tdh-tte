@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { Settings, Headphones, Lightbulb, Target } from "lucide-react"
 
 export function AboutSection() {
   const [isVisible, setIsVisible] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const ref = useRef(null)
 
   useEffect(() => {
@@ -25,28 +27,36 @@ export function AboutSection() {
 
   const features = [
     {
-      icon: "⚙️",
+      Icon: Settings,
       title: "Thiết Bị Chất Lượng",
       description: "Cung cấp các thiết bị hàng đầu thế giới với độ bền cao",
-      gradient: "from-blue-500 to-cyan-500",
+      gradient: "from-blue-500 via-blue-600 to-cyan-500",
+      iconColor: "text-blue-600",
+      shadowColor: "shadow-blue-500/50",
     },
     {
-      icon: "🔧",
+      Icon: Headphones,
       title: "Dịch Vụ Hỗ Trợ",
       description: "Hỗ trợ kỹ thuật 24/7 để đảm bảo hiệu suất tối đa",
-      gradient: "from-cyan-500 to-blue-500",
+      gradient: "from-cyan-500 via-cyan-600 to-blue-500",
+      iconColor: "text-cyan-600",
+      shadowColor: "shadow-cyan-500/50",
     },
     {
-      icon: "💡",
+      Icon: Lightbulb,
       title: "Giải Pháp Tùy Chỉnh",
       description: "Thiết kế giải pháp phù hợp với nhu cầu cụ thể của bạn",
-      gradient: "from-blue-600 to-purple-500",
+      gradient: "from-blue-600 via-indigo-600 to-purple-500",
+      iconColor: "text-indigo-600",
+      shadowColor: "shadow-indigo-500/50",
     },
     {
-      icon: "🎯",
+      Icon: Target,
       title: "Kinh Nghiệm Lâu Năm",
       description: "Hơn 20 năm phục vụ các dự án lớn trong ngành công nghiệp",
-      gradient: "from-purple-500 to-cyan-500",
+      gradient: "from-purple-500 via-purple-600 to-cyan-500",
+      iconColor: "text-purple-600",
+      shadowColor: "shadow-purple-500/50",
     },
   ]
 
@@ -73,35 +83,64 @@ export function AboutSection() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="group relative p-6 bg-white rounded-2xl border border-gray-100 hover:border-blue-300 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-                style={{
-                  animation: isVisible ? `cardLift 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards` : "none",
-                  animationDelay: `${index * 0.15}s`,
-                  opacity: isVisible ? 1 : 0,
-                }}
-              >
+            {features.map((feature, index) => {
+              const Icon = feature.Icon
+              return (
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
-                ></div>
+                  key={index}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className={`group relative p-8 bg-white/80 backdrop-blur-sm rounded-3xl border-2 border-gray-100 hover:border-transparent shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2 ${hoveredIndex === index ? feature.shadowColor : ''}`}
+                  style={{
+                    animation: isVisible ? `cardLift 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards` : "none",
+                    animationDelay: `${index * 0.15}s`,
+                    opacity: isVisible ? 1 : 0,
+                  }}
+                >
+                  {/* Gradient Background */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  ></div>
 
-                <div className="relative z-10">
-                  <div className="text-5xl mb-4 transition-transform duration-300 group-hover:scale-125 group-hover:animate-icon-rotate inline-block">
-                    {feature.icon}
+                  {/* Animated Border Glow */}
+                  <div
+                    className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${feature.gradient} p-[2px]`}
+                    style={{
+                      mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      maskComposite: 'exclude',
+                    }}
+                  ></div>
+
+                  {/* Floating Particles Effect */}
+                  <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  <div className="relative z-10">
+                    {/* Icon Container with Background */}
+                    <div className={`relative inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${feature.gradient} p-[2px] transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
+                      <div className="flex items-center justify-center w-full h-full bg-white rounded-2xl">
+                        <Icon 
+                          className={`w-8 h-8 ${feature.iconColor} transition-all duration-500 group-hover:scale-110`}
+                          strokeWidth={2.5}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h4 className="font-bold text-lg text-gray-900 mb-3 transition-colors duration-300">
+                      {feature.title}
+                    </h4>
+
+                    {/* Description */}
+                    <p className="text-sm text-gray-600 transition-colors leading-relaxed">
+                      {feature.description}
+                    </p>
+                    
+                    {/* Corner Accent */}
+                    <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-bl-full`}></div>
                   </div>
-                  <h4 className="font-bold text-lg text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    {feature.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">
-                    {feature.description}
-                  </p>
-
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">

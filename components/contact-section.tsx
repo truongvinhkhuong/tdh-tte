@@ -8,7 +8,7 @@ import { MapPin, Phone, Mail } from "lucide-react"
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    email: "tts@toanthang.vn",
     phone: "",
     message: "",
   })
@@ -31,17 +31,17 @@ export function ContactSection() {
     {
       icon: MapPin,
       title: "Địa Chỉ",
-      content: "Hà Nội, Việt Nam",
+      content: " 11B Nguyễn Bỉnh Khiêm, P. Bến Nghé, Q.1, TP. HCM",
     },
     {
       icon: Phone,
       title: "Điện Thoại",
-      content: "+84 (0) 123 456 789",
+      content: "(84-254) 3522219",
     },
     {
       icon: Mail,
       title: "Email",
-      content: "info@tte.com.vn",
+      content: "tts@toanthang.vn",
     },
   ]
 
