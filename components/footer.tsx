@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Facebook, Twitter, Linkedin } from "lucide-react"
 
 export function Footer() {
@@ -27,11 +28,14 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#2B54A7] to-blue-400 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
-              <span className="text-xl font-bold text-slate-900">TTE</span>
+            <div className="mb-6">
+              <Image 
+                src="/ToanThang-Logo.svg" 
+                alt="Toàn Thắng" 
+                width={140}
+                height={40}
+                className="object-contain"
+              />
             </div>
             <p className="text-slate-600 mb-6 leading-relaxed">
               Công ty cổ phần Kỹ Thuật Toàn Thắng - Cung cấp giải pháp công nghệ hàng đầu cho ngành dầu khí.

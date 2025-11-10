@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 export function Header() {
@@ -60,35 +61,23 @@ export function Header() {
           {/* Logo */}
           <Link 
             href="#" 
-            className={`flex items-center gap-3 group transform transition-all duration-300 hover:scale-105 ${
+            className={`flex items-center group transform transition-all duration-300 hover:scale-105 ${
               isScrolled ? 'scale-95' : 'scale-100'
             }`}
           >
-            <div className={`relative transition-all duration-500 ${
-              isScrolled ? 'w-10 h-10' : 'w-12 h-12'
-            } bg-gradient-to-br from-white to-gray-100 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:rotate-6`}>
-              <span className={`font-bold transition-all duration-500 ${
-                isScrolled ? 'text-xl' : 'text-2xl'
-              } bg-gradient-to-br from-[#2B54A7] to-[#1e3a75] bg-clip-text text-transparent`}>
-                T
-              </span>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#2B54A7]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            <div className="flex flex-col">
-              <span className={`font-bold transition-all duration-500 ${
-                isScrolled 
-                  ? 'text-[#2B54A7] text-base' 
-                  : 'text-white text-lg drop-shadow-lg'
-              }`}>
-                TTE
-              </span>
-              <span className={`text-xs hidden sm:block transition-all duration-500 ${
-                isScrolled 
-                  ? 'text-gray-600' 
-                  : 'text-white/90 drop-shadow'
-              }`}>
-                Kỹ Thuật Toàn Thắng
-              </span>
+            <div className={`relative flex items-center transition-all duration-500 ${
+              !isScrolled ? 'px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg hover:shadow-2xl' : ''
+            }`}>
+              <Image 
+                src="/ToanThang-Logo.svg" 
+                alt="Toàn Thắng" 
+                width={isScrolled ? 120 : 150}
+                height={isScrolled ? 40 : 50}
+                className={`transition-all duration-500 object-contain ${
+                  !isScrolled ? 'drop-shadow-sm' : ''
+                }`}
+                priority
+              />
             </div>
           </Link>
 
