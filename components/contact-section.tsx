@@ -8,7 +8,7 @@ import { MapPin, Phone, Mail } from "lucide-react"
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "tts@toanthang.vn",
+    email: "",
     phone: "",
     message: "",
   })

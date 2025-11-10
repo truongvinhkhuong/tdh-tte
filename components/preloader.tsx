@@ -237,36 +237,105 @@ export function Preloader() {
         <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-blue-400 opacity-30" />
       </div>
 
-      {/* Loading text with animated dots */}
-      <div className="flex flex-col items-center gap-3 mt-12">
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold tracking-wider text-gray-700" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
-            TOANTHANG ENGINEERING CORPORATION
-          </span>
-          <span className="flex gap-1.5">
-            <span 
-              className="w-1.5 h-1.5 bg-blue-600 rounded-full dot-pulse" 
-              style={{ 
-                animation: 'dotPulseAnim 1.4s ease-in-out infinite',
-                animationDelay: '0s'
-              }} 
+      {/* Loading text with enhanced design */}
+      <div className="flex flex-col items-center gap-4 mt-12">
+        {/* Company Name with Gradient and Effects */}
+        <div className="relative flex flex-col items-center gap-2">
+          {/* Main company name */}
+          <div className="relative">
+            {/* Glow background effect */}
+            <div 
+              className="absolute inset-0 blur-2xl opacity-40"
+              style={{
+                background: 'linear-gradient(90deg, #2B54A7, #3b82f6, #2B54A7)',
+                animation: 'shimmer 3s ease-in-out infinite',
+              }}
             />
-            <span 
-              className="w-1.5 h-1.5 bg-blue-600 rounded-full dot-pulse" 
-              style={{ 
-                animation: 'dotPulseAnim 1.4s ease-in-out infinite',
-                animationDelay: '0.35s'
-              }} 
+            
+            {/* Main text with gradient */}
+            <h1 
+              className="relative text-4xl font-bold tracking-wide flex gap-4"
+              style={{
+                background: 'linear-gradient(135deg, #1e3a7a 0%, #2B54A7 25%, #3b82f6 50%, #2B54A7 75%, #1e3a7a 100%)',
+                backgroundSize: '200% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                animation: 'gradientSlide 4s ease-in-out infinite',
+                textShadow: '0 0 30px rgba(43, 84, 167, 0.3)',
+                letterSpacing: '0.15em',
+              }}
+            >
+              {["TOAN", "THANG"].map((word, wordIndex) => (
+                <span key={wordIndex} className="flex">
+                  {word.split('').map((letter, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        display: 'inline-block',
+                        animation: 'letterFloat 3s ease-in-out infinite',
+                        animationDelay: `${(wordIndex * 5 + i) * 0.1}s`,
+                      }}
+                    >
+                      {letter}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+          </div>
+          
+          {/* Subtitle with elegant styling */}
+          <div className="relative">
+            <p 
+              className="text-sm font-medium tracking-[0.3em] uppercase"
+              style={{
+                background: 'linear-gradient(90deg, #64748b, #2B54A7, #64748b)',
+                backgroundSize: '200% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                animation: 'gradientSlide 3s ease-in-out infinite reverse',
+              }}
+            >
+              Engineering Corporation
+            </p>
+          </div>
+          
+          {/* Decorative line with animation */}
+          <div className="flex items-center gap-2 mt-2">
+            <div 
+              className="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+              style={{
+                width: '80px',
+                animation: 'expandLine 2s ease-in-out infinite',
+              }}
             />
-            <span 
-              className="w-1.5 h-1.5 bg-blue-600 rounded-full dot-pulse" 
-              style={{ 
-                animation: 'dotPulseAnim 1.4s ease-in-out infinite',
-                animationDelay: '0.7s'
-              }} 
+            <div className="flex gap-1.5">
+              {[0, 1, 2].map((i) => (
+                <span 
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: 'linear-gradient(135deg, #2B54A7, #60a5fa)',
+                    animation: 'dotPulseAnim 1.4s ease-in-out infinite',
+                    animationDelay: `${i * 0.35}s`,
+                    boxShadow: '0 0 10px rgba(43, 84, 167, 0.5)',
+                  }} 
+                />
+              ))}
+            </div>
+            <div 
+              className="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+              style={{
+                width: '80px',
+                animation: 'expandLine 2s ease-in-out infinite',
+              }}
             />
-          </span>
+          </div>
         </div>
+        
+        
       </div>
 
       <style jsx global>{`
@@ -298,6 +367,58 @@ export function Preloader() {
           40% {
             opacity: 1;
             transform: scale(1.3);
+          }
+        }
+        
+        @keyframes gradientSlide {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        
+        @keyframes shimmer {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes letterFloat {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+        
+        @keyframes expandLine {
+          0%, 100% {
+            width: 60px;
+            opacity: 0.5;
+          }
+          50% {
+            width: 100px;
+            opacity: 1;
+          }
+        }
+        
+        @keyframes fadeInOut {
+          0%, 100% {
+            opacity: 0.4;
+          }
+          50% {
+            opacity: 1;
           }
         }
       `}</style>
