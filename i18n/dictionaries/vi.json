@@ -1,0 +1,190 @@
+{
+    "nav": {
+        "home": "Trang chủ",
+        "about": "Về chúng tôi",
+        "products": "Sản phẩm",
+        "projects": "Dự án",
+        "services": "Dịch vụ",
+        "techHub": "Tech Hub",
+        "news": "Tin tức",
+        "careers": "Tuyển dụng",
+        "contact": "Liên hệ"
+    },
+    "header": {
+        "contactNow": "Liên hệ ngay",
+        "searchPlaceholder": "Tìm kiếm sản phẩm, dịch vụ...",
+        "language": "VI"
+    },
+    "hero": {
+        "title": "Giải Pháp Công Nghệ Hàng Đầu",
+        "subtitle": "Cho Ngành Dầu Khí & Năng Lượng",
+        "description": "Công ty Cổ phần Kỹ thuật Toàn Thắng - Đối tác tin cậy với hơn 30 năm kinh nghiệm cung cấp thiết bị và giải pháp công nghệ cho ngành công nghiệp.",
+        "cta": "Khám phá giải pháp",
+        "ctaSecondary": "Liên hệ tư vấn"
+    },
+    "about": {
+        "title": "Về Chúng Tôi",
+        "subtitle": "Công ty cổ phần Kỹ Thuật Toàn Thắng là nhà cung cấp hàng đầu các giải pháp công nghệ cho ngành dầu khí",
+        "mission": "Sứ mệnh của chúng tôi",
+        "missionDesc": "Cung cấp các sản phẩm và dịch vụ chất lượng cao, giúp các đối tác nâng cao hiệu suất hoạt động và đạt được các mục tiêu kinh doanh của họ.",
+        "vision": "Tầm nhìn",
+        "visionDesc": "Trở thành đối tác công nghệ hàng đầu trong ngành công nghiệp Việt Nam và khu vực.",
+        "coreValues": "Giá trị cốt lõi",
+        "values": {
+            "quality": "Chất lượng",
+            "qualityDesc": "Cam kết cung cấp sản phẩm và dịch vụ chất lượng cao nhất",
+            "innovation": "Đổi mới",
+            "innovationDesc": "Luôn cập nhật công nghệ mới nhất trong ngành",
+            "integrity": "Chính trực",
+            "integrityDesc": "Xây dựng niềm tin thông qua sự minh bạch",
+            "partnership": "Đối tác",
+            "partnershipDesc": "Đồng hành cùng khách hàng trong mọi dự án"
+        },
+        "learnMore": "Tìm hiểu thêm",
+        "history": "Lịch sử phát triển",
+        "certificates": "Chứng chỉ & Giấy phép",
+        "stats": {
+            "years": "Năm kinh nghiệm",
+            "projects": "Dự án thành công",
+            "employees": "Nhân viên chuyên nghiệp",
+            "satisfaction": "Độ hài lòng khách hàng"
+        },
+        "features": {
+            "equipment": "Thiết bị chất lượng",
+            "equipmentDesc": "Cung cấp các thiết bị hàng đầu thế giới với độ bền cao",
+            "support": "Dịch vụ hỗ trợ",
+            "supportDesc": "Hỗ trợ kỹ thuật 24/7 để đảm bảo hiệu suất tối đa",
+            "solutions": "Giải pháp tùy chỉnh",
+            "solutionsDesc": "Thiết kế giải pháp phù hợp với nhu cầu cụ thể của bạn",
+            "experience": "Kinh nghiệm lâu năm",
+            "experienceDesc": "Hơn 30 năm phục vụ các dự án lớn trong ngành công nghiệp"
+        }
+    },
+    "products": {
+        "title": "Sản Phẩm",
+        "subtitle": "Khám phá bộ sưu tập các sản phẩm chất lượng cao của chúng tôi",
+        "featured": "Sản Phẩm Nổi Bật",
+        "viewAll": "Xem tất cả sản phẩm",
+        "viewDetails": "Chi tiết",
+        "contact": "Liên hệ",
+        "requestQuote": "Yêu cầu báo giá",
+        "filter": {
+            "brand": "Thương hiệu",
+            "category": "Danh mục",
+            "industry": "Ngành công nghiệp",
+            "all": "Tất cả"
+        },
+        "tabs": {
+            "description": "Mô tả",
+            "specifications": "Thông số kỹ thuật",
+            "documents": "Tài liệu"
+        },
+        "relatedProjects": "Dự án sử dụng sản phẩm này"
+    },
+    "projects": {
+        "title": "Dự Án",
+        "subtitle": "Một số dự án tiêu biểu mà chúng tôi đã thực hiện thành công",
+        "featured": "Dự Án Nổi Bật",
+        "viewAll": "Xem tất cả dự án",
+        "viewDetails": "Xem chi tiết",
+        "client": "Khách hàng",
+        "location": "Địa điểm",
+        "year": "Năm hoàn thành",
+        "challenge": "Thách thức",
+        "solution": "Giải pháp",
+        "relatedProducts": "Sản phẩm sử dụng trong dự án"
+    },
+    "services": {
+        "title": "Dịch Vụ",
+        "subtitle": "Chúng tôi cung cấp một loạt các dịch vụ toàn diện để đáp ứng mọi nhu cầu của bạn",
+        "consulting": "Tư Vấn Kỹ Thuật",
+        "consultingDesc": "Cung cấp tư vấn chuyên sâu về công nghệ và giải pháp tối ưu cho doanh nghiệp",
+        "supply": "Cung Cấp Thiết Bị",
+        "supplyDesc": "Cung cấp các thiết bị công nghiệp chất lượng cao từ các hãng sản xuất hàng đầu",
+        "installation": "Lắp Đặt & Vận Hành",
+        "installationDesc": "Đội ngũ kỹ sư giàu kinh nghiệm giúp lắp đặt và vận hành thiết bị",
+        "maintenance": "Bảo Trì & Sửa Chữa",
+        "maintenanceDesc": "Dịch vụ bảo trì định kỳ và sửa chữa khẩn cấp 24/7",
+        "training": "Đào Tạo Nhân Sự",
+        "trainingDesc": "Cung cấp khóa đào tạo chuyên nghiệp cho đội ngũ kỹ thuật của bạn",
+        "support": "Hỗ Trợ Kỹ Thuật",
+        "supportDesc": "Hỗ trợ kỹ thuật 24/7 để giải quyết các vấn đề kỹ thuật",
+        "learnMore": "Tìm hiểu thêm"
+    },
+    "techHub": {
+        "title": "Tech Hub",
+        "subtitle": "Trung tâm kiến thức kỹ thuật và giải pháp công nghệ",
+        "solutions": "Giải pháp",
+        "library": "Thư viện",
+        "downloadCatalog": "Tải catalog",
+        "readMore": "Đọc thêm"
+    },
+    "news": {
+        "title": "Tin Tức",
+        "subtitle": "Cập nhật tin tức mới nhất từ Toàn Thắng Engineering",
+        "latest": "Tin Mới Nhất",
+        "categories": {
+            "all": "Tất cả",
+            "company": "Tin công ty",
+            "industry": "Tin ngành"
+        },
+        "readMore": "Đọc thêm",
+        "publishedAt": "Đăng ngày"
+    },
+    "careers": {
+        "title": "Tuyển Dụng",
+        "subtitle": "Gia nhập đội ngũ Toàn Thắng Engineering",
+        "positions": "Vị trí đang tuyển",
+        "department": "Phòng ban",
+        "location": "Địa điểm",
+        "deadline": "Hạn nộp hồ sơ",
+        "apply": "Ứng tuyển ngay",
+        "noPositions": "Hiện tại không có vị trí nào đang tuyển"
+    },
+    "contact": {
+        "title": "Liên Hệ Với Chúng Tôi",
+        "subtitle": "Hãy liên hệ với chúng tôi để được tư vấn miễn phí về các giải pháp phù hợp với nhu cầu của bạn",
+        "address": "Địa chỉ",
+        "phone": "Điện thoại",
+        "email": "Email",
+        "form": {
+            "name": "Họ và tên",
+            "email": "Email",
+            "phone": "Số điện thoại",
+            "subject": "Chủ đề",
+            "message": "Nội dung tin nhắn",
+            "submit": "Gửi thông tin"
+        }
+    },
+    "footer": {
+        "company": "Công Ty",
+        "support": "Hỗ Trợ",
+        "legal": "Pháp Lý",
+        "newsletter": "Đăng ký nhận tin",
+        "newsletterDesc": "Nhận thông tin mới nhất về sản phẩm và dịch vụ",
+        "subscribe": "Đăng ký",
+        "emailPlaceholder": "Email của bạn",
+        "copyright": "Công ty cổ phần Kỹ Thuật Toàn Thắng",
+        "links": {
+            "about": "Về chúng tôi",
+            "services": "Dịch vụ",
+            "projects": "Dự án",
+            "blog": "Blog",
+            "contact": "Liên hệ",
+            "faq": "FAQ",
+            "guide": "Hướng dẫn",
+            "policy": "Chính sách",
+            "terms": "Điều khoản",
+            "privacy": "Chính sách bảo mật",
+            "cookie": "Cookie",
+            "copyright": "Bản quyền"
+        }
+    },
+    "common": {
+        "loading": "Đang tải...",
+        "error": "Đã có lỗi xảy ra",
+        "back": "Quay lại",
+        "viewMore": "Xem thêm",
+        "close": "Đóng"
+    }
+}

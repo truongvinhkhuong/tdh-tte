@@ -1,63 +1,102 @@
 "use client"
 
 import Image from "next/image"
-import { Facebook, Twitter, Linkedin } from "lucide-react"
+import Link from "next/link"
+import { Facebook, Linkedin, Mail } from "lucide-react"
+import type { Locale } from "@/i18n/config"
+import type { Dictionary } from "@/i18n/get-dictionary"
+import { companyInfo } from "@/lib/data"
 
-export function Footer() {
+interface FooterProps {
+  lang: Locale
+  dict: Dictionary
+}
+
+export function Footer({ lang, dict }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
   const footerLinks = [
     {
-      title: "Công Ty",
-      links: ["Về chúng tôi", "Dịch vụ", "Dự án", "Blog"],
+      title: dict.footer.company,
+      links: [
+        { label: dict.footer.links.about, href: `/${lang}/about` },
+        { label: dict.footer.links.services, href: `/${lang}/services` },
+        { label: dict.footer.links.projects, href: `/${lang}/projects` },
+        { label: dict.footer.links.blog, href: `/${lang}/news` },
+      ],
     },
     {
-      title: "Hỗ Trợ",
-      links: ["Liên hệ", "FAQ", "Hướng dẫn", "Chính sách"],
+      title: dict.footer.support,
+      links: [
+        { label: dict.footer.links.contact, href: `/${lang}/contact` },
+        { label: dict.footer.links.faq, href: `/${lang}/faq` },
+        { label: dict.footer.links.guide, href: `/${lang}/tech-hub` },
+        { label: dict.footer.links.policy, href: `/${lang}/policy` },
+      ],
     },
     {
-      title: "Pháp Lý",
-      links: ["Điều khoản", "Chính sách bảo mật", "Cookie", "Bản quyền"],
+      title: dict.footer.legal,
+      links: [
+        { label: dict.footer.links.terms, href: `/${lang}/terms` },
+        { label: dict.footer.links.privacy, href: `/${lang}/privacy` },
+        { label: dict.footer.links.cookie, href: `/${lang}/cookie` },
+        { label: dict.footer.links.copyright, href: `/${lang}/copyright` },
+      ],
     },
   ]
 
   return (
-    <footer className="bg-gradient-to-b from-slate-350 to-slate-400 text-slate-800 pt-20 pb-8 rounded-t-3xl border-t-2 border-[#2B54A7]/20">
+    <footer className="bg-gradient-to-b from-slate-100 to-slate-200 text-slate-800 pt-20 pb-8 border-t-2 border-[#2B54A7]/20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Footer Content */}
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+        {/* Main Footer Content */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Company Info */}
-          <div>
+          <div className="lg:col-span-2">
             <div className="mb-6">
-              <Image 
-                src="/ToanThang-Logo.svg" 
-                alt="Toàn Thắng" 
-                width={140}
-                height={40}
+              <Image
+                src="/ToanThang-Logo.svg"
+                alt="Toàn Thắng"
+                width={160}
+                height={50}
                 className="object-contain"
               />
             </div>
-            <p className="font-body text-slate-600 mb-6 leading-relaxed">
-              Công ty cổ phần Kỹ Thuật Toàn Thắng - Cung cấp giải pháp công nghệ hàng đầu cho ngành dầu khí.
+            <p className="font-body text-slate-600 mb-4 leading-relaxed">
+              {companyInfo.name}
             </p>
-            <div className="flex gap-4">
+            <div className="space-y-2 text-sm text-slate-600 mb-6">
+              <p>{companyInfo.address}</p>
+              <p>{dict.contact.phone}: {companyInfo.phone}</p>
+              <p>{dict.contact.email}: {companyInfo.email}</p>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {companyInfo.socialLinks.facebook && (
+                <a
+                  href={companyInfo.socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-200 hover:bg-[#2B54A7] rounded-lg flex items-center justify-center transition-all duration-300 group shadow-sm"
+                >
+                  <Facebook size={20} className="text-slate-700 group-hover:text-white" />
+                </a>
+              )}
+              {companyInfo.socialLinks.linkedin && (
+                <a
+                  href={companyInfo.socialLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-200 hover:bg-[#2B54A7] rounded-lg flex items-center justify-center transition-all duration-300 group shadow-sm"
+                >
+                  <Linkedin size={20} className="text-slate-700 group-hover:text-white" />
+                </a>
+              )}
               <a
-                href="#"
+                href={`mailto:${companyInfo.email}`}
                 className="w-10 h-10 bg-slate-200 hover:bg-[#2B54A7] rounded-lg flex items-center justify-center transition-all duration-300 group shadow-sm"
               >
-                <Facebook size={20} className="text-slate-700 group-hover:text-white" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-slate-200 hover:bg-[#2B54A7] rounded-lg flex items-center justify-center transition-all duration-300 group shadow-sm"
-              >
-                <Twitter size={20} className="text-slate-700 group-hover:text-white" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-slate-200 hover:bg-[#2B54A7] rounded-lg flex items-center justify-center transition-all duration-300 group shadow-sm"
-              >
-                <Linkedin size={20} className="text-slate-700 group-hover:text-white" />
+                <Mail size={20} className="text-slate-700 group-hover:text-white" />
               </a>
             </div>
           </div>
@@ -69,14 +108,44 @@ export function Footer() {
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <a href="#" className="font-body text-slate-600 hover:text-[#2B54A7] transition-colors duration-300">
-                      {link}
-                    </a>
+                    <Link
+                      href={link.href}
+                      className="font-body text-slate-600 hover:text-[#2B54A7] transition-colors duration-300"
+                    >
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="bg-white/60 rounded-2xl p-6 mb-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="font-heading font-bold text-lg text-slate-900 mb-1">
+                {dict.footer.newsletter}
+              </h3>
+              <p className="font-body text-slate-600 text-sm">
+                {dict.footer.newsletterDesc}
+              </p>
+            </div>
+            <form className="flex gap-3 w-full md:w-auto">
+              <input
+                type="email"
+                placeholder={dict.footer.emailPlaceholder}
+                className="flex-1 md:w-64 px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#2B54A7] transition-all duration-300 font-body"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white font-heading font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
+              >
+                {dict.footer.subscribe}
+              </button>
+            </form>
+          </div>
         </div>
 
         {/* Divider */}
@@ -85,9 +154,16 @@ export function Footer() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="font-body text-slate-600 text-sm">
-            © {currentYear} Công ty cổ phần Kỹ Thuật Toàn Thắng. 
+            © {currentYear} {dict.footer.copyright}. All rights reserved.
           </p>
-         
+          <div className="flex gap-6 text-sm">
+            <Link href={`/${lang}/terms`} className="text-slate-600 hover:text-[#2B54A7] transition-colors">
+              {dict.footer.links.terms}
+            </Link>
+            <Link href={`/${lang}/privacy`} className="text-slate-600 hover:text-[#2B54A7] transition-colors">
+              {dict.footer.links.privacy}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

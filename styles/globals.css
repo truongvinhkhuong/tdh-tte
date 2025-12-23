@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO BOLD.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-BOLD.TTF') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -22,7 +22,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO ITALIC.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-ITALIC.TTF') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -30,7 +30,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO BOLD ITALIC.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-BOLD-ITALIC.TTF') format('truetype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -38,7 +38,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVO.TTF') format('truetype');
+  src: url('/fonts/UTM-AVO.TTF') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -46,7 +46,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOBOLD.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOBOLD.TTF') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -54,7 +54,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOITALIC.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOITALIC.TTF') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -62,7 +62,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOBOLD_ITALIC.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOBOLD-ITALIC.TTF') format('truetype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -186,6 +186,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -198,43 +199,49 @@
     font-weight: 400;
     font-style: normal;
   }
-  
+
   .font-svn-avo-bold {
     font-family: 'SVN-AVO', system-ui, sans-serif;
     font-weight: 700;
     font-style: normal;
   }
-  
+
   .font-svn-avo-italic {
     font-family: 'SVN-AVO', system-ui, sans-serif;
     font-weight: 400;
     font-style: italic;
   }
-  
+
   .font-svn-avo-bold-italic {
     font-family: 'SVN-AVO', system-ui, sans-serif;
     font-weight: 700;
     font-style: italic;
   }
-  
+
+  .font-svn-avo-extra-bold {
+    font-family: 'SVN-AVO', system-ui, sans-serif;
+    font-weight: 700;
+    -webkit-text-stroke: 0.5px currentColor;
+  }
+
   .font-utm-avo {
     font-family: 'UTM AVO', system-ui, sans-serif;
     font-weight: 400;
     font-style: normal;
   }
-  
+
   .font-utm-avo-bold {
     font-family: 'UTM AVO', system-ui, sans-serif;
     font-weight: 700;
     font-style: normal;
   }
-  
+
   .font-utm-avo-italic {
     font-family: 'UTM AVO', system-ui, sans-serif;
     font-weight: 400;
     font-style: italic;
   }
-  
+
   .font-utm-avo-bold-italic {
     font-family: 'UTM AVO', system-ui, sans-serif;
     font-weight: 700;

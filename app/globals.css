@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO BOLD.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-BOLD.TTF') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -22,7 +22,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO ITALIC.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-ITALIC.TTF') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -30,7 +30,7 @@
 
 @font-face {
   font-family: 'SVN-AVO';
-  src: url('/fonts/SVN-AVO BOLD ITALIC.TTF') format('truetype');
+  src: url('/fonts/SVN-AVO-BOLD-ITALIC.TTF') format('truetype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -38,7 +38,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVO.TTF') format('truetype');
+  src: url('/fonts/UTM-AVO.TTF') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -46,7 +46,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOBOLD.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOBOLD.TTF') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -54,7 +54,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOITALIC.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOITALIC.TTF') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -62,7 +62,7 @@
 
 @font-face {
   font-family: 'UTM AVO';
-  src: url('/fonts/UTM AVOBOLD_ITALIC.TTF') format('truetype');
+  src: url('/fonts/UTM-AVOBOLD-ITALIC.TTF') format('truetype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -146,7 +146,7 @@
   --font-utm-avo: "UTM AVO", system-ui, -apple-system, sans-serif;
   --font-heading: "SVN-AVO", system-ui, -apple-system, sans-serif;
   --font-body: "UTM AVO", system-ui, -apple-system, sans-serif;
-  
+
   /* Colors */
   --color-primary: #3676dd;
   --color-primary-dark: #2a5cc4;
@@ -201,6 +201,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -232,53 +233,62 @@
  *    <span className="font-svn-avo font-bold italic">Text in nghiêng</span>
  */
 @layer utilities {
+
   /* Font SVN-AVO Variants */
   .font-svn-avo {
     font-family: var(--font-svn-avo);
   }
-  
+
   .font-svn-avo-bold {
     font-family: var(--font-svn-avo);
     font-weight: 700;
   }
-  
+
   .font-svn-avo-italic {
     font-family: var(--font-svn-avo);
     font-style: italic;
   }
-  
+
   .font-svn-avo-bold-italic {
     font-family: var(--font-svn-avo);
     font-weight: 700;
     font-style: italic;
   }
-  
+
+  /* Extra bold với text-stroke để tăng độ dày nét chữ */
+  .font-svn-avo-extra-bold {
+    font-family: var(--font-svn-avo);
+    font-weight: 700;
+    -webkit-text-stroke: 0.5px currentColor;
+    text-stroke: 0.5px currentColor;
+  }
+
   /* Font UTM AVO Variants */
   .font-utm-avo {
     font-family: var(--font-utm-avo);
   }
-  
+
   .font-utm-avo-bold {
     font-family: var(--font-utm-avo);
     font-weight: 700;
   }
-  
+
   .font-utm-avo-italic {
     font-family: var(--font-utm-avo);
     font-style: italic;
   }
-  
+
   .font-utm-avo-bold-italic {
     font-family: var(--font-utm-avo);
     font-weight: 700;
     font-style: italic;
   }
-  
+
   /* Semantic Font Classes */
   .font-heading {
     font-family: var(--font-heading);
   }
-  
+
   .font-body {
     font-family: var(--font-body);
   }
@@ -304,15 +314,19 @@ body {
     transform: translateY(0px) translateX(0px) scale(1) rotate(0deg);
     opacity: 0.4;
   }
+
   25% {
     opacity: 0.7;
   }
+
   50% {
     opacity: 0.8;
   }
+
   75% {
     opacity: 0.5;
   }
+
   100% {
     transform: translateY(-150px) translateX(80px) scale(0) rotate(360deg);
     opacity: 0;
@@ -323,21 +337,25 @@ body {
   0% {
     transform: rotate(0deg) scale(1);
   }
+
   50% {
     transform: rotate(180deg) scale(1.05);
   }
+
   100% {
     transform: rotate(360deg) scale(1);
   }
 }
 
 @keyframes spinnerPulse {
+
   0%,
   100% {
     opacity: 1;
     filter: drop-shadow(0 0 15px rgba(54, 118, 221, 0.8)) drop-shadow(0 0 30px rgba(14, 165, 233, 0.4));
     transform: scale(1);
   }
+
   50% {
     opacity: 0.3;
     filter: drop-shadow(0 0 5px rgba(54, 118, 221, 0.2));
@@ -346,14 +364,15 @@ body {
 }
 
 @keyframes textGlow {
+
   0%,
   100% {
     text-shadow: 0 0 10px rgba(54, 118, 221, 0.6), 0 0 20px rgba(14, 165, 233, 0.3), 0 0 40px rgba(54, 118, 221, 0.2);
     letter-spacing: 4px;
   }
+
   50% {
-    text-shadow: 0 0 20px rgba(54, 118, 221, 0.9), 0 0 40px rgba(14, 165, 233, 0.6), 0 0 60px rgba(54, 118, 221, 0.4), 0
-      0 80px rgba(14, 165, 233, 0.2);
+    text-shadow: 0 0 20px rgba(54, 118, 221, 0.9), 0 0 40px rgba(14, 165, 233, 0.6), 0 0 60px rgba(54, 118, 221, 0.4), 0 0 80px rgba(14, 165, 233, 0.2);
     letter-spacing: 6px;
   }
 }
@@ -363,6 +382,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -373,6 +393,7 @@ body {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -382,9 +403,11 @@ body {
   0% {
     width: 0%;
   }
+
   40% {
     width: 70%;
   }
+
   100% {
     width: 100%;
   }
@@ -396,6 +419,7 @@ body {
     transform: translateY(60px) rotateX(30deg) scaleY(0.8);
     filter: blur(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0deg) scaleY(1);
@@ -409,6 +433,7 @@ body {
     transform: translateY(30px) translateX(-20px);
     filter: blur(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) translateX(0);
@@ -422,6 +447,7 @@ body {
     transform: translateY(40px) skewY(10deg);
     filter: blur(10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) skewY(0deg);
@@ -434,6 +460,7 @@ body {
     opacity: 0;
     transform: rotateX(90deg) translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: rotateX(0deg) translateY(0);
@@ -441,30 +468,34 @@ body {
 }
 
 @keyframes floatingAnimation {
+
   0%,
   100% {
     transform: translateY(0px) translateX(0px);
   }
+
   25% {
     transform: translateY(-30px) translateX(-10px);
   }
+
   50% {
     transform: translateY(-15px) translateX(0px);
   }
+
   75% {
     transform: translateY(-25px) translateX(10px);
   }
 }
 
 @keyframes buttonGlow {
+
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(54, 118, 221, 0.4), 0 0 40px rgba(14, 165, 233, 0.2), inset 0 0 20px
-      rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(54, 118, 221, 0.4), 0 0 40px rgba(14, 165, 233, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
   }
+
   50% {
-    box-shadow: 0 0 40px rgba(54, 118, 221, 0.8), 0 0 80px rgba(14, 165, 233, 0.5), inset 0 0 20px
-      rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 40px rgba(54, 118, 221, 0.8), 0 0 80px rgba(14, 165, 233, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -473,6 +504,7 @@ body {
     opacity: 0;
     transform: translateY(60px) perspective(1000px) rotateX(20deg);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) perspective(1000px) rotateX(0deg);
@@ -484,6 +516,7 @@ body {
     opacity: 0;
     transform: translateX(-100px) skewX(20deg);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) skewX(0deg);
@@ -495,6 +528,7 @@ body {
     opacity: 0;
     transform: translateX(100px) skewX(-20deg);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) skewX(0deg);
@@ -505,9 +539,11 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -517,6 +553,7 @@ body {
   from {
     transform: rotate(-180deg) scale(0);
   }
+
   to {
     transform: rotate(0deg) scale(1);
   }
@@ -674,6 +711,7 @@ html {
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -685,6 +723,7 @@ html {
     opacity: 0;
     transform: scale(0.95) rotateY(-10deg);
   }
+
   to {
     opacity: 1;
     transform: scale(1) rotateY(0deg);
@@ -696,6 +735,7 @@ html {
     opacity: 0;
     transform: translateX(-60px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -707,6 +747,7 @@ html {
     opacity: 0;
     transform: translateX(60px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -856,10 +897,14 @@ html {
 
 /* Dot pulse animation for loading dots */
 @keyframes dotPulse {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     opacity: 0.3;
     transform: scale(0.8);
   }
+
   40% {
     opacity: 1;
     transform: scale(1.2);
@@ -887,15 +932,20 @@ html {
 
 /* Enhanced Feature Card Animations */
 @keyframes iconBounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
+
   25% {
     transform: translateY(-10px) rotate(-5deg);
   }
+
   50% {
     transform: translateY(0) rotate(5deg);
   }
+
   75% {
     transform: translateY(-5px) rotate(-2deg);
   }
@@ -905,31 +955,38 @@ html {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 @keyframes glow {
-  0%, 100% {
+
+  0%,
+  100% {
     filter: drop-shadow(0 0 5px currentColor);
   }
+
   50% {
     filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor);
   }
 }
 
 @keyframes borderGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(14, 165, 233, 0.3);
   }
+
   50% {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(14, 165, 233, 0.6), 0 0 60px rgba(59, 130, 246, 0.4);
   }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }

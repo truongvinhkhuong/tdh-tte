@@ -1,0 +1,190 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About Us",
+        "products": "Products",
+        "projects": "Projects",
+        "services": "Services",
+        "techHub": "Tech Hub",
+        "news": "News",
+        "careers": "Careers",
+        "contact": "Contact"
+    },
+    "header": {
+        "contactNow": "Contact Now",
+        "searchPlaceholder": "Search products, services...",
+        "language": "EN"
+    },
+    "hero": {
+        "title": "Leading Technology Solutions",
+        "subtitle": "For Oil & Gas and Energy Industries",
+        "description": "Toan Thang Engineering Joint Stock Company - Your trusted partner with over 30 years of experience providing equipment and technology solutions for the industrial sector.",
+        "cta": "Explore Solutions",
+        "ctaSecondary": "Contact Us"
+    },
+    "about": {
+        "title": "About Us",
+        "subtitle": "Toan Thang Engineering Joint Stock Company is a leading provider of technology solutions for the oil and gas industry",
+        "mission": "Our Mission",
+        "missionDesc": "To provide high-quality products and services that help partners improve operational efficiency and achieve their business goals.",
+        "vision": "Vision",
+        "visionDesc": "To become the leading technology partner in Vietnam's industrial sector and the region.",
+        "coreValues": "Core Values",
+        "values": {
+            "quality": "Quality",
+            "qualityDesc": "Committed to providing the highest quality products and services",
+            "innovation": "Innovation",
+            "innovationDesc": "Always updating with the latest industry technologies",
+            "integrity": "Integrity",
+            "integrityDesc": "Building trust through transparency",
+            "partnership": "Partnership",
+            "partnershipDesc": "Standing with customers in every project"
+        },
+        "learnMore": "Learn More",
+        "history": "Our History",
+        "certificates": "Certificates & Licenses",
+        "stats": {
+            "years": "Years of Experience",
+            "projects": "Successful Projects",
+            "employees": "Professional Employees",
+            "satisfaction": "Customer Satisfaction"
+        },
+        "features": {
+            "equipment": "Quality Equipment",
+            "equipmentDesc": "Providing world-leading equipment with high durability",
+            "support": "Support Services",
+            "supportDesc": "24/7 technical support to ensure maximum performance",
+            "solutions": "Custom Solutions",
+            "solutionsDesc": "Designing solutions tailored to your specific needs",
+            "experience": "Long Experience",
+            "experienceDesc": "Over 30 years serving major industry projects"
+        }
+    },
+    "products": {
+        "title": "Products",
+        "subtitle": "Discover our collection of high-quality products",
+        "featured": "Featured Products",
+        "viewAll": "View All Products",
+        "viewDetails": "Details",
+        "contact": "Contact",
+        "requestQuote": "Request Quote",
+        "filter": {
+            "brand": "Brand",
+            "category": "Category",
+            "industry": "Industry",
+            "all": "All"
+        },
+        "tabs": {
+            "description": "Description",
+            "specifications": "Specifications",
+            "documents": "Documents"
+        },
+        "relatedProjects": "Projects using this product"
+    },
+    "projects": {
+        "title": "Projects",
+        "subtitle": "Some notable projects we have successfully completed",
+        "featured": "Featured Projects",
+        "viewAll": "View All Projects",
+        "viewDetails": "View Details",
+        "client": "Client",
+        "location": "Location",
+        "year": "Completion Year",
+        "challenge": "The Challenge",
+        "solution": "The Solution",
+        "relatedProducts": "Products used in this project"
+    },
+    "services": {
+        "title": "Services",
+        "subtitle": "We provide a comprehensive range of services to meet all your needs",
+        "consulting": "Technical Consulting",
+        "consultingDesc": "Providing in-depth consulting on technology and optimal solutions for your business",
+        "supply": "Equipment Supply",
+        "supplyDesc": "Supplying high-quality industrial equipment from leading manufacturers",
+        "installation": "Installation & Operation",
+        "installationDesc": "Experienced engineering team to install and operate equipment",
+        "maintenance": "Maintenance & Repair",
+        "maintenanceDesc": "Regular maintenance and 24/7 emergency repair services",
+        "training": "Staff Training",
+        "trainingDesc": "Professional training courses for your technical team",
+        "support": "Technical Support",
+        "supportDesc": "24/7 technical support to resolve technical issues",
+        "learnMore": "Learn More"
+    },
+    "techHub": {
+        "title": "Tech Hub",
+        "subtitle": "Technical knowledge center and technology solutions",
+        "solutions": "Solutions",
+        "library": "Library",
+        "downloadCatalog": "Download Catalog",
+        "readMore": "Read More"
+    },
+    "news": {
+        "title": "News",
+        "subtitle": "Latest updates from Toan Thang Engineering",
+        "latest": "Latest News",
+        "categories": {
+            "all": "All",
+            "company": "Company News",
+            "industry": "Industry News"
+        },
+        "readMore": "Read More",
+        "publishedAt": "Published on"
+    },
+    "careers": {
+        "title": "Careers",
+        "subtitle": "Join the Toan Thang Engineering team",
+        "positions": "Open Positions",
+        "department": "Department",
+        "location": "Location",
+        "deadline": "Application Deadline",
+        "apply": "Apply Now",
+        "noPositions": "No positions are currently available"
+    },
+    "contact": {
+        "title": "Contact Us",
+        "subtitle": "Contact us for free consultation on solutions that suit your needs",
+        "address": "Address",
+        "phone": "Phone",
+        "email": "Email",
+        "form": {
+            "name": "Full Name",
+            "email": "Email",
+            "phone": "Phone Number",
+            "subject": "Subject",
+            "message": "Message",
+            "submit": "Send Message"
+        }
+    },
+    "footer": {
+        "company": "Company",
+        "support": "Support",
+        "legal": "Legal",
+        "newsletter": "Newsletter",
+        "newsletterDesc": "Get the latest updates on products and services",
+        "subscribe": "Subscribe",
+        "emailPlaceholder": "Your email",
+        "copyright": "Toan Thang Engineering Joint Stock Company",
+        "links": {
+            "about": "About Us",
+            "services": "Services",
+            "projects": "Projects",
+            "blog": "Blog",
+            "contact": "Contact",
+            "faq": "FAQ",
+            "guide": "Guide",
+            "policy": "Policy",
+            "terms": "Terms",
+            "privacy": "Privacy Policy",
+            "cookie": "Cookie",
+            "copyright": "Copyright"
+        }
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "back": "Back",
+        "viewMore": "View More",
+        "close": "Close"
+    }
+}

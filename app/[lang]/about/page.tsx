@@ -1,0 +1,40 @@
+import type { Metadata } from "next"
+import type { Locale } from "@/i18n/config"
+import { getDictionary } from "@/i18n/get-dictionary"
+import { AboutHero } from "@/components/about/about-hero"
+import { CompanyIntro } from "@/components/about/company-intro"
+import { HistoryTimeline } from "@/components/about/history-timeline"
+import { CertificatesSection } from "@/components/about/certificates-section"
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ lang: Locale }>
+}): Promise<Metadata> {
+    const { lang } = await params
+
+    return {
+        title: lang === 'vi' ? 'Về Chúng Tôi' : 'About Us',
+        description: lang === 'vi'
+            ? 'Tìm hiểu về Công ty Cổ phần Kỹ thuật Toàn Thắng - Hơn 30 năm kinh nghiệm trong ngành dầu khí'
+            : 'Learn about Toan Thang Engineering - Over 30 years of experience in the oil and gas industry',
+    }
+}
+
+export default async function AboutPage({
+    params,
+}: {
+    params: Promise<{ lang: Locale }>
+}) {
+    const { lang } = await params
+    const dict = await getDictionary(lang)
+
+    return (
+        <main className="pt-20">
+            <AboutHero lang={lang} dict={dict} />
+            <CompanyIntro lang={lang} dict={dict} />
+            <HistoryTimeline lang={lang} dict={dict} />
+            <CertificatesSection lang={lang} dict={dict} />
+        </main>
+    )
+}
