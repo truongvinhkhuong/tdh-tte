@@ -101,7 +101,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                     {/* Map */}
                     <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[400px] lg:h-auto">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4240888837474!2d106.70076691474905!3d10.779821492319028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4b3330bcc7%3A0x4db964d76bf6e18e!2zMTFCIE5ndXnhu4VuIELhu4luaCBLaGnDqm0sIELhur9uIE5naMOpLCBRdeG6rW4gMSwgVGjDoG5oIHBo4buRIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1703312000000!5m2!1svi!2s"
+                            src="https://maps.google.com/maps?q=11B%20Nguy%E1%BB%85n%20B%E1%BB%89nh%20Khi%C3%AAm%2C%20B%E1%BA%BFn%20Ngh%C3%A9%2C%20Qu%E1%BA%ADn%201%2C%20Th%C3%A0nh%20ph%E1%BB%91%20H%E1%BB%93%20Ch%C3%AD%20Minh&t=&z=17&ie=UTF8&iwloc=&output=embed"
                             width="100%"
                             height="100%"
                             style={{ border: 0, minHeight: '400px' }}

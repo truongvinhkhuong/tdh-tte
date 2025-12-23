@@ -16,14 +16,14 @@
         "language": "VI"
     },
     "hero": {
-        "title": "Giải Pháp Công Nghệ Hàng Đầu",
-        "subtitle": "Cho Ngành Dầu Khí & Năng Lượng",
+        "title": "Giải pháp công nghệ hàng đầu",
+        "subtitle": "Cho ngành dầu khí & năng lượng",
         "description": "Công ty Cổ phần Kỹ thuật Toàn Thắng - Đối tác tin cậy với hơn 30 năm kinh nghiệm cung cấp thiết bị và giải pháp công nghệ cho ngành công nghiệp.",
         "cta": "Khám phá giải pháp",
         "ctaSecondary": "Liên hệ tư vấn"
     },
     "about": {
-        "title": "Về Chúng Tôi",
+        "title": "Về chúng tôi",
         "subtitle": "Công ty cổ phần Kỹ Thuật Toàn Thắng là nhà cung cấp hàng đầu các giải pháp công nghệ cho ngành dầu khí",
         "mission": "Sứ mệnh của chúng tôi",
         "missionDesc": "Cung cấp các sản phẩm và dịch vụ chất lượng cao, giúp các đối tác nâng cao hiệu suất hoạt động và đạt được các mục tiêu kinh doanh của họ.",
@@ -61,9 +61,9 @@
         }
     },
     "products": {
-        "title": "Sản Phẩm",
+        "title": "Sản phẩm",
         "subtitle": "Khám phá bộ sưu tập các sản phẩm chất lượng cao của chúng tôi",
-        "featured": "Sản Phẩm Nổi Bật",
+        "featured": "Sản phẩm nổi bật",
         "viewAll": "Xem tất cả sản phẩm",
         "viewDetails": "Chi tiết",
         "contact": "Liên hệ",
@@ -82,9 +82,9 @@
         "relatedProjects": "Dự án sử dụng sản phẩm này"
     },
     "projects": {
-        "title": "Dự Án",
+        "title": "Dự án",
         "subtitle": "Một số dự án tiêu biểu mà chúng tôi đã thực hiện thành công",
-        "featured": "Dự Án Nổi Bật",
+        "featured": "Dự án nổi bật",
         "viewAll": "Xem tất cả dự án",
         "viewDetails": "Xem chi tiết",
         "client": "Khách hàng",
@@ -95,24 +95,24 @@
         "relatedProducts": "Sản phẩm sử dụng trong dự án"
     },
     "services": {
-        "title": "Dịch Vụ",
+        "title": "Dịch vụ",
         "subtitle": "Chúng tôi cung cấp một loạt các dịch vụ toàn diện để đáp ứng mọi nhu cầu của bạn",
-        "consulting": "Tư Vấn Kỹ Thuật",
+        "consulting": "Tư vấn kỹ thuật",
         "consultingDesc": "Cung cấp tư vấn chuyên sâu về công nghệ và giải pháp tối ưu cho doanh nghiệp",
-        "supply": "Cung Cấp Thiết Bị",
+        "supply": "Cung cấp thiết bị",
         "supplyDesc": "Cung cấp các thiết bị công nghiệp chất lượng cao từ các hãng sản xuất hàng đầu",
-        "installation": "Lắp Đặt & Vận Hành",
+        "installation": "Lắp đặt & Vận hành",
         "installationDesc": "Đội ngũ kỹ sư giàu kinh nghiệm giúp lắp đặt và vận hành thiết bị",
-        "maintenance": "Bảo Trì & Sửa Chữa",
+        "maintenance": "Bảo trì & Sửa chữa",
         "maintenanceDesc": "Dịch vụ bảo trì định kỳ và sửa chữa khẩn cấp 24/7",
-        "training": "Đào Tạo Nhân Sự",
+        "training": "Đào tạo nhân sự",
         "trainingDesc": "Cung cấp khóa đào tạo chuyên nghiệp cho đội ngũ kỹ thuật của bạn",
-        "support": "Hỗ Trợ Kỹ Thuật",
+        "support": "Hỗ trợ kỹ thuật",
         "supportDesc": "Hỗ trợ kỹ thuật 24/7 để giải quyết các vấn đề kỹ thuật",
         "learnMore": "Tìm hiểu thêm"
     },
     "techHub": {
-        "title": "Tech Hub",
+        "title": "Tech hub",
         "subtitle": "Trung tâm kiến thức kỹ thuật và giải pháp công nghệ",
         "solutions": "Giải pháp",
         "library": "Thư viện",
@@ -120,9 +120,9 @@
         "readMore": "Đọc thêm"
     },
     "news": {
-        "title": "Tin Tức",
+        "title": "Tin tức",
         "subtitle": "Cập nhật tin tức mới nhất từ Toàn Thắng Engineering",
-        "latest": "Tin Mới Nhất",
+        "latest": "Tin mới nhất",
         "categories": {
             "all": "Tất cả",
             "company": "Tin công ty",
@@ -132,7 +132,7 @@
         "publishedAt": "Đăng ngày"
     },
     "careers": {
-        "title": "Tuyển Dụng",
+        "title": "Tuyển dụng",
         "subtitle": "Gia nhập đội ngũ Toàn Thắng Engineering",
         "positions": "Vị trí đang tuyển",
         "department": "Phòng ban",
@@ -142,7 +142,7 @@
         "noPositions": "Hiện tại không có vị trí nào đang tuyển"
     },
     "contact": {
-        "title": "Liên Hệ Với Chúng Tôi",
+        "title": "Liên hệ với chúng tôi",
         "subtitle": "Hãy liên hệ với chúng tôi để được tư vấn miễn phí về các giải pháp phù hợp với nhu cầu của bạn",
         "address": "Địa chỉ",
         "phone": "Điện thoại",
@@ -157,9 +157,9 @@
         }
     },
     "footer": {
-        "company": "Công Ty",
-        "support": "Hỗ Trợ",
-        "legal": "Pháp Lý",
+        "company": "Công ty",
+        "support": "Hỗ trợ",
+        "legal": "Pháp lý",
         "newsletter": "Đăng ký nhận tin",
         "newsletterDesc": "Nhận thông tin mới nhất về sản phẩm và dịch vụ",
         "subscribe": "Đăng ký",
