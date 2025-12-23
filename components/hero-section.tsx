@@ -105,7 +105,7 @@ export function HeroSection() {
 
       <div className="absolute top-24 right-4 md:right-8 z-20 text-white/70 text-sm flex items-center gap-2 backdrop-blur-md bg-white/10 px-3 py-2 rounded-full border border-white/20">
         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-        <span className="font-semibold">Tự động</span>
+        <span className="font-heading font-semibold">Tự động</span>
       </div>
     </section>
   )

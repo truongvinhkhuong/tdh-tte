@@ -31,12 +31,12 @@ export function Header() {
   }, [lastScrollY])
 
   const navItems = [
-    { label: "Trang Chủ", href: "#" },
-    { label: "Về Chúng Tôi", href: "#about" },
-    { label: "Dịch Vụ", href: "#services" },
-    { label: "Sản Phẩm", href: "#products" },
-    { label: "Dự Án", href: "#projects" },
-    { label: "Liên Hệ", href: "#contact" },
+    { label: "Trang chủ", href: "#" },
+    { label: "Về chúng tôi", href: "#about" },
+    { label: "Dịch vụ", href: "#services" },
+    { label: "Sản phẩm", href: "#products" },
+    { label: "Dự án", href: "#projects" },
+    { label: "Liên hệ", href: "#contact" },
   ]
 
   const scrollToContact = () => {
@@ -88,7 +88,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className={`relative px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg group overflow-hidden ${
+                className={`relative px-4 py-2 text-sm font-heading font-semibold transition-all duration-300 rounded-lg group overflow-hidden ${
                   isScrolled 
                     ? 'text-gray-700 hover:text-[#2B54A7]' 
                     : 'text-white/95 hover:text-white drop-shadow-sm'
@@ -117,13 +117,13 @@ export function Header() {
           {/* CTA Button */}
           <button 
             onClick={scrollToContact}
-            className={`hidden md:inline-flex items-center gap-2 px-6 py-2.5 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${
+            className={`hidden md:inline-flex items-center gap-2 px-6 py-2.5 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${
               isScrolled 
                 ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white hover:shadow-[#2B54A7]/30' 
                 : 'bg-white text-[#2B54A7] hover:bg-gray-50 hover:shadow-white/20'
             }`}
           >
-            <span>Liên Hệ Ngay</span>
+            <span>Liên hệ ngay</span>
             <ChevronDown className="w-4 h-4 animate-bounce" />
           </button>
 
@@ -154,7 +154,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className={`block px-4 py-3 rounded-xl font-medium transition-all duration-300 transform hover:translate-x-2 hover:scale-105 ${
+                className={`block px-4 py-3 rounded-xl font-heading font-medium transition-all duration-300 transform hover:translate-x-2 hover:scale-105 ${
                   isMobileMenuOpen ? 'animate-fade-in-up' : ''
                 } ${
                   isScrolled 
@@ -173,13 +173,13 @@ export function Header() {
             ))}
             <button 
               onClick={scrollToContact}
-              className={`w-full mt-3 px-4 py-3 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${
+              className={`w-full mt-3 px-4 py-3 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${
                 isScrolled 
                   ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white' 
                   : 'bg-white text-[#2B54A7] hover:bg-gray-50'
               } ${isMobileMenuOpen ? 'animate-fade-in-up' : ''}`}
             >
-              <span>Liên Hệ Ngay</span>
+              <span>Liên hệ ngay</span>
               <ChevronDown className="w-4 h-4 animate-bounce" />
             </button>
           </nav>

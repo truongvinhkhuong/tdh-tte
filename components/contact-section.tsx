@@ -49,8 +49,8 @@ export function ContactSection() {
     <section id="contact" className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Liên Hệ Với Chúng Tôi</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-4xl font-heading font-bold text-foreground mb-4">Liên Hệ Với Chúng Tôi</h2>
+          <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
             Hãy liên hệ với chúng tôi để được tư vấn miễn phí về các giải pháp phù hợp với nhu cầu của bạn
           </p>
         </div>
@@ -66,8 +66,8 @@ export function ContactSection() {
                 <div className="text-4xl mb-4 text-blue-600 group-hover:text-cyan-500 transition-colors inline-block">
                   <IconComponent size={40} strokeWidth={1.5} />
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{info.title}</h3>
-                <p className="text-muted-foreground">{info.content}</p>
+                <h3 className="text-lg font-heading font-bold text-foreground mb-2">{info.title}</h3>
+                <p className="font-body text-muted-foreground">{info.content}</p>
               </div>
             )
           })}
@@ -82,7 +82,7 @@ export function ContactSection() {
                 placeholder="Tên của bạn"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300 font-body"
                 required
               />
               <input
@@ -91,7 +91,7 @@ export function ContactSection() {
                 placeholder="Email của bạn"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300 font-body"
                 required
               />
             </div>
@@ -101,7 +101,7 @@ export function ContactSection() {
               placeholder="Số điện thoại"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300 font-body"
             />
             <textarea
               name="message"
@@ -109,12 +109,12 @@ export function ContactSection() {
               rows={5}
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300 resize-none font-body"
               required
             ></textarea>
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+              className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
             >
               Gửi Thông Tin
             </button>

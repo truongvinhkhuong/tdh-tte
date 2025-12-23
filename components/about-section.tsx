@@ -28,7 +28,7 @@ export function AboutSection() {
   const features = [
     {
       Icon: Settings,
-      title: "Thiết Bị Chất Lượng",
+      title: "Thiết bị chất lượng",
       description: "Cung cấp các thiết bị hàng đầu thế giới với độ bền cao",
       gradient: "from-blue-500 via-blue-600 to-cyan-500",
       iconColor: "text-blue-600",
@@ -36,7 +36,7 @@ export function AboutSection() {
     },
     {
       Icon: Headphones,
-      title: "Dịch Vụ Hỗ Trợ",
+      title: "Dịch vụ hỗ trợ",
       description: "Hỗ trợ kỹ thuật 24/7 để đảm bảo hiệu suất tối đa",
       gradient: "from-cyan-500 via-cyan-600 to-blue-500",
       iconColor: "text-cyan-600",
@@ -44,7 +44,7 @@ export function AboutSection() {
     },
     {
       Icon: Lightbulb,
-      title: "Giải Pháp Tùy Chỉnh",
+      title: "Giải pháp tùy chỉnh",
       description: "Thiết kế giải pháp phù hợp với nhu cầu cụ thể của bạn",
       gradient: "from-blue-600 via-indigo-600 to-purple-500",
       iconColor: "text-indigo-600",
@@ -52,7 +52,7 @@ export function AboutSection() {
     },
     {
       Icon: Target,
-      title: "Kinh Nghiệm Lâu Năm",
+      title: "Kinh nghiệm lâu năm",
       description: "Hơn 20 năm phục vụ các dự án lớn trong ngành công nghiệp",
       gradient: "from-purple-500 via-purple-600 to-cyan-500",
       iconColor: "text-purple-600",
@@ -72,12 +72,12 @@ export function AboutSection() {
         <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <div className="text-center mb-20">
             <div className="inline-block relative">
-              <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Về Chúng Tôi
+              <h2 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                VỀ CHÚNG TÔI
               </h2>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
+            <p className="text-lg font-body text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
               Công ty cổ phần Kỹ Thuật Toàn Thắng là nhà cung cấp hàng đầu các giải pháp công nghệ cho ngành dầu khí
             </p>
           </div>
@@ -126,12 +126,12 @@ export function AboutSection() {
                     </div>
 
                     {/* Title */}
-                    <h4 className="font-bold text-lg text-gray-900 mb-3 transition-colors duration-300">
+                    <h4 className="font-heading font-bold text-lg text-gray-900 mb-3 transition-colors duration-300">
                       {feature.title}
                     </h4>
 
                     {/* Description */}
-                    <p className="text-sm text-gray-600 transition-colors leading-relaxed">
+                    <p className="text-sm font-body text-gray-600 transition-colors leading-relaxed">
                       {feature.description}
                     </p>
                     
@@ -145,26 +145,26 @@ export function AboutSection() {
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h3 className="text-3xl md:text-4xl font-bold text-gray-900">Sứ Mệnh Của Chúng Tôi</h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <h3 className="text-3xl md:text-4xl font-heading font-bold text-gray-900">Sứ mệnh của chúng tôi</h3>
+              <p className="font-body text-gray-600 leading-relaxed text-lg">
                 Cung cấp các sản phẩm và dịch vụ chất lượng cao, giúp các đối tác nâng cao hiệu suất hoạt động và đạt
                 được các mục tiêu kinh doanh của họ.
               </p>
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <p className="font-body text-gray-600 leading-relaxed text-lg">
                 Chúng tôi cam kết đồng hành với các khách hàng trong mỗi bước của hành trình, từ tư vấn ban đầu đến bảo
                 trì và hỗ trợ lâu dài.
               </p>
-              <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 hover-glow">
-                Tìm Hiểu Thêm
+              <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 hover-glow">
+                Tìm hiểu thêm
               </button>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               {[
-                { number: "20+", label: "Năm Kinh Nghiệm" },
-                { number: "500+", label: "Dự Án Thành Công" },
-                { number: "100+", label: "Nhân Viên Chuyên Nghiệp" },
-                { number: "98%", label: "Độ Hài Lòng Khách Hàng" },
+                { number: "20+", label: "Năm kinh nghiệm" },
+                { number: "500+", label: "Dự án thành công" },
+                { number: "100+", label: "Nhân viên chuyên nghiệp" },
+                { number: "98%", label: "Độ hài lòng khách hàng" },
               ].map((stat, index) => (
                 <div
                   key={index}
@@ -175,8 +175,8 @@ export function AboutSection() {
                     opacity: isVisible ? 1 : 0,
                   }}
                 >
-                  <div className="text-3xl md:text-4xl font-black text-blue-600 mb-2">{stat.number}</div>
-                  <p className="text-sm text-gray-600 font-semibold">{stat.label}</p>
+                  <div className="text-3xl md:text-4xl font-heading font-black text-blue-600 mb-2">{stat.number}</div>
+                  <p className="text-sm font-body text-gray-600 font-semibold">{stat.label}</p>
                 </div>
               ))}
             </div>

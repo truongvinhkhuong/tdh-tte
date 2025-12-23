@@ -75,12 +75,12 @@ export function ServicesSection() {
         <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <div className="text-center mb-20">
             <div className="inline-block relative">
-              <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 Dịch Vụ Của Chúng Tôi
               </h2>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
+            <p className="text-lg font-body text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
               Chúng tôi cung cấp một loạt các dịch vụ toàn diện để đáp ứng mọi nhu cầu của bạn
             </p>
           </div>
@@ -106,10 +106,10 @@ export function ServicesSection() {
                     <div className="text-5xl mb-4 transition-all duration-300 group-hover:scale-125 inline-block text-blue-600 group-hover:text-cyan-500">
                       <IconComponent size={48} strokeWidth={1.5} />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-xl font-heading font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+                    <p className="text-sm font-body text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
                       {service.description}
                     </p>
 

@@ -140,9 +140,14 @@
 }
 
 @theme inline {
-  --font-sans: "SVN-AVO", "UTM AVO", system-ui, sans-serif;
-  --font-svn-avo: "SVN-AVO", system-ui, sans-serif;
-  --font-utm-avo: "UTM AVO", system-ui, sans-serif;
+  /* Font Families - Sử dụng với class font-sans, font-svn-avo, font-utm-avo */
+  --font-sans: "SVN-AVO", "UTM AVO", system-ui, -apple-system, sans-serif;
+  --font-svn-avo: "SVN-AVO", system-ui, -apple-system, sans-serif;
+  --font-utm-avo: "UTM AVO", system-ui, -apple-system, sans-serif;
+  --font-heading: "SVN-AVO", system-ui, -apple-system, sans-serif;
+  --font-body: "UTM AVO", system-ui, -apple-system, sans-serif;
+  
+  /* Colors */
   --color-primary: #3676dd;
   --color-primary-dark: #2a5cc4;
   --color-primary-light: #5390e6;
@@ -201,54 +206,81 @@
   }
 }
 
-/* Custom Font Utilities */
+/* 
+ * HƯỚNG DẪN SỬ DỤNG FONT CHỮ
+ * 
+ * Tailwind CSS v4 - Sử dụng trực tiếp với class:
+ * 
+ * 1. Font Families:
+ *    - font-sans       : Font mặc định (SVN-AVO + UTM AVO)
+ *    - font-svn-avo    : SVN-AVO font
+ *    - font-utm-avo    : UTM AVO font
+ *    - font-heading    : Font cho tiêu đề (SVN-AVO)
+ *    - font-body       : Font cho nội dung (UTM AVO)
+ * 
+ * 2. Font Weights (kết hợp với font family):
+ *    - font-normal     : 400
+ *    - font-bold       : 700
+ * 
+ * 3. Font Styles:
+ *    - italic          : Chữ nghiêng
+ *    - not-italic      : Chữ thẳng
+ * 
+ * Ví dụ sử dụng:
+ *    <h1 className="font-heading font-bold">Tiêu đề</h1>
+ *    <p className="font-body">Nội dung</p>
+ *    <span className="font-svn-avo font-bold italic">Text in nghiêng</span>
+ */
 @layer utilities {
+  /* Font SVN-AVO Variants */
   .font-svn-avo {
-    font-family: 'SVN-AVO', system-ui, sans-serif;
-    font-weight: 400;
-    font-style: normal;
+    font-family: var(--font-svn-avo);
   }
   
   .font-svn-avo-bold {
-    font-family: 'SVN-AVO', system-ui, sans-serif;
+    font-family: var(--font-svn-avo);
     font-weight: 700;
-    font-style: normal;
   }
   
   .font-svn-avo-italic {
-    font-family: 'SVN-AVO', system-ui, sans-serif;
-    font-weight: 400;
+    font-family: var(--font-svn-avo);
     font-style: italic;
   }
   
   .font-svn-avo-bold-italic {
-    font-family: 'SVN-AVO', system-ui, sans-serif;
+    font-family: var(--font-svn-avo);
     font-weight: 700;
     font-style: italic;
   }
   
+  /* Font UTM AVO Variants */
   .font-utm-avo {
-    font-family: 'UTM AVO', system-ui, sans-serif;
-    font-weight: 400;
-    font-style: normal;
+    font-family: var(--font-utm-avo);
   }
   
   .font-utm-avo-bold {
-    font-family: 'UTM AVO', system-ui, sans-serif;
+    font-family: var(--font-utm-avo);
     font-weight: 700;
-    font-style: normal;
   }
   
   .font-utm-avo-italic {
-    font-family: 'UTM AVO', system-ui, sans-serif;
-    font-weight: 400;
+    font-family: var(--font-utm-avo);
     font-style: italic;
   }
   
   .font-utm-avo-bold-italic {
-    font-family: 'UTM AVO', system-ui, sans-serif;
+    font-family: var(--font-utm-avo);
     font-weight: 700;
     font-style: italic;
+  }
+  
+  /* Semantic Font Classes */
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+  
+  .font-body {
+    font-family: var(--font-body);
   }
 }
 

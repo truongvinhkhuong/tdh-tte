@@ -77,12 +77,12 @@ export function ProductsSection() {
         <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <div className="text-center mb-20">
             <div className="inline-block relative">
-              <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 Sản Phẩm Nổi Bật
               </h2>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-8">
+            <p className="text-lg font-body text-gray-600 max-w-2xl mx-auto mt-8">
               Khám phá bộ sưu tập các sản phẩm chất lượng cao của chúng tôi
             </p>
           </div>
@@ -108,15 +108,15 @@ export function ProductsSection() {
                 </div>
 
                 <div className="p-6">
-                  <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-bold rounded-full mb-3">
+                  <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-heading font-bold rounded-full mb-3">
                     {product.category}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-heading font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-semibold">{product.price}</span>
-                    <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold rounded-lg hover:shadow-lg hover:scale-110 transition-all duration-300 group-hover:from-cyan-500 group-hover:to-blue-600">
+                    <span className="font-body text-gray-600 font-semibold">{product.price}</span>
+                    <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-heading font-semibold rounded-lg hover:shadow-lg hover:scale-110 transition-all duration-300 group-hover:from-cyan-500 group-hover:to-blue-600">
                       Chi Tiết
                     </button>
                   </div>

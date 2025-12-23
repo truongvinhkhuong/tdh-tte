@@ -25,19 +25,19 @@ export function ProjectsSection() {
 
   const projects = [
     {
-      title: "Dự Án Lọc Dầu Ngành",
+      title: "Dự án lọc dầu ngành",
       description: "Cung cấp hệ thống xử lý dầu toàn bộ với công suất 50,000 bbl/ngày",
       image: "/oil-refinery-project-industrial.jpg",
       year: "2023",
     },
     {
-      title: "Nhà Máy Hóa Dầu",
+      title: "Nhà máy hóa dầu",
       description: "Lắp đặt hệ thống điều khiển tự động cho nhà máy hóa dầu",
       image: "/petrochemical-plant-industrial-project.jpg",
       year: "2022",
     },
     {
-      title: "Trạm Khí Tự Nhiên",
+      title: "Trạm khí tự nhiên",
       description: "Cung cấp thiết bị xử lý khí tự nhiên cho trạm trung chuyển",
       image: "/natural-gas-station-industrial.jpg",
       year: "2023",
@@ -56,12 +56,12 @@ export function ProjectsSection() {
         <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <div className="text-center mb-20">
             <div className="inline-block relative">
-              <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Dự Án Nổi Bật
+              <h2 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                Dự án nổi bật
               </h2>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-8">
+            <p className="text-lg font-body text-gray-600 max-w-2xl mx-auto mt-8">
               Một số dự án tiêu biểu mà chúng tôi đã thực hiện thành công
             </p>
           </div>
@@ -88,13 +88,13 @@ export function ProjectsSection() {
 
                 <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
                   <div className="transform transition-all duration-300 group-hover:translate-y-0">
-                    <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-bold rounded-full mb-3">
+                    <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-heading font-bold rounded-full mb-3">
                       {project.year}
                     </span>
-                    <h3 className="text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
+                    <h3 className="text-2xl font-heading font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
                       {project.title}
                     </h3>
-                    <p className="text-sm text-gray-100 group-hover:text-white transition-colors line-clamp-2">
+                    <p className="text-sm font-body text-gray-100 group-hover:text-white transition-colors line-clamp-2">
                       {project.description}
                     </p>
                   </div>

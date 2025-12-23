@@ -9,15 +9,15 @@ export function Footer() {
   const footerLinks = [
     {
       title: "Công Ty",
-      links: ["Về Chúng Tôi", "Dịch Vụ", "Dự Án", "Blog"],
+      links: ["Về chúng tôi", "Dịch vụ", "Dự án", "Blog"],
     },
     {
       title: "Hỗ Trợ",
-      links: ["Liên Hệ", "FAQ", "Hướng Dẫn", "Chính Sách"],
+      links: ["Liên hệ", "FAQ", "Hướng dẫn", "Chính sách"],
     },
     {
       title: "Pháp Lý",
-      links: ["Điều Khoản", "Chính Sách Bảo Mật", "Cookie", "Bản Quyền"],
+      links: ["Điều khoản", "Chính sách bảo mật", "Cookie", "Bản quyền"],
     },
   ]
 
@@ -37,7 +37,7 @@ export function Footer() {
                 className="object-contain"
               />
             </div>
-            <p className="text-slate-600 mb-6 leading-relaxed">
+            <p className="font-body text-slate-600 mb-6 leading-relaxed">
               Công ty cổ phần Kỹ Thuật Toàn Thắng - Cung cấp giải pháp công nghệ hàng đầu cho ngành dầu khí.
             </p>
             <div className="flex gap-4">
@@ -65,11 +65,11 @@ export function Footer() {
           {/* Footer Links */}
           {footerLinks.map((section, index) => (
             <div key={index}>
-              <h3 className="font-bold text-lg mb-6 text-slate-900">{section.title}</h3>
+              <h3 className="font-heading font-bold text-lg mb-6 text-slate-900">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <a href="#" className="text-slate-600 hover:text-[#2B54A7] transition-colors duration-300">
+                    <a href="#" className="font-body text-slate-600 hover:text-[#2B54A7] transition-colors duration-300">
                       {link}
                     </a>
                   </li>
@@ -84,7 +84,7 @@ export function Footer() {
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-600 text-sm">
+          <p className="font-body text-slate-600 text-sm">
             © {currentYear} Công ty cổ phần Kỹ Thuật Toàn Thắng. 
           </p>
          
