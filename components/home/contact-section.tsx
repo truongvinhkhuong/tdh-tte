@@ -67,11 +67,10 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
         <section id="contact" className="py-24 scroll-mt-24 bg-gradient-to-b from-white via-gray-50 to-gray-100">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <div className="inline-block relative">
-                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent">
+                    <div className="inline-block">
+                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2">
                             {dict.contact.title}
                         </h2>
-                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full"></div>
                     </div>
                     <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
                         {dict.contact.subtitle}
