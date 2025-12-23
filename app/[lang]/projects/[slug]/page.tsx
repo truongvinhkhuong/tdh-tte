@@ -64,7 +64,7 @@ export default async function ProjectDetailPage({
                             <ArrowLeft size={20} />
                             {dict.common.back}
                         </Link>
-                        <span className="inline-block px-4 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm font-heading font-bold rounded-full mb-4">
+                        <span className="inline-block px-4 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-sm font-heading font-bold rounded-full mb-4">
                             {project.industry.name}
                         </span>
                         <h1 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
@@ -81,21 +81,21 @@ export default async function ProjectDetailPage({
                     <div className="grid md:grid-cols-3 gap-6 -mt-20 relative z-10 mb-12">
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                             <div className="flex items-center gap-3 mb-2">
-                                <Building2 className="text-blue-600" size={24} />
+                                <Building2 className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.client}</span>
                             </div>
                             <p className="font-body text-gray-600">{project.client}</p>
                         </div>
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                             <div className="flex items-center gap-3 mb-2">
-                                <MapPin className="text-blue-600" size={24} />
+                                <MapPin className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.location}</span>
                             </div>
                             <p className="font-body text-gray-600">{project.location}</p>
                         </div>
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                             <div className="flex items-center gap-3 mb-2">
-                                <Calendar className="text-blue-600" size={24} />
+                                <Calendar className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.year}</span>
                             </div>
                             <p className="font-body text-gray-600">{project.completionYear}</p>
@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({
                                 {project.challenge}
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-green-50 to-cyan-50 p-8 rounded-2xl border border-green-100">
+                        <div className="bg-gradient-to-br from-green-50 to-[#5a7ec9]/10 p-8 rounded-2xl border border-green-100">
                             <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
                                 {dict.projects.solution}
                             </h2>
@@ -133,7 +133,7 @@ export default async function ProjectDetailPage({
                                     <Link
                                         key={product.id}
                                         href={`/${lang}/products/${product.slug}`}
-                                        className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300"
+                                        className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40"
                                     >
                                         <div className="relative h-48 bg-gray-200 overflow-hidden">
                                             <Image
@@ -144,11 +144,11 @@ export default async function ProjectDetailPage({
                                             />
                                         </div>
                                         <div className="p-4">
-                                            <h3 className="font-heading font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="font-heading font-bold text-gray-900 group-hover:text-[#364fa1] transition-colors">
                                                 {product.name}
                                             </h3>
                                             <p className="text-sm font-body text-gray-500">{product.modelNumber}</p>
-                                            <span className="inline-flex items-center gap-1 text-blue-600 text-sm font-heading font-semibold mt-2 group-hover:gap-2 transition-all">
+                                            <span className="inline-flex items-center gap-1 text-[#364fa1] text-sm font-heading font-semibold mt-2 group-hover:gap-2 transition-all">
                                                 {dict.products.viewDetails}
                                                 <ArrowRight size={14} />
                                             </span>

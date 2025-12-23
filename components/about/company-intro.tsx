@@ -15,25 +15,25 @@ export function CompanyIntro({ lang, dict }: CompanyIntroProps) {
             icon: Target,
             title: dict.about.values.quality,
             description: dict.about.values.qualityDesc,
-            color: "from-blue-500 to-cyan-500",
+            color: "from-[#364fa1] to-[#5a7ec9]",
         },
         {
             icon: Eye,
             title: dict.about.values.innovation,
             description: dict.about.values.innovationDesc,
-            color: "from-cyan-500 to-blue-500",
+            color: "from-[#5a7ec9] to-[#364fa1]",
         },
         {
             icon: Heart,
             title: dict.about.values.integrity,
             description: dict.about.values.integrityDesc,
-            color: "from-blue-600 to-purple-500",
+            color: "from-[#364fa1] to-[#6b7fc6]",
         },
         {
             icon: Users,
             title: dict.about.values.partnership,
             description: dict.about.values.partnershipDesc,
-            color: "from-purple-500 to-cyan-500",
+            color: "from-[#5a6cb8] to-[#7b93d1]",
         },
     ]
 
@@ -42,7 +42,7 @@ export function CompanyIntro({ lang, dict }: CompanyIntroProps) {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Mission & Vision */}
                 <div className="grid lg:grid-cols-2 gap-12 mb-20">
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-10 rounded-3xl border border-blue-100">
+                    <div className="bg-gradient-to-br from-[#364fa1]/5 to-[#5a7ec9]/10 p-10 rounded-3xl border border-[#364fa1]/20">
                         <h2 className="text-3xl font-heading font-bold text-gray-900 mb-6">
                             {dict.about.mission}
                         </h2>
@@ -51,7 +51,7 @@ export function CompanyIntro({ lang, dict }: CompanyIntroProps) {
                         </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-cyan-50 to-blue-50 p-10 rounded-3xl border border-cyan-100">
+                    <div className="bg-gradient-to-br from-[#5a7ec9]/10 to-[#364fa1]/5 p-10 rounded-3xl border border-[#5a7ec9]/20">
                         <h2 className="text-3xl font-heading font-bold text-gray-900 mb-6">
                             {dict.about.vision}
                         </h2>
@@ -74,7 +74,7 @@ export function CompanyIntro({ lang, dict }: CompanyIntroProps) {
                         return (
                             <div
                                 key={index}
-                                className="group p-8 bg-white rounded-2xl border border-gray-100 hover:border-blue-300 shadow-lg hover:shadow-xl transition-all duration-300"
+                                className="group p-8 bg-white rounded-2xl border border-gray-100 hover:border-[#364fa1]/40 shadow-lg hover:shadow-xl transition-all duration-300"
                             >
                                 <div className={`inline-flex items-center justify-center w-14 h-14 mb-6 rounded-xl bg-gradient-to-r ${value.color} text-white group-hover:scale-110 transition-transform duration-300`}>
                                     <Icon size={28} />

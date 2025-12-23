@@ -73,7 +73,7 @@ export default async function NewsArticlePage({
                             <ArrowLeft size={20} />
                             {dict.common.back}
                         </Link>
-                        <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm font-heading font-bold rounded-full mb-4">
+                        <span className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-sm font-heading font-bold rounded-full mb-4">
                             {article.category === 'company' ? dict.news.categories.company : dict.news.categories.industry}
                         </span>
                         <h1 className="text-3xl md:text-4xl font-heading font-bold text-white">
@@ -102,7 +102,7 @@ export default async function NewsArticlePage({
 
                     {/* Content */}
                     <div
-                        className="prose prose-lg max-w-none font-body prose-headings:font-heading prose-headings:font-bold prose-a:text-blue-600"
+                        className="prose prose-lg max-w-none font-body prose-headings:font-heading prose-headings:font-bold prose-a:text-[#364fa1]"
                         dangerouslySetInnerHTML={{ __html: article.content }}
                     />
                 </div>

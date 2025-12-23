@@ -68,11 +68,11 @@ export default async function CareersPage({
                                 <Link
                                     key={vacancy.id}
                                     href={`/${lang}/careers/${vacancy.slug}`}
-                                    className="block bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300 group"
+                                    className="block bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40 group"
                                 >
                                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                         <div>
-                                            <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                                 {vacancy.title}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
@@ -104,7 +104,7 @@ export default async function CareersPage({
                                                     {formatDate(vacancy.deadline)}
                                                 </p>
                                             </div>
-                                            <span className="px-4 py-2 bg-blue-600 text-white font-heading font-semibold rounded-lg group-hover:bg-blue-700 transition-colors">
+                                            <span className="px-4 py-2 bg-[#364fa1] text-white font-heading font-semibold rounded-lg group-hover:bg-[#2d4388] transition-colors">
                                                 {dict.careers.apply}
                                             </span>
                                         </div>
@@ -135,7 +135,7 @@ export default async function CareersPage({
                     </p>
                     <a
                         href="mailto:hr@toanthang.vn"
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
                     >
                         <Mail size={20} />
                         hr@toanthang.vn

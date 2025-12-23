@@ -69,7 +69,7 @@ export default async function NewsPage({
                                         fill
                                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
-                                    <div className="absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-heading font-bold rounded-full">
+                                    <div className="absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-heading font-bold rounded-full">
                                         {article.category === 'company' ? dict.news.categories.company : dict.news.categories.industry}
                                     </div>
                                 </div>
@@ -78,13 +78,13 @@ export default async function NewsPage({
                                         <Calendar size={14} />
                                         <span className="font-body">{formatDate(article.publishedAt)}</span>
                                     </div>
-                                    <h3 className="text-lg font-heading font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                    <h3 className="text-lg font-heading font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#364fa1] transition-colors">
                                         {article.title}
                                     </h3>
                                     <p className="font-body text-gray-600 text-sm line-clamp-2 mb-4">
                                         {article.excerpt}
                                     </p>
-                                    <span className="inline-flex items-center gap-1 text-blue-600 font-heading font-semibold text-sm group-hover:gap-2 transition-all">
+                                    <span className="inline-flex items-center gap-1 text-[#364fa1] font-heading font-semibold text-sm group-hover:gap-2 transition-all">
                                         {dict.news.readMore}
                                         <ArrowRight size={16} />
                                     </span>

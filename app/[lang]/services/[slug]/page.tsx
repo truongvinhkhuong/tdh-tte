@@ -86,7 +86,7 @@ export default async function ServiceDetailPage({
                     />
 
                     {/* Contact Form */}
-                    <div className="mt-16 bg-gradient-to-br from-gray-50 to-blue-50 p-8 rounded-2xl">
+                    <div className="mt-16 bg-gradient-to-br from-gray-50 to-[#364fa1]/5 p-8 rounded-2xl">
                         <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
                             {lang === 'vi' ? 'Yêu cầu dịch vụ' : 'Request Service'}
                         </h2>
@@ -95,7 +95,7 @@ export default async function ServiceDetailPage({
                                 <input
                                     type="text"
                                     placeholder={dict.contact.form.name}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1]"
                                 />
                                 <input
                                     type="email"
@@ -115,7 +115,7 @@ export default async function ServiceDetailPage({
                             ></textarea>
                             <button
                                 type="submit"
-                                className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+                                className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
                             >
                                 {dict.contact.form.submit}
                             </button>

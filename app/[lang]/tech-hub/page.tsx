@@ -50,7 +50,7 @@ export default async function TechHubPage({
             <section className="py-16 bg-white">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-3 mb-8">
-                        <BookOpen className="text-blue-600" size={28} />
+                        <BookOpen className="text-[#364fa1]" size={28} />
                         <h2 className="text-3xl font-heading font-bold text-gray-900">
                             {dict.techHub.solutions}
                         </h2>
@@ -72,7 +72,7 @@ export default async function TechHubPage({
                                     />
                                 </div>
                                 <div className="p-6">
-                                    <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                    <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                         {article.title}
                                     </h3>
                                     <p className="font-body text-gray-600 text-sm mb-4 line-clamp-2">
@@ -84,7 +84,7 @@ export default async function TechHubPage({
                                                 {article.readTime} {lang === 'vi' ? 'phút đọc' : 'min read'}
                                             </span>
                                         )}
-                                        <span className="inline-flex items-center gap-1 text-blue-600 font-heading font-semibold text-sm group-hover:gap-2 transition-all">
+                                        <span className="inline-flex items-center gap-1 text-[#364fa1] font-heading font-semibold text-sm group-hover:gap-2 transition-all">
                                             {dict.techHub.readMore}
                                             <ArrowRight size={16} />
                                         </span>
@@ -100,7 +100,7 @@ export default async function TechHubPage({
             <section className="py-16 bg-gray-50">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-3 mb-8">
-                        <FileText className="text-blue-600" size={28} />
+                        <FileText className="text-[#364fa1]" size={28} />
                         <h2 className="text-3xl font-heading font-bold text-gray-900">
                             {dict.techHub.library}
                         </h2>
@@ -113,18 +113,18 @@ export default async function TechHubPage({
                                 href={item.downloadUrl || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300"
+                                className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40"
                             >
-                                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
-                                    <FileText size={24} className="text-blue-600" />
+                                <div className="w-12 h-12 bg-[#364fa1]/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#364fa1]/20 transition-colors">
+                                    <FileText size={24} className="text-[#364fa1]" />
                                 </div>
-                                <h3 className="font-heading font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                <h3 className="font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                     {item.title}
                                 </h3>
                                 <p className="font-body text-gray-600 text-sm mb-4">
                                     {item.excerpt}
                                 </p>
-                                <span className="inline-flex items-center gap-2 text-blue-600 font-heading font-semibold text-sm">
+                                <span className="inline-flex items-center gap-2 text-[#364fa1] font-heading font-semibold text-sm">
                                     <Download size={16} />
                                     {dict.techHub.downloadCatalog}
                                 </span>

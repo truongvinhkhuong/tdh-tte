@@ -46,45 +46,45 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
             title: dict.services.consulting,
             description: dict.services.consultingDesc,
             icon: "Lightbulb",
-            gradient: "from-blue-500 to-cyan-500",
+            gradient: "from-[#364fa1] to-[#5a7ec9]",
         },
         {
             title: dict.services.supply,
             description: dict.services.supplyDesc,
             icon: "Package",
-            gradient: "from-cyan-500 to-blue-500",
+            gradient: "from-[#5a7ec9] to-[#364fa1]",
         },
         {
             title: dict.services.installation,
             description: dict.services.installationDesc,
             icon: "Wrench",
-            gradient: "from-blue-600 to-purple-500",
+            gradient: "from-[#364fa1] to-[#6b7fc6]",
         },
         {
             title: dict.services.maintenance,
             description: dict.services.maintenanceDesc,
             icon: "Settings",
-            gradient: "from-purple-500 to-cyan-500",
+            gradient: "from-[#5a6cb8] to-[#7b93d1]",
         },
         {
             title: dict.services.training,
             description: dict.services.trainingDesc,
             icon: "Users",
-            gradient: "from-blue-500 to-purple-500",
+            gradient: "from-[#364fa1] to-[#5a6cb8]",
         },
         {
             title: dict.services.support,
             description: dict.services.supportDesc,
             icon: "Headphones",
-            gradient: "from-cyan-500 to-purple-500",
+            gradient: "from-[#5a7ec9] to-[#6b7fc6]",
         },
     ]
 
     return (
         <section id="services" className="py-24 scroll-mt-24 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
+            <div className="absolute top-20 left-10 w-72 h-72 bg-[#364fa1]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
             <div
-                className="absolute bottom-20 right-10 w-72 h-72 bg-cyan-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
+                className="absolute bottom-20 right-10 w-72 h-72 bg-[#5a7ec9]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
                 style={{ animationDelay: "2s" }}
             ></div>
 
@@ -92,10 +92,10 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                 <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
                     <div className="text-center mb-20">
                         <div className="inline-block relative">
-                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent">
                                 {dict.services.title}
                             </h2>
-                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
+                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full"></div>
                         </div>
                         <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
                             {dict.services.subtitle}
@@ -108,7 +108,7 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                             return (
                                 <div
                                     key={index}
-                                    className="group relative p-8 bg-white rounded-2xl border border-gray-100 hover:border-blue-300 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                                    className="group relative p-8 bg-white rounded-2xl border border-gray-100 hover:border-[#364fa1]/40 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
                                     style={{
                                         animationName: isVisible ? 'cardLift' : 'none',
                                         animationDuration: '0.8s',
@@ -123,17 +123,17 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                                     ></div>
 
                                     <div className="relative z-10">
-                                        <div className="text-5xl mb-4 transition-all duration-300 group-hover:scale-125 inline-block text-blue-600 group-hover:text-cyan-500">
+                                        <div className="text-5xl mb-4 transition-all duration-300 group-hover:scale-125 inline-block text-[#364fa1] group-hover:text-[#5a7ec9]">
                                             <IconComponent size={48} strokeWidth={1.5} />
                                         </div>
-                                        <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                                        <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-3 group-hover:text-[#364fa1] transition-colors">
                                             {service.title}
                                         </h3>
                                         <p className="text-sm font-svn-avo text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
                                             {service.description}
                                         </p>
 
-                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                                     </div>
                                 </div>
                             )
@@ -143,7 +143,7 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                     <div className="text-center mt-12">
                         <Link
                             href={`/${lang}/services`}
-                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                         >
                             {dict.services.learnMore}
                         </Link>

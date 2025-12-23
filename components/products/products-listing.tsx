@@ -47,8 +47,8 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             key={brand.id}
                             onClick={() => setSelectedBrand(selectedBrand === brand.id ? null : brand.id)}
                             className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 font-body text-sm ${selectedBrand === brand.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                                ? 'bg-[#364fa1] text-white'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                                 }`}
                         >
                             {brand.name}
@@ -68,8 +68,8 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             key={category.id}
                             onClick={() => setSelectedCategory(selectedCategory === category.id ? null : category.id)}
                             className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 font-body text-sm ${selectedCategory === category.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                                ? 'bg-[#364fa1] text-white'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                                 }`}
                         >
                             {category.name}
@@ -89,8 +89,8 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             key={industry.id}
                             onClick={() => setSelectedIndustry(selectedIndustry === industry.id ? null : industry.id)}
                             className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 font-body text-sm ${selectedIndustry === industry.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                                ? 'bg-[#364fa1] text-white'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                                 }`}
                         >
                             {industry.name}
@@ -116,7 +116,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-heading font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">
+                    <h1 className="text-4xl font-heading font-black bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-2">
                         {dict.products.title}
                     </h1>
                     <p className="font-body text-gray-600">
@@ -146,7 +146,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                 <Filter size={20} />
                                 {lang === 'vi' ? 'Bộ lọc' : 'Filters'}
                                 {hasActiveFilters && (
-                                    <span className="w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                                    <span className="w-5 h-5 bg-[#364fa1] text-white text-xs rounded-full flex items-center justify-center">
                                         {[selectedBrand, selectedCategory, selectedIndustry].filter(Boolean).length}
                                     </span>
                                 )}
@@ -168,7 +168,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                 <Link
                                     key={product.id}
                                     href={`/${lang}/products/${product.slug}`}
-                                    className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-blue-300"
+                                    className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40"
                                 >
                                     <div className="relative h-56 bg-gray-200 overflow-hidden">
                                         <Image
@@ -183,10 +183,10 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                     </div>
 
                                     <div className="p-6">
-                                        <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-heading font-bold rounded-full mb-3">
+                                        <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-heading font-bold rounded-full mb-3">
                                             {product.category.name}
                                         </div>
-                                        <h3 className="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                        <h3 className="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                             {product.name}
                                         </h3>
                                         <p className="text-sm font-body text-gray-500 mb-4">
@@ -194,7 +194,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                         </p>
                                         <div className="flex justify-between items-center">
                                             <span className="font-body text-gray-600 font-semibold">{dict.products.contact}</span>
-                                            <span className="flex items-center gap-1 text-blue-600 font-heading font-semibold text-sm group-hover:gap-2 transition-all">
+                                            <span className="flex items-center gap-1 text-[#364fa1] font-heading font-semibold text-sm group-hover:gap-2 transition-all">
                                                 {dict.products.viewDetails}
                                                 <ArrowRight size={16} />
                                             </span>
@@ -214,7 +214,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                 </p>
                                 <button
                                     onClick={clearFilters}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg font-heading font-semibold hover:bg-blue-700 transition-colors"
+                                    className="px-6 py-2 bg-[#364fa1] text-white rounded-lg font-heading font-semibold hover:bg-[#2d4388] transition-colors"
                                 >
                                     {lang === 'vi' ? 'Xóa bộ lọc' : 'Clear Filters'}
                                 </button>

@@ -80,7 +80,7 @@ export function HeroSection({ lang, dict }: HeroSectionProps) {
                     <div className="max-w-2xl">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-svn-avo-extra-bold text-white mb-4 leading-tight">
                             {dict.hero.title}
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-svn-avo-extra-bold">
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4f6db3] to-[#7b93d1] font-svn-avo-extra-bold">
                                 {dict.hero.subtitle}
                             </span>
                         </h1>
@@ -148,7 +148,7 @@ export function HeroSection({ lang, dict }: HeroSectionProps) {
                             setTimeout(() => setIsAutoPlay(true), 10000)
                         }}
                         className={`h-1 rounded-full transition-all duration-500 backdrop-blur-md ${index === currentSlide
-                            ? "w-10 bg-gradient-to-r from-blue-400 to-cyan-400 shadow-lg shadow-blue-500/50"
+                            ? "w-10 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] shadow-lg shadow-[#364fa1]/50"
                             : "w-2 bg-white/40 hover:bg-white/70"
                             }`}
                         aria-label={`Go to slide ${index + 1}`}

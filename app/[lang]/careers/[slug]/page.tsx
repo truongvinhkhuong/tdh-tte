@@ -129,7 +129,7 @@ export default async function VacancyDetailPage({
                                 <ul className="space-y-3">
                                     {vacancy.benefits.map((benefit, index) => (
                                         <li key={index} className="flex items-start gap-3">
-                                            <CheckCircle size={20} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                                            <CheckCircle size={20} className="text-[#364fa1] flex-shrink-0 mt-0.5" />
                                             <span className="font-body text-gray-600">{benefit}</span>
                                         </li>
                                     ))}
@@ -158,7 +158,7 @@ export default async function VacancyDetailPage({
                                 ) : (
                                     <a
                                         href={`mailto:${vacancy.contactEmail}?subject=${encodeURIComponent(vacancy.title)}`}
-                                        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+                                        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
                                     >
                                         <Mail size={20} />
                                         {dict.careers.apply}

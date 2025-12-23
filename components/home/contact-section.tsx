@@ -68,10 +68,10 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <div className="inline-block relative">
-                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent">
                             {dict.contact.title}
                         </h2>
-                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
+                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full"></div>
                     </div>
                     <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
                         {dict.contact.subtitle}
@@ -85,9 +85,9 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                         return (
                             <div
                                 key={index}
-                                className="bg-white p-8 rounded-2xl shadow-lg text-center hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100 hover:border-blue-300 group"
+                                className="bg-white p-8 rounded-2xl shadow-lg text-center hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40 group"
                             >
-                                <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white group-hover:scale-110 transition-transform duration-300">
+                                <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-[#364fa1] to-[#5a7ec9] text-white group-hover:scale-110 transition-transform duration-300">
                                     <IconComponent size={28} strokeWidth={1.5} />
                                 </div>
                                 <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2">{info.title}</h3>
@@ -127,7 +127,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-300 font-svn-avo"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1] focus:border-transparent transition-all duration-300 font-svn-avo"
                                         required
                                     />
                                 </div>
@@ -141,7 +141,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-300 font-svn-avo"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1] focus:border-transparent transition-all duration-300 font-svn-avo"
                                         required
                                     />
                                 </div>
@@ -158,7 +158,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-300 font-svn-avo"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1] focus:border-transparent transition-all duration-300 font-svn-avo"
                                     />
                                 </div>
                                 <div>
@@ -171,7 +171,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                         name="subject"
                                         value={formData.subject}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-300 font-svn-avo"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1] focus:border-transparent transition-all duration-300 font-svn-avo"
                                     />
                                 </div>
                             </div>
@@ -186,7 +186,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                     rows={5}
                                     value={formData.message}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-300 resize-none font-svn-avo"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1] focus:border-transparent transition-all duration-300 resize-none font-svn-avo"
                                     required
                                 ></textarea>
                             </div>
@@ -194,7 +194,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-svn-avo-extra-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-extra-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
                                 {isSubmitting ? (
                                     <span>{dict.common.loading}</span>

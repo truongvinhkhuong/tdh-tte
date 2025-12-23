@@ -107,7 +107,7 @@ export default async function TechArticlePage({
 
                     {/* Content */}
                     <div
-                        className="prose prose-lg max-w-none font-body prose-headings:font-heading prose-headings:font-bold prose-a:text-blue-600"
+                        className="prose prose-lg max-w-none font-body prose-headings:font-heading prose-headings:font-bold prose-a:text-[#364fa1]"
                         dangerouslySetInnerHTML={{ __html: article.content }}
                     />
                 </div>

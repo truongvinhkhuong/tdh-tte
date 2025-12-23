@@ -60,9 +60,9 @@ export default async function ServicesPage({
                             return (
                                 <div
                                     key={service.id}
-                                    className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300"
+                                    className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40"
                                 >
-                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-[#364fa1] to-[#5a7ec9] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                         <IconComponent size={32} className="text-white" />
                                     </div>
                                     <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
@@ -73,7 +73,7 @@ export default async function ServicesPage({
                                     </p>
                                     <Link
                                         href={`/${lang}/services/${service.slug}`}
-                                        className="inline-flex items-center gap-2 text-blue-600 font-heading font-semibold group-hover:gap-3 transition-all"
+                                        className="inline-flex items-center gap-2 text-[#364fa1] font-heading font-semibold group-hover:gap-3 transition-all"
                                     >
                                         {dict.services.learnMore}
                                         <ArrowRight size={18} />
@@ -98,7 +98,7 @@ export default async function ServicesPage({
                     </p>
                     <Link
                         href={`/${lang}/contact`}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
                     >
                         {dict.header.contactNow}
                         <ArrowRight size={20} />

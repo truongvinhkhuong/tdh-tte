@@ -32,7 +32,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                 <div className="mb-8">
                     <Link
                         href={`/${lang}/products`}
-                        className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-heading font-semibold"
+                        className="inline-flex items-center gap-2 text-[#364fa1] hover:text-[#2d4388] font-heading font-semibold"
                     >
                         <ArrowLeft size={20} />
                         {lang === 'vi' ? 'Quay lại sản phẩm' : 'Back to Products'}
@@ -56,7 +56,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     <button
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
-                                        className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index ? 'border-blue-600' : 'border-gray-200 hover:border-gray-400'
+                                        className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index ? 'border-[#364fa1]' : 'border-gray-200 hover:border-gray-400'
                                             }`}
                                     >
                                         <Image
@@ -94,13 +94,13 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
 
                         {/* Category & Industry Tags */}
                         <div className="flex flex-wrap gap-2 mb-8">
-                            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-heading font-semibold rounded-full">
+                            <span className="px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-sm font-heading font-semibold rounded-full">
                                 {product.category.name}
                             </span>
                             {product.industries.map((industry) => (
                                 <span
                                     key={industry.id}
-                                    className="px-3 py-1 bg-cyan-100 text-cyan-700 text-sm font-heading font-semibold rounded-full"
+                                    className="px-3 py-1 bg-[#5a7ec9]/10 text-[#4a5ea0] text-sm font-heading font-semibold rounded-full"
                                 >
                                     {industry.name}
                                 </span>
@@ -111,14 +111,14 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
                                 onClick={() => setShowQuoteForm(true)}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
                             >
                                 <Send size={20} />
                                 {dict.products.requestQuote}
                             </button>
                             <Link
                                 href={`/${lang}/contact`}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-blue-600 text-blue-600 font-heading font-semibold rounded-xl hover:bg-blue-50 transition-all duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#364fa1] text-[#364fa1] font-heading font-semibold rounded-xl hover:bg-[#364fa1]/5 transition-all duration-300"
                             >
                                 {dict.contact.title}
                             </Link>
@@ -135,8 +135,8 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex-1 px-6 py-4 font-heading font-semibold transition-all duration-200 ${activeTab === tab.id
-                                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
-                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                    ? 'text-[#364fa1] border-b-2 border-[#364fa1] bg-[#364fa1]/5'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                     }`}
                             >
                                 {tab.label}
@@ -187,8 +187,8 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group"
                                     >
-                                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                                            <FileText size={24} className="text-blue-600" />
+                                        <div className="w-12 h-12 bg-[#364fa1]/10 rounded-lg flex items-center justify-center group-hover:bg-[#364fa1]/20 transition-colors">
+                                            <FileText size={24} className="text-[#364fa1]" />
                                         </div>
                                         <div className="flex-1">
                                             <h4 className="font-heading font-semibold text-gray-900">{doc.name}</h4>
@@ -196,7 +196,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                                 {doc.type.toUpperCase()} {doc.size && `• ${doc.size}`}
                                             </p>
                                         </div>
-                                        <Download size={20} className="text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                        <Download size={20} className="text-gray-400 group-hover:text-[#364fa1] transition-colors" />
                                     </a>
                                 ))}
                                 {product.documents.length === 0 && (
@@ -230,7 +230,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                     <div className="absolute bottom-0 left-0 right-0 p-6">
-                                        <h3 className="text-lg font-heading font-bold text-white group-hover:text-cyan-300 transition-colors">
+                                        <h3 className="text-lg font-heading font-bold text-white group-hover:text-[#a8bcdf] transition-colors">
                                             {project.title}
                                         </h3>
                                     </div>
@@ -261,7 +261,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                             <input
                                 type="text"
                                 placeholder={dict.contact.form.name}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#364fa1]"
                             />
                             <input
                                 type="email"
@@ -288,7 +288,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all"
                                 >
                                     {dict.contact.form.submit}
                                 </button>

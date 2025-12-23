@@ -42,9 +42,9 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
             id="products"
             className="py-24 scroll-mt-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden"
         >
-            <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#5a7ec9]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
             <div
-                className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
+                className="absolute bottom-0 left-0 w-96 h-96 bg-[#364fa1]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
                 style={{ animationDelay: "2s" }}
             ></div>
 
@@ -52,10 +52,10 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                 <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
                     <div className="text-center mb-20">
                         <div className="inline-block relative">
-                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent">
                                 {dict.products.featured}
                             </h2>
-                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
+                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full"></div>
                         </div>
                         <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
                             {dict.products.subtitle}
@@ -67,7 +67,7 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                             <Link
                                 key={product.id}
                                 href={`/${lang}/products/${product.slug}`}
-                                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-blue-300"
+                                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-[#364fa1]/40"
                                 style={{
                                     animationName: isVisible ? 'cardLift' : 'none',
                                     animationDuration: '0.8s',
@@ -93,10 +93,10 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                                 </div>
 
                                 <div className="p-6">
-                                    <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-svn-avo-extra-bold rounded-full mb-3">
+                                    <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-svn-avo-extra-bold rounded-full mb-3">
                                         {product.category.name}
                                     </div>
-                                    <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                    <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                         {product.name}
                                     </h3>
                                     <p className="text-sm font-svn-avo text-gray-500 mb-4">
@@ -104,7 +104,7 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                                     </p>
                                     <div className="flex justify-between items-center">
                                         <span className="font-svn-avo text-gray-600">{dict.products.contact}</span>
-                                        <span className="flex items-center gap-1 text-blue-600 font-svn-avo-extra-bold text-sm group-hover:gap-2 transition-all">
+                                        <span className="flex items-center gap-1 text-[#364fa1] font-svn-avo-extra-bold text-sm group-hover:gap-2 transition-all">
                                             {dict.products.viewDetails}
                                             <ArrowRight size={16} />
                                         </span>
@@ -117,7 +117,7 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                     <div className="text-center mt-12">
                         <Link
                             href={`/${lang}/products`}
-                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                         >
                             {dict.products.viewAll}
                             <ArrowRight size={20} />

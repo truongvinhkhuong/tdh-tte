@@ -36,9 +36,9 @@ export function ProjectsSection({ lang, dict }: ProjectsSectionProps) {
 
     return (
         <section id="projects" className="py-24 scroll-mt-24 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
-            <div className="absolute top-20 right-20 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
+            <div className="absolute top-20 right-20 w-80 h-80 bg-[#364fa1]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"></div>
             <div
-                className="absolute bottom-20 left-20 w-80 h-80 bg-cyan-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
+                className="absolute bottom-20 left-20 w-80 h-80 bg-[#5a7ec9]/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-floating"
                 style={{ animationDelay: "2s" }}
             ></div>
 
@@ -46,10 +46,10 @@ export function ProjectsSection({ lang, dict }: ProjectsSectionProps) {
                 <div ref={ref} className={`transition-all duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}>
                     <div className="text-center mb-20">
                         <div className="inline-block relative">
-                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                            <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent">
                                 {dict.projects.featured}
                             </h2>
-                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"></div>
+                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full"></div>
                         </div>
                         <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
                             {dict.projects.subtitle}
@@ -61,7 +61,7 @@ export function ProjectsSection({ lang, dict }: ProjectsSectionProps) {
                             <Link
                                 key={project.id}
                                 href={`/${lang}/projects/${project.slug}`}
-                                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-blue-300 h-96"
+                                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-[#364fa1]/40 h-96"
                                 style={{
                                     animationName: isVisible ? 'cardLift' : 'none',
                                     animationDuration: '0.8s',
@@ -80,17 +80,17 @@ export function ProjectsSection({ lang, dict }: ProjectsSectionProps) {
 
                                 {/* Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/90 group-hover:via-black/60 transition-all duration-300"></div>
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#364fa1]/20 to-[#5a7ec9]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                                 {/* Content */}
                                 <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
                                     <div className="transform transition-all duration-300 group-hover:translate-y-0">
                                         {/* Industry Badge */}
-                                        <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs font-svn-avo-extra-bold rounded-full mb-3">
+                                        <span className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-svn-avo-extra-bold rounded-full mb-3">
                                             {project.industry.name}
                                         </span>
 
-                                        <h3 className="text-2xl font-svn-avo-extra-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
+                                        <h3 className="text-2xl font-svn-avo-extra-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#7b93d1] group-hover:to-[#a8bcdf] group-hover:bg-clip-text transition-all duration-300">
                                             {project.title}
                                         </h3>
 
@@ -123,7 +123,7 @@ export function ProjectsSection({ lang, dict }: ProjectsSectionProps) {
                     <div className="text-center mt-12">
                         <Link
                             href={`/${lang}/projects`}
-                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-extra-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                         >
                             {dict.projects.viewAll}
                             <ArrowRight size={20} />
