@@ -38,56 +38,56 @@ export function CompanyIntro({ lang, dict }: CompanyIntroProps) {
     ]
 
     return (
-        <section className="py-24 bg-white">
+        <section className="py-16 md:py-20 bg-white">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Mission & Vision */}
-                <div className="grid lg:grid-cols-2 gap-12 mb-20">
-                    <div className="bg-gradient-to-br from-[#364fa1]/5 to-[#5a7ec9]/10 p-10 rounded-3xl border border-[#364fa1]/20">
-                        <h2 className="text-3xl font-heading font-bold text-gray-900 mb-6">
+                {/* Mission & Vision - Compact Side by Side */}
+                <div className="grid lg:grid-cols-2 gap-6 mb-12">
+                    <div className="bg-gradient-to-br from-[#364fa1]/5 to-[#5a7ec9]/10 p-6 md:p-8 rounded-2xl border border-[#364fa1]/20">
+                        <h2 className="text-2xl font-heading font-bold text-gray-900 mb-3">
                             {dict.about.mission}
                         </h2>
-                        <p className="font-body text-gray-600 text-lg leading-relaxed">
+                        <p className="font-body text-gray-600 text-base leading-relaxed">
                             {dict.about.missionDesc}
                         </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#5a7ec9]/10 to-[#364fa1]/5 p-10 rounded-3xl border border-[#5a7ec9]/20">
-                        <h2 className="text-3xl font-heading font-bold text-gray-900 mb-6">
+                    <div className="bg-gradient-to-br from-[#5a7ec9]/10 to-[#364fa1]/5 p-6 md:p-8 rounded-2xl border border-[#5a7ec9]/20">
+                        <h2 className="text-2xl font-heading font-bold text-gray-900 mb-3">
                             {dict.about.vision}
                         </h2>
-                        <p className="font-body text-gray-600 text-lg leading-relaxed">
+                        <p className="font-body text-gray-600 text-base leading-relaxed">
                             {dict.about.visionDesc}
                         </p>
                     </div>
                 </div>
 
-                {/* Core Values */}
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900">
+                {/* Core Values - Compact Horizontal Design */}
+                <div className="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-6 md:p-8 border border-gray-100">
+                    <h2 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 text-center mb-6">
                         {dict.about.coreValues}
                     </h2>
-                </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {values.map((value, index) => {
-                        const Icon = value.icon
-                        return (
-                            <div
-                                key={index}
-                                className="group p-8 bg-white rounded-2xl border border-gray-100 hover:border-[#364fa1]/40 shadow-lg hover:shadow-xl transition-all duration-300"
-                            >
-                                <div className={`inline-flex items-center justify-center w-14 h-14 mb-6 rounded-xl bg-gradient-to-r ${value.color} text-white group-hover:scale-110 transition-transform duration-300`}>
-                                    <Icon size={28} />
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {values.map((value, index) => {
+                            const Icon = value.icon
+                            return (
+                                <div
+                                    key={index}
+                                    className="group flex flex-col items-center text-center p-4 bg-white rounded-xl border border-gray-100 hover:border-[#364fa1]/40 hover:shadow-lg transition-all duration-300"
+                                >
+                                    <div className={`flex items-center justify-center w-11 h-11 mb-3 rounded-lg bg-gradient-to-r ${value.color} text-white group-hover:scale-110 transition-transform duration-300`}>
+                                        <Icon size={22} />
+                                    </div>
+                                    <h3 className="text-base font-heading font-bold text-gray-900 mb-1">
+                                        {value.title}
+                                    </h3>
+                                    <p className="font-body text-gray-500 text-xs leading-relaxed line-clamp-2">
+                                        {value.description}
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-heading font-bold text-gray-900 mb-3">
-                                    {value.title}
-                                </h3>
-                                <p className="font-body text-gray-600 text-sm leading-relaxed">
-                                    {value.description}
-                                </p>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </section>
