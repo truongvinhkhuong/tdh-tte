@@ -37,7 +37,7 @@ export function CertificatesSection({ lang, dict }: CertificatesSectionProps) {
                             <h3 className="text-xl font-heading font-bold text-gray-900 mb-2">
                                 {cert.name}
                             </h3>
-                            <p className="font-body text-gray-600 text-sm mb-2">
+                            <p className="font-svn-avo-bold text-gray-800 text-sm mb-2">
                                 {cert.issuer}
                             </p>
                             <span className="inline-block px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-xs font-heading font-bold rounded-full">

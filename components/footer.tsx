@@ -61,10 +61,10 @@ export function Footer({ lang, dict }: FooterProps) {
                 className="object-contain"
               />
             </div>
-            <p className="font-body text-slate-600 mb-4 leading-relaxed">
+            <p className="font-svn-avo-bold text-slate-800 mb-4 leading-relaxed">
               {companyInfo.name}
             </p>
-            <div className="space-y-2 text-sm text-slate-600 mb-6">
+            <div className="space-y-2 text-sm text-slate-800 mb-6">
               <p>{companyInfo.address}</p>
               <p>{dict.contact.phone}: {companyInfo.phone}</p>
               <p>{dict.contact.email}: {companyInfo.email}</p>
@@ -110,7 +110,7 @@ export function Footer({ lang, dict }: FooterProps) {
                   <li key={linkIndex}>
                     <Link
                       href={link.href}
-                      className="font-body text-slate-600 hover:text-[#2B54A7] transition-colors duration-300"
+                      className="font-svn-avo-bold text-slate-800 hover:text-[#2B54A7] transition-colors duration-300"
                     >
                       {link.label}
                     </Link>
@@ -128,7 +128,7 @@ export function Footer({ lang, dict }: FooterProps) {
               <h3 className="font-heading font-bold text-lg text-slate-900 mb-1">
                 {dict.footer.newsletter}
               </h3>
-              <p className="font-body text-slate-600 text-sm">
+              <p className="font-svn-avo-bold text-slate-800 text-sm">
                 {dict.footer.newsletterDesc}
               </p>
             </div>
@@ -153,14 +153,14 @@ export function Footer({ lang, dict }: FooterProps) {
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-slate-600 text-sm">
+          <p className="font-svn-avo-bold text-slate-800 text-sm">
             © {currentYear} {dict.footer.copyright}. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
-            <Link href={`/${lang}/terms`} className="text-slate-600 hover:text-[#2B54A7] transition-colors">
+            <Link href={`/${lang}/terms`} className="text-slate-800 hover:text-[#2B54A7] transition-colors">
               {dict.footer.links.terms}
             </Link>
-            <Link href={`/${lang}/privacy`} className="text-slate-600 hover:text-[#2B54A7] transition-colors">
+            <Link href={`/${lang}/privacy`} className="text-slate-800 hover:text-[#2B54A7] transition-colors">
               {dict.footer.links.privacy}
             </Link>
           </div>

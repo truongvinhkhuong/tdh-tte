@@ -93,7 +93,7 @@ export function HistoryTimeline({ lang, dict }: HistoryTimelineProps) {
                                 {activeItem.title}
                             </h3>
 
-                            <p className="font-body text-gray-600 text-base md:text-lg leading-relaxed">
+                            <p className="font-svn-avo-bold text-gray-800 text-base md:text-lg leading-relaxed">
                                 {activeItem.description}
                             </p>
 
