@@ -15,12 +15,20 @@ export interface Product {
     relatedProjects: Project[];
 }
 
+export interface SubBrand {
+    id: string;
+    slug: string;
+    name: string;
+    logo?: string;
+}
+
 export interface Brand {
     id: string;
     slug: string;
     name: string;
     logo: string;
     description?: string;
+    subBrands?: SubBrand[];
 }
 
 export interface ProductCategory {
