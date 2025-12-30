@@ -150,6 +150,7 @@ export interface TimelineMilestone {
     year: number;
     title: string;
     description: string;
+    images?: string[];
 }
 
 export interface Certificate {

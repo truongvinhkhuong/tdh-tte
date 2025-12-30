@@ -60,6 +60,13 @@
             "experienceDesc": "Over 30 years serving major industry projects"
         }
     },
+    "customers": {
+        "title": "Featured Customers",
+        "subtitle": "We are proud to partner with leading enterprises in the industry",
+        "projects": "Successful Projects",
+        "years": "Years of Experience",
+        "satisfaction": "Customer Satisfaction"
+    },
     "products": {
         "title": "Products",
         "subtitle": "Discover our collection of high-quality products",

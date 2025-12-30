@@ -4,6 +4,7 @@ import { getDictionary } from "@/i18n/get-dictionary"
 import { AboutHero } from "@/components/about/about-hero"
 import { CompanyIntro } from "@/components/about/company-intro"
 import { HistoryTimeline } from "@/components/about/history-timeline"
+import { CustomersSection } from "@/components/shared/customers-section"
 import { CertificatesSection } from "@/components/about/certificates-section"
 
 export async function generateMetadata({
@@ -34,6 +35,7 @@ export default async function AboutPage({
             <AboutHero lang={lang} dict={dict} />
             <CompanyIntro lang={lang} dict={dict} />
             <HistoryTimeline lang={lang} dict={dict} />
+            <CustomersSection lang={lang} dict={dict} variant="about" />
             <CertificatesSection lang={lang} dict={dict} />
         </main>
     )

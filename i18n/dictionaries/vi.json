@@ -60,6 +60,13 @@
             "experienceDesc": "Hơn 30 năm phục vụ các dự án lớn trong ngành công nghiệp"
         }
     },
+    "customers": {
+        "title": "Khách hàng tiêu biểu",
+        "subtitle": "Chúng tôi tự hào được hợp tác với các doanh nghiệp hàng đầu trong ngành",
+        "projects": "Dự án thành công",
+        "years": "Năm kinh nghiệm",
+        "satisfaction": "Khách hàng hài lòng"
+    },
     "products": {
         "title": "Sản phẩm",
         "subtitle": "Khám phá bộ sưu tập các sản phẩm chất lượng cao của chúng tôi",
