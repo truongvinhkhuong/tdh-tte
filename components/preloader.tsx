@@ -30,13 +30,13 @@ export function Preloader() {
       <div className="relative w-80 h-80 flex items-center justify-center">
         {/* Animated glow rings */}
         <div className="absolute w-full h-full flex items-center justify-center">
-          <div 
+          <div
             className="absolute w-64 h-64 rounded-full border-2 border-blue-400 opacity-20"
             style={{
               animation: 'pulse-ring 3s ease-in-out infinite',
             }}
           />
-          <div 
+          <div
             className="absolute w-72 h-72 rounded-full border border-blue-300 opacity-10"
             style={{
               animation: 'pulse-ring 3s ease-in-out infinite 1s',
@@ -162,21 +162,21 @@ export function Preloader() {
               keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
               keyTimes="0; 0.5; 1"
             />
-            
+
             {/* Needle shadow/base */}
             <path
               d="M 120 120 L 118 120 L 118 35 L 120 30 L 122 35 L 122 120 Z"
               fill="#1e3a7a"
               opacity="0.3"
             />
-            
+
             {/* Main needle body */}
             <path
               d="M 120 120 L 118 120 L 118 35 L 120 30 L 122 35 L 122 120 Z"
               fill="url(#needleGradient)"
               filter="url(#needleGlow)"
             />
-            
+
             {/* Needle edge highlight */}
             <line
               x1="119"
@@ -188,7 +188,7 @@ export function Preloader() {
               opacity="0.5"
               strokeLinecap="round"
             />
-            
+
             {/* Glowing tip */}
             <circle
               cx="120"
@@ -204,7 +204,7 @@ export function Preloader() {
                 repeatCount="indefinite"
               />
             </circle>
-            
+
             <circle
               cx="120"
               cy="30"
@@ -244,16 +244,16 @@ export function Preloader() {
           {/* Main company name */}
           <div className="relative">
             {/* Glow background effect */}
-            <div 
+            <div
               className="absolute inset-0 blur-2xl opacity-40"
               style={{
                 background: 'linear-gradient(90deg, #2B54A7, #3b82f6, #2B54A7)',
                 animation: 'shimmer 3s ease-in-out infinite',
               }}
             />
-            
+
             {/* Main text with gradient */}
-            <h1 
+            <h1
               className="relative text-4xl font-bold tracking-wide flex gap-4"
               style={{
                 background: 'linear-gradient(135deg, #1e3a7a 0%, #2B54A7 25%, #3b82f6 50%, #2B54A7 75%, #1e3a7a 100%)',
@@ -284,10 +284,10 @@ export function Preloader() {
               ))}
             </h1>
           </div>
-          
+
           {/* Subtitle with elegant styling */}
           <div className="relative">
-            <p 
+            <p
               className="text-sm font-medium tracking-[0.3em] uppercase"
               style={{
                 background: 'linear-gradient(90deg, #64748b, #2B54A7, #64748b)',
@@ -301,10 +301,10 @@ export function Preloader() {
               Engineering Corporation
             </p>
           </div>
-          
+
           {/* Decorative line with animation */}
           <div className="flex items-center gap-2 mt-2">
-            <div 
+            <div
               className="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
               style={{
                 width: '80px',
@@ -313,7 +313,7 @@ export function Preloader() {
             />
             <div className="flex gap-1.5">
               {[0, 1, 2].map((i) => (
-                <span 
+                <span
                   key={i}
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
@@ -321,11 +321,11 @@ export function Preloader() {
                     animation: 'dotPulseAnim 1.4s ease-in-out infinite',
                     animationDelay: `${i * 0.35}s`,
                     boxShadow: '0 0 10px rgba(43, 84, 167, 0.5)',
-                  }} 
+                  }}
                 />
               ))}
             </div>
-            <div 
+            <div
               className="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
               style={{
                 width: '80px',
@@ -334,8 +334,8 @@ export function Preloader() {
             />
           </div>
         </div>
-        
-        
+
+
       </div>
 
       <style jsx global>{`

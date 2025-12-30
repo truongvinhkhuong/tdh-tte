@@ -41,8 +41,8 @@ export function Header({ lang, dict }: HeaderProps) {
     { label: dict.nav.home, href: `/${lang}` },
     { label: dict.nav.about, href: `/${lang}/about` },
     { label: dict.nav.products, href: `/${lang}/products` },
-    { label: dict.nav.projects, href: `/${lang}/projects` },
     { label: dict.nav.services, href: `/${lang}/services` },
+    { label: dict.nav.projects, href: `/${lang}/projects` },
     { label: dict.nav.techHub, href: `/${lang}/tech-hub` },
     { label: dict.nav.news, href: `/${lang}/news` },
   ]
@@ -88,18 +88,18 @@ export function Header({ lang, dict }: HeaderProps) {
                 href={item.href}
                 style={{ animationDelay: `${index * 50}ms` }}
                 className={`relative px-3 py-2 text-sm font-heading font-semibold transition-all duration-300 rounded-lg group overflow-hidden ${isScrolled
-                    ? 'text-gray-700 hover:text-[#2B54A7]'
-                    : 'text-white/95 hover:text-white drop-shadow-sm'
+                  ? 'text-gray-700 hover:text-[#2B54A7]'
+                  : 'text-white/95 hover:text-white drop-shadow-sm'
                   }`}
               >
                 <span className={`absolute inset-0 rounded-lg transition-all duration-300 transform scale-0 group-hover:scale-100 ${isScrolled
-                    ? 'bg-[#2B54A7]/10'
-                    : 'bg-white/20 backdrop-blur-sm'
+                  ? 'bg-[#2B54A7]/10'
+                  : 'bg-white/20 backdrop-blur-sm'
                   }`}></span>
                 <span className="relative z-10">{item.label}</span>
                 <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 rounded-full transition-all duration-300 group-hover:w-3/4 ${isScrolled
-                    ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]'
-                    : 'bg-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]'
+                  : 'bg-white shadow-lg'
                   }`}></span>
               </Link>
             ))}
@@ -111,8 +111,8 @@ export function Header({ lang, dict }: HeaderProps) {
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className={`p-2 rounded-lg transition-all duration-300 ${isScrolled
-                  ? 'hover:bg-gray-100 text-gray-700'
-                  : 'hover:bg-white/20 text-white'
+                ? 'hover:bg-gray-100 text-gray-700'
+                : 'hover:bg-white/20 text-white'
                 }`}
             >
               <Search size={20} />
@@ -122,8 +122,8 @@ export function Header({ lang, dict }: HeaderProps) {
             <Link
               href={`/${otherLang}`}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-heading font-semibold text-sm transition-all duration-300 ${isScrolled
-                  ? 'hover:bg-gray-100 text-gray-700'
-                  : 'hover:bg-white/20 text-white'
+                ? 'hover:bg-gray-100 text-gray-700'
+                : 'hover:bg-white/20 text-white'
                 }`}
             >
               <Globe size={18} />
@@ -134,8 +134,8 @@ export function Header({ lang, dict }: HeaderProps) {
             <Link
               href={`/${lang}/contact`}
               className={`inline-flex items-center gap-2 px-5 py-2.5 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${isScrolled
-                  ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white hover:shadow-[#2B54A7]/30'
-                  : 'bg-white text-[#2B54A7] hover:bg-gray-50 hover:shadow-white/20'
+                ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white hover:shadow-[#2B54A7]/30'
+                : 'bg-white text-[#2B54A7] hover:bg-gray-50 hover:shadow-white/20'
                 }`}
             >
               <span>{dict.header.contactNow}</span>
@@ -146,8 +146,8 @@ export function Header({ lang, dict }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             className={`lg:hidden p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${isScrolled
-                ? 'hover:bg-[#2B54A7]/10 text-gray-700'
-                : 'hover:bg-white/20 text-white backdrop-blur-sm'
+              ? 'hover:bg-[#2B54A7]/10 text-gray-700'
+              : 'hover:bg-white/20 text-white backdrop-blur-sm'
               }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -168,8 +168,8 @@ export function Header({ lang, dict }: HeaderProps) {
                 type="text"
                 placeholder={dict.header.searchPlaceholder}
                 className={`w-full px-4 py-3 pl-12 rounded-xl border-2 transition-all duration-300 font-body ${isScrolled
-                    ? 'border-gray-200 focus:border-[#2B54A7] bg-gray-50'
-                    : 'border-white/30 focus:border-white bg-white/20 text-white placeholder:text-white/70'
+                  ? 'border-gray-200 focus:border-[#2B54A7] bg-gray-50'
+                  : 'border-white/30 focus:border-white bg-white/20 text-white placeholder:text-white/70'
                   }`}
               />
               <Search className={`absolute left-4 top-1/2 -translate-y-1/2 ${isScrolled ? 'text-gray-400' : 'text-white/70'
@@ -186,8 +186,8 @@ export function Header({ lang, dict }: HeaderProps) {
             <Link
               href={`/${otherLang}`}
               className={`flex items-center gap-2 px-4 py-3 rounded-xl font-heading font-medium transition-all duration-300 ${isScrolled
-                  ? 'text-gray-700 hover:bg-[#2B54A7]/10 hover:text-[#2B54A7]'
-                  : 'text-white hover:bg-white/20'
+                ? 'text-gray-700 hover:bg-[#2B54A7]/10 hover:text-[#2B54A7]'
+                : 'text-white hover:bg-white/20'
                 }`}
             >
               <Globe size={18} />
@@ -216,8 +216,8 @@ export function Header({ lang, dict }: HeaderProps) {
             <Link
               href={`/${lang}/contact`}
               className={`w-full mt-3 px-4 py-3 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${isScrolled
-                  ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white'
-                  : 'bg-white text-[#2B54A7] hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white'
+                : 'bg-white text-[#2B54A7] hover:bg-gray-50'
                 } ${isMobileMenuOpen ? 'animate-fade-in-up' : ''}`}
             >
               <span>{dict.header.contactNow}</span>
