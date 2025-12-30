@@ -40,7 +40,7 @@ export default async function TechHubPage({
                     <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-6">
                         {dict.techHub.title}
                     </h1>
-                    <p className="text-xl font-body text-white/80 max-w-3xl mx-auto">
+                    <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
                         {dict.techHub.subtitle}
                     </p>
                 </div>
@@ -75,12 +75,12 @@ export default async function TechHubPage({
                                     <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                         {article.title}
                                     </h3>
-                                    <p className="font-body text-gray-600 text-sm mb-4 line-clamp-2">
+                                    <p className="font-svn-avo-bold text-gray-800 text-sm mb-4 line-clamp-2">
                                         {article.excerpt}
                                     </p>
                                     <div className="flex justify-between items-center">
                                         {article.readTime && (
-                                            <span className="text-sm font-body text-gray-500">
+                                            <span className="text-sm font-svn-avo-bold text-gray-800">
                                                 {article.readTime} {lang === 'vi' ? 'phút đọc' : 'min read'}
                                             </span>
                                         )}
@@ -121,7 +121,7 @@ export default async function TechHubPage({
                                 <h3 className="font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                     {item.title}
                                 </h3>
-                                <p className="font-body text-gray-600 text-sm mb-4">
+                                <p className="font-svn-avo-bold text-gray-800 text-sm mb-4">
                                     {item.excerpt}
                                 </p>
                                 <span className="inline-flex items-center gap-2 text-[#364fa1] font-heading font-semibold text-sm">

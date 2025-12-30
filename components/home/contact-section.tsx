@@ -72,7 +72,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                             {dict.contact.title}
                         </h2>
                     </div>
-                    <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
+                    <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8">
                         {dict.contact.subtitle}
                     </p>
                 </div>
@@ -90,7 +90,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                     <IconComponent size={28} strokeWidth={1.5} />
                                 </div>
                                 <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2">{info.title}</h3>
-                                <p className="font-svn-avo text-gray-600">{info.content}</p>
+                                <p className="font-svn-avo-bold text-gray-800">{info.content}</p>
                             </div>
                         )
                     })}

@@ -43,7 +43,7 @@ export function PartnersSection({ lang, dict }: PartnersSectionProps) {
                         <h3 className="text-2xl md:text-3xl font-svn-avo-extra-bold text-gray-900 mb-2">
                             {lang === 'vi' ? 'Đối Tác Chiến Lược' : 'Strategic Partners'}
                         </h3>
-                        <p className="font-svn-avo text-gray-600">
+                        <p className="font-svn-avo-bold text-gray-800">
                             {lang === 'vi'
                                 ? 'Hợp tác với các thương hiệu hàng đầu thế giới'
                                 : 'Partnering with world-leading brands'}

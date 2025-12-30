@@ -84,11 +84,11 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                             {product.name}
                         </h1>
 
-                        <p className="text-lg font-body text-gray-500 mb-6">
+                        <p className="text-lg font-svn-avo-bold text-gray-800 mb-6">
                             {lang === 'vi' ? 'Mã sản phẩm' : 'Model'}: {product.modelNumber}
                         </p>
 
-                        <p className="font-body text-gray-600 leading-relaxed mb-8">
+                        <p className="font-svn-avo-bold text-gray-800 leading-relaxed mb-8">
                             {product.shortDescription}
                         </p>
 
@@ -148,7 +148,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                     <div className="p-8">
                         {activeTab === 'description' && (
                             <div
-                                className="prose prose-lg max-w-none font-body"
+                                className="prose prose-lg max-w-none font-svn-avo-bold"
                                 dangerouslySetInnerHTML={{ __html: product.description }}
                             />
                         )}
@@ -162,7 +162,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                                 <td className="px-6 py-4 font-heading font-semibold text-gray-900 w-1/3">
                                                     {spec.key}
                                                 </td>
-                                                <td className="px-6 py-4 font-body text-gray-600">
+                                                <td className="px-6 py-4 font-svn-avo-bold text-gray-800">
                                                     {spec.value} {spec.unit}
                                                 </td>
                                             </tr>
@@ -170,7 +170,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     </tbody>
                                 </table>
                                 {product.specifications.length === 0 && (
-                                    <p className="text-center text-gray-500 py-8 font-body">
+                                    <p className="text-center text-gray-800 py-8 font-svn-avo-bold">
                                         {lang === 'vi' ? 'Chưa có thông số kỹ thuật' : 'No specifications available'}
                                     </p>
                                 )}
@@ -192,7 +192,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                         </div>
                                         <div className="flex-1">
                                             <h4 className="font-heading font-semibold text-gray-900">{doc.name}</h4>
-                                            <p className="text-sm font-body text-gray-500">
+                                            <p className="text-sm font-svn-avo-bold text-gray-800">
                                                 {doc.type.toUpperCase()} {doc.size && `• ${doc.size}`}
                                             </p>
                                         </div>
@@ -200,7 +200,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     </a>
                                 ))}
                                 {product.documents.length === 0 && (
-                                    <p className="text-center text-gray-500 py-8 font-body">
+                                    <p className="text-center text-gray-800 py-8 font-svn-avo-bold">
                                         {lang === 'vi' ? 'Chưa có tài liệu' : 'No documents available'}
                                     </p>
                                 )}
@@ -252,7 +252,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                         <h3 className="text-2xl font-heading font-bold text-gray-900 mb-6">
                             {dict.products.requestQuote}
                         </h3>
-                        <p className="font-body text-gray-600 mb-6">
+                        <p className="font-svn-avo-bold text-gray-800 mb-6">
                             {lang === 'vi'
                                 ? `Yêu cầu báo giá cho: ${product.name}`
                                 : `Request quote for: ${product.name}`}

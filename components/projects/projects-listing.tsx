@@ -28,7 +28,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
                     <h1 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4">
                         {dict.projects.title}
                     </h1>
-                    <p className="font-body text-gray-600 text-lg max-w-2xl mx-auto">
+                    <p className="font-svn-avo-bold text-gray-800 text-lg max-w-2xl mx-auto">
                         {dict.projects.subtitle}
                     </p>
                 </div>
@@ -86,7 +86,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
                                     {project.title}
                                 </h3>
 
-                                <p className="text-sm font-body text-gray-200 line-clamp-2 mb-4">
+                                <p className="text-sm font-svn-avo-bold text-gray-200 line-clamp-2 mb-4">
                                     {project.shortDescription}
                                 </p>
 
@@ -113,7 +113,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
                 {/* Empty State */}
                 {filteredProjects.length === 0 && (
                     <div className="text-center py-16 bg-white rounded-2xl">
-                        <p className="font-body text-gray-600">
+                        <p className="font-svn-avo-bold text-gray-800">
                             {lang === 'vi'
                                 ? 'Không tìm thấy dự án phù hợp'
                                 : 'No projects found'}

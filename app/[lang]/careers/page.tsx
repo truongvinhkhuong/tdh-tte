@@ -49,7 +49,7 @@ export default async function CareersPage({
                     <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-6">
                         {dict.careers.title}
                     </h1>
-                    <p className="text-xl font-body text-white/80 max-w-3xl mx-auto">
+                    <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
                         {dict.careers.subtitle}
                     </p>
                 </div>
@@ -96,7 +96,7 @@ export default async function CareersPage({
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <div className="text-right">
-                                                <p className="text-sm font-body text-gray-500">
+                                                <p className="text-sm font-svn-avo-bold text-gray-800">
                                                     {dict.careers.deadline}
                                                 </p>
                                                 <p className="flex items-center gap-1 text-sm font-heading font-semibold text-orange-600">
@@ -114,7 +114,7 @@ export default async function CareersPage({
                         </div>
                     ) : (
                         <div className="text-center py-16 bg-white rounded-2xl">
-                            <p className="font-body text-gray-600">
+                            <p className="font-svn-avo-bold text-gray-800">
                                 {dict.careers.noPositions}
                             </p>
                         </div>
@@ -128,7 +128,7 @@ export default async function CareersPage({
                     <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
                         {lang === 'vi' ? 'Không tìm thấy vị trí phù hợp?' : "Couldn't find a suitable position?"}
                     </h2>
-                    <p className="font-body text-gray-600 mb-6">
+                    <p className="font-svn-avo-bold text-gray-800 mb-6">
                         {lang === 'vi'
                             ? 'Gửi CV của bạn cho chúng tôi để được xem xét trong tương lai'
                             : 'Send us your CV for future consideration'}

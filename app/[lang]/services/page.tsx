@@ -45,7 +45,7 @@ export default async function ServicesPage({
                     <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-6">
                         {dict.services.title}
                     </h1>
-                    <p className="text-xl font-body text-white/80 max-w-3xl mx-auto">
+                    <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
                         {dict.services.subtitle}
                     </p>
                 </div>
@@ -68,7 +68,7 @@ export default async function ServicesPage({
                                     <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
                                         {service.title}
                                     </h3>
-                                    <p className="font-body text-gray-600 leading-relaxed mb-6">
+                                    <p className="font-svn-avo-bold text-gray-800 leading-relaxed mb-6">
                                         {service.shortDescription}
                                     </p>
                                     <Link
@@ -91,7 +91,7 @@ export default async function ServicesPage({
                     <h2 className="text-3xl font-heading font-bold text-gray-900 mb-4">
                         {lang === 'vi' ? 'Cần tư vấn thêm?' : 'Need more consultation?'}
                     </h2>
-                    <p className="font-body text-gray-600 mb-8">
+                    <p className="font-svn-avo-bold text-gray-800 mb-8">
                         {lang === 'vi'
                             ? 'Liên hệ với chúng tôi để được hỗ trợ nhanh chóng'
                             : 'Contact us for quick support'}

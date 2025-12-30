@@ -101,7 +101,7 @@ export default async function VacancyDetailPage({
                                 <h2 className="text-xl font-heading font-bold text-gray-900 mb-4">
                                     {lang === 'vi' ? 'Mô tả công việc' : 'Job Description'}
                                 </h2>
-                                <p className="font-body text-gray-600 leading-relaxed">
+                                <p className="font-svn-avo-bold text-gray-800 leading-relaxed">
                                     {vacancy.description}
                                 </p>
                             </div>
@@ -115,7 +115,7 @@ export default async function VacancyDetailPage({
                                     {vacancy.requirements.map((req, index) => (
                                         <li key={index} className="flex items-start gap-3">
                                             <CheckCircle size={20} className="text-green-500 flex-shrink-0 mt-0.5" />
-                                            <span className="font-body text-gray-600">{req}</span>
+                                            <span className="font-svn-avo-bold text-gray-800">{req}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -130,7 +130,7 @@ export default async function VacancyDetailPage({
                                     {vacancy.benefits.map((benefit, index) => (
                                         <li key={index} className="flex items-start gap-3">
                                             <CheckCircle size={20} className="text-[#364fa1] flex-shrink-0 mt-0.5" />
-                                            <span className="font-body text-gray-600">{benefit}</span>
+                                            <span className="font-svn-avo-bold text-gray-800">{benefit}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -142,7 +142,7 @@ export default async function VacancyDetailPage({
                             {/* Apply Card */}
                             <div className="bg-white p-6 rounded-2xl shadow-md">
                                 <div className="mb-6">
-                                    <p className="text-sm font-body text-gray-500 mb-1">
+                                    <p className="text-sm font-svn-avo-bold text-gray-800 mb-1">
                                         {dict.careers.deadline}
                                     </p>
                                     <p className={`flex items-center gap-2 font-heading font-bold ${isExpired ? 'text-red-600' : 'text-orange-600'}`}>
@@ -171,7 +171,7 @@ export default async function VacancyDetailPage({
                                 <h3 className="font-heading font-bold text-gray-900 mb-3">
                                     {lang === 'vi' ? 'Chia sẻ' : 'Share'}
                                 </h3>
-                                <p className="text-sm font-body text-gray-500">
+                                <p className="text-sm font-svn-avo-bold text-gray-800">
                                     {lang === 'vi'
                                         ? 'Chia sẻ cơ hội này với bạn bè'
                                         : 'Share this opportunity with friends'}

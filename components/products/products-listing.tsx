@@ -223,7 +223,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             key={category.id}
                             onClick={() => setSelectedCategory(selectedCategory === category.id ? null : category.id)}
                             className={`
-                                px-3 py-1.5 rounded-full text-sm font-body transition-all duration-200
+                                px-3 py-1.5 rounded-full text-sm font-svn-avo-bold transition-all duration-200
                                 ${selectedCategory === category.id
                                     ? 'bg-[#364fa1] text-white shadow-md'
                                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
@@ -248,7 +248,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             key={industry.id}
                             onClick={() => setSelectedIndustry(selectedIndustry === industry.id ? null : industry.id)}
                             className={`
-                                px-3 py-1.5 rounded-full text-sm font-body transition-all duration-200
+                                px-3 py-1.5 rounded-full text-sm font-svn-avo-bold transition-all duration-200
                                 ${selectedIndustry === industry.id
                                     ? 'bg-[#364fa1] text-white shadow-md'
                                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
@@ -282,7 +282,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                     <h1 className="text-4xl font-heading font-black bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-2 pb-2">
                         {dict.products.title}
                     </h1>
-                    <p className="font-body text-gray-600">
+                    <p className="font-svn-avo-bold text-gray-800">
                         {dict.products.subtitle}
                     </p>
                 </div>
@@ -321,7 +321,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                         {hasActiveFilters && (
                             <div className="mb-6 flex flex-wrap gap-2">
                                 {selectedBrand && (
-                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] rounded-full text-sm font-body">
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] rounded-full text-sm font-svn-avo-bold">
                                         {brands.find(b => b.id === selectedBrand)?.name}
                                         <button onClick={() => { setSelectedBrand(null); setSelectedSubBrand(null); }} className="hover:text-red-500">
                                             <X size={14} />
@@ -329,7 +329,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                     </span>
                                 )}
                                 {selectedSubBrand && (
-                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#5a7ec9]/10 text-[#5a7ec9] rounded-full text-sm font-body">
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#5a7ec9]/10 text-[#5a7ec9] rounded-full text-sm font-svn-avo-bold">
                                         {brands.flatMap(b => b.subBrands || []).find(sb => sb.id === selectedSubBrand)?.name}
                                         <button onClick={() => setSelectedSubBrand(null)} className="hover:text-red-500">
                                             <X size={14} />
@@ -337,7 +337,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                     </span>
                                 )}
                                 {selectedCategory && (
-                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-body">
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-svn-avo-bold">
                                         {categories.find(c => c.id === selectedCategory)?.name}
                                         <button onClick={() => setSelectedCategory(null)} className="hover:text-red-500">
                                             <X size={14} />
@@ -345,7 +345,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                     </span>
                                 )}
                                 {selectedIndustry && (
-                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-body">
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-svn-avo-bold">
                                         {industries.find(i => i.id === selectedIndustry)?.name}
                                         <button onClick={() => setSelectedIndustry(null)} className="hover:text-red-500">
                                             <X size={14} />
@@ -357,7 +357,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
 
                         {/* Results Count */}
                         <div className="mb-6">
-                            <p className="font-body text-gray-600">
+                            <p className="font-svn-avo-bold text-gray-800">
                                 {lang === 'vi'
                                     ? `Hiển thị ${filteredProducts.length} sản phẩm`
                                     : `Showing ${filteredProducts.length} products`}
@@ -406,11 +406,11 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                         <h3 className="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                             {product.name}
                                         </h3>
-                                        <p className="text-sm font-body text-gray-500 mb-4">
+                                        <p className="text-sm font-svn-avo-bold text-gray-800 mb-4">
                                             {product.modelNumber}
                                         </p>
                                         <div className="flex justify-between items-center">
-                                            <span className="font-body text-gray-600 font-semibold">{dict.products.contact}</span>
+                                            <span className="font-svn-avo-bold text-gray-800 font-semibold">{dict.products.contact}</span>
                                             <span className="flex items-center gap-1 text-[#364fa1] font-heading font-semibold text-sm group-hover:gap-2 transition-all">
                                                 {dict.products.viewDetails}
                                                 <ArrowRight size={16} />
@@ -427,7 +427,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                 <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                                     <Filter size={32} className="text-gray-400" />
                                 </div>
-                                <p className="font-body text-gray-600 mb-4">
+                                <p className="font-svn-avo-bold text-gray-800 mb-4">
                                     {lang === 'vi'
                                         ? 'Không tìm thấy sản phẩm phù hợp'
                                         : 'No products found matching your criteria'}

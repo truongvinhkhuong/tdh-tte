@@ -52,7 +52,7 @@ export function CustomersSection({ lang, dict, variant = 'home' }: CustomersSect
                         {customers?.title || 'Khách hàng tiêu biểu'}
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-body max-w-2xl mx-auto">
+                    <p className="text-gray-800 font-svn-avo-bold max-w-2xl mx-auto">
                         {customers?.subtitle || 'Chúng tôi tự hào được hợp tác với các doanh nghiệp hàng đầu trong ngành'}
                     </p>
                 </div>
@@ -102,15 +102,15 @@ export function CustomersSection({ lang, dict, variant = 'home' }: CustomersSect
                 <div className="mt-12 flex flex-wrap justify-center gap-8 md:gap-16">
                     <div className="text-center">
                         <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">500+</div>
-                        <div className="text-gray-600 font-body text-sm mt-1">{customers?.projects || 'Dự án thành công'}</div>
+                        <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.projects || 'Dự án thành công'}</div>
                     </div>
                     <div className="text-center">
                         <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">30+</div>
-                        <div className="text-gray-600 font-body text-sm mt-1">{customers?.years || 'Năm kinh nghiệm'}</div>
+                        <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.years || 'Năm kinh nghiệm'}</div>
                     </div>
                     <div className="text-center">
                         <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">100%</div>
-                        <div className="text-gray-600 font-body text-sm mt-1">{customers?.satisfaction || 'Khách hàng hài lòng'}</div>
+                        <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.satisfaction || 'Khách hàng hài lòng'}</div>
                     </div>
                 </div>
             </div>

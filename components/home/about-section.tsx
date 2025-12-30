@@ -93,7 +93,7 @@ export function AboutSection({ lang, dict }: AboutSectionProps) {
                                 {dict.about.title}
                             </h2>
                         </div>
-                        <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
+                        <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8 leading-relaxed">
                             {dict.about.subtitle}
                         </p>
                     </div>
@@ -139,7 +139,7 @@ export function AboutSection({ lang, dict }: AboutSectionProps) {
                                         </h4>
 
                                         {/* Description */}
-                                        <p className="text-sm font-svn-avo text-gray-600 transition-colors leading-relaxed">
+                                        <p className="text-sm font-svn-avo-bold text-gray-800 transition-colors leading-relaxed">
                                             {feature.description}
                                         </p>
                                     </div>
@@ -154,10 +154,10 @@ export function AboutSection({ lang, dict }: AboutSectionProps) {
                             <h3 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-gray-900">
                                 {dict.about.mission}
                             </h3>
-                            <p className="font-svn-avo text-gray-600 leading-relaxed text-lg">
+                            <p className="font-svn-avo-bold text-gray-800 leading-relaxed text-lg">
                                 {dict.about.missionDesc}
                             </p>
-                            <p className="font-svn-avo text-gray-600 leading-relaxed text-lg">
+                            <p className="font-svn-avo-bold text-gray-800 leading-relaxed text-lg">
                                 {dict.about.visionDesc}
                             </p>
                             <Link
@@ -184,7 +184,7 @@ export function AboutSection({ lang, dict }: AboutSectionProps) {
                                     }}
                                 >
                                     <div className="text-3xl md:text-4xl font-svn-avo-extra-bold text-[#364fa1] mb-2">{stat.number}</div>
-                                    <p className="text-sm font-svn-avo text-gray-600">{stat.label}</p>
+                                    <p className="text-sm font-svn-avo-bold text-gray-800">{stat.label}</p>
                                 </div>
                             ))}
                         </div>

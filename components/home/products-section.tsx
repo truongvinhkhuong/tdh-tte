@@ -56,7 +56,7 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                                 {dict.products.featured}
                             </h2>
                         </div>
-                        <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
+                        <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8">
                             {dict.products.subtitle}
                         </p>
                     </div>
@@ -98,11 +98,11 @@ export function ProductsSection({ lang, dict }: ProductsSectionProps) {
                                     <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                         {product.name}
                                     </h3>
-                                    <p className="text-sm font-svn-avo text-gray-500 mb-4">
+                                    <p className="text-sm font-svn-avo-bold text-gray-800 mb-4">
                                         {product.modelNumber}
                                     </p>
                                     <div className="flex justify-between items-center">
-                                        <span className="font-svn-avo text-gray-600">{dict.products.contact}</span>
+                                        <span className="font-svn-avo-bold text-gray-800">{dict.products.contact}</span>
                                         <span className="flex items-center gap-1 text-[#364fa1] font-svn-avo-extra-bold text-sm group-hover:gap-2 transition-all">
                                             {dict.products.viewDetails}
                                             <ArrowRight size={16} />

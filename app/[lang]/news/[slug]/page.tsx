@@ -91,18 +91,18 @@ export default async function NewsArticlePage({
                         {article.author && (
                             <div className="flex items-center gap-2">
                                 <User size={18} />
-                                <span className="font-body">{article.author}</span>
+                                <span className="font-svn-avo-bold">{article.author}</span>
                             </div>
                         )}
                         <div className="flex items-center gap-2">
                             <Calendar size={18} />
-                            <span className="font-body">{formatDate(article.publishedAt)}</span>
+                            <span className="font-svn-avo-bold">{formatDate(article.publishedAt)}</span>
                         </div>
                     </div>
 
                     {/* Content */}
                     <div
-                        className="prose prose-lg max-w-none font-body prose-headings:font-heading prose-headings:font-bold prose-a:text-[#364fa1]"
+                        className="prose prose-lg max-w-none font-svn-avo-bold prose-headings:font-heading prose-headings:font-bold prose-a:text-[#364fa1]"
                         dangerouslySetInnerHTML={{ __html: article.content }}
                     />
                 </div>

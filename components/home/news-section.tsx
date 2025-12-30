@@ -62,7 +62,7 @@ export function NewsSection({ lang, dict }: NewsSectionProps) {
                                 {dict.news.latest}
                             </h2>
                         </div>
-                        <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8">
+                        <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8">
                             {dict.news.subtitle}
                         </p>
                     </div>
@@ -108,7 +108,7 @@ export function NewsSection({ lang, dict }: NewsSectionProps) {
                                         {article.title}
                                     </h3>
 
-                                    <p className="text-sm font-svn-avo text-gray-600 line-clamp-2 mb-4">
+                                    <p className="text-sm font-svn-avo-bold text-gray-800 line-clamp-2 mb-4">
                                         {article.excerpt}
                                     </p>
 

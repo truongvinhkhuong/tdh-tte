@@ -84,7 +84,7 @@ export function HeroSection({ lang, dict }: HeroSectionProps) {
                                 {dict.hero.subtitle}
                             </span>
                         </h1>
-                        <p className="text-lg md:text-xl font-utm-avo text-gray-200 mb-8 leading-relaxed">
+                        <p className="text-lg md:text-xl font-svn-avo-bold text-gray-200 mb-8 leading-relaxed">
                             {dict.hero.description}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">

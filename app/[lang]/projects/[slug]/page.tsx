@@ -84,21 +84,21 @@ export default async function ProjectDetailPage({
                                 <Building2 className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.client}</span>
                             </div>
-                            <p className="font-body text-gray-600">{project.client}</p>
+                            <p className="font-svn-avo-bold text-gray-800">{project.client}</p>
                         </div>
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                             <div className="flex items-center gap-3 mb-2">
                                 <MapPin className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.location}</span>
                             </div>
-                            <p className="font-body text-gray-600">{project.location}</p>
+                            <p className="font-svn-avo-bold text-gray-800">{project.location}</p>
                         </div>
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                             <div className="flex items-center gap-3 mb-2">
                                 <Calendar className="text-[#364fa1]" size={24} />
                                 <span className="font-heading font-bold text-gray-900">{dict.projects.year}</span>
                             </div>
-                            <p className="font-body text-gray-600">{project.completionYear}</p>
+                            <p className="font-svn-avo-bold text-gray-800">{project.completionYear}</p>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@ export default async function ProjectDetailPage({
                             <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
                                 {dict.projects.challenge}
                             </h2>
-                            <p className="font-body text-gray-600 leading-relaxed">
+                            <p className="font-svn-avo-bold text-gray-800 leading-relaxed">
                                 {project.challenge}
                             </p>
                         </div>
@@ -116,7 +116,7 @@ export default async function ProjectDetailPage({
                             <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
                                 {dict.projects.solution}
                             </h2>
-                            <p className="font-body text-gray-600 leading-relaxed">
+                            <p className="font-svn-avo-bold text-gray-800 leading-relaxed">
                                 {project.solution}
                             </p>
                         </div>
@@ -147,7 +147,7 @@ export default async function ProjectDetailPage({
                                             <h3 className="font-heading font-bold text-gray-900 group-hover:text-[#364fa1] transition-colors">
                                                 {product.name}
                                             </h3>
-                                            <p className="text-sm font-body text-gray-500">{product.modelNumber}</p>
+                                            <p className="text-sm font-svn-avo-bold text-gray-800">{product.modelNumber}</p>
                                             <span className="inline-flex items-center gap-1 text-[#364fa1] text-sm font-heading font-semibold mt-2 group-hover:gap-2 transition-all">
                                                 {dict.products.viewDetails}
                                                 <ArrowRight size={14} />

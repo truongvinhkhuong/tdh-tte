@@ -96,7 +96,7 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                                 {dict.services.title}
                             </h2>
                         </div>
-                        <p className="text-lg font-svn-avo text-gray-600 max-w-2xl mx-auto mt-8 leading-relaxed">
+                        <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8 leading-relaxed">
                             {dict.services.subtitle}
                         </p>
                     </div>
@@ -128,7 +128,7 @@ export function ServicesSection({ lang, dict }: ServicesSectionProps) {
                                         <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-3 group-hover:text-[#364fa1] transition-colors">
                                             {service.title}
                                         </h3>
-                                        <p className="text-sm font-svn-avo text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+                                        <p className="text-sm font-svn-avo-bold text-gray-800 group-hover:text-gray-900 transition-colors leading-relaxed">
                                             {service.description}
                                         </p>
 
