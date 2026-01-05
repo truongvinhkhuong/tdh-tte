@@ -66,7 +66,7 @@ export default async function VacancyDetailPage({
                         <ArrowLeft size={20} />
                         {dict.common.back}
                     </Link>
-                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
+                    <h1 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-white mb-4">
                         {vacancy.title}
                     </h1>
                     <div className="flex flex-wrap items-center gap-4 text-white/80">

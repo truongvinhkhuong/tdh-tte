@@ -25,7 +25,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-heading font-black bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4">
+                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4">
                         {dict.projects.title}
                     </h1>
                     <p className="font-svn-avo-bold text-gray-800 text-lg max-w-2xl mx-auto">
@@ -37,7 +37,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
                 <div className="flex flex-wrap justify-center gap-3 mb-12">
                     <button
                         onClick={() => setSelectedIndustry(null)}
-                        className={`px-5 py-2 rounded-full font-heading font-semibold transition-all duration-200 ${selectedIndustry === null
+                        className={`px-5 py-2 rounded-full font-svn-avo-bold transition-all duration-200 ${selectedIndustry === null
                             ? 'bg-[#364fa1] text-white'
                             : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                             }`}
@@ -48,7 +48,7 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
                         <button
                             key={industry.id}
                             onClick={() => setSelectedIndustry(industry.id)}
-                            className={`px-5 py-2 rounded-full font-heading font-semibold transition-all duration-200 ${selectedIndustry === industry.id
+                            className={`px-5 py-2 rounded-full font-svn-avo-bold transition-all duration-200 ${selectedIndustry === industry.id
                                 ? 'bg-[#364fa1] text-white'
                                 : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                                 }`}
@@ -78,11 +78,11 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
 
                             {/* Content */}
                             <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                                <span className="inline-block w-fit px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-heading font-bold rounded-full mb-3">
+                                <span className="inline-block w-fit px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-svn-avo-bold rounded-full mb-3">
                                     {project.industry.name}
                                 </span>
 
-                                <h3 className="text-2xl font-heading font-bold mb-3 group-hover:text-[#a8bcdf] transition-colors">
+                                <h3 className="text-2xl font-svn-avo-extra-bold mb-3 group-hover:text-[#a8bcdf] transition-colors">
                                     {project.title}
                                 </h3>
 

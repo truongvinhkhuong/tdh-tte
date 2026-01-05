@@ -40,10 +40,11 @@ export function HistoryTimeline({ lang, dict }: HistoryTimelineProps) {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-10">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4 pb-2">
-                        {dict.about.history}
-                    </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full mx-auto"></div>
+                    <div className="inline-block">
+                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2">
+                            {dict.about.history}
+                        </h2>
+                    </div>
                 </div>
 
                 {/* Year Tabs - Horizontal Timeline */}
@@ -59,7 +60,7 @@ export function HistoryTimeline({ lang, dict }: HistoryTimelineProps) {
                                     key={item.year}
                                     onClick={() => handleYearClick(index)}
                                     className={`
-                                        relative z-10 px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-heading font-bold text-sm md:text-base
+                                        relative z-10 px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-svn-avo-bold text-sm md:text-base
                                         transition-all duration-300 whitespace-nowrap
                                         ${activeIndex === index
                                             ? 'bg-gradient-to-br from-[#364fa1] to-[#5a7ec9] text-white shadow-xl shadow-[#364fa1]/30 scale-110 -translate-y-1'
@@ -84,12 +85,12 @@ export function HistoryTimeline({ lang, dict }: HistoryTimelineProps) {
                         {/* Text Content */}
                         <div className="p-6 md:p-10 flex flex-col justify-center order-2 md:order-1">
                             <div className="inline-flex items-center gap-2 mb-4">
-                                <span className="px-4 py-1.5 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-lg font-heading font-bold rounded-full">
+                                <span className="px-4 py-1.5 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-lg font-svn-avo-bold rounded-full">
                                     {activeItem.year}
                                 </span>
                             </div>
 
-                            <h3 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-4">
+                            <h3 className="text-2xl md:text-3xl font-svn-avo-extra-bold text-gray-900 mb-4">
                                 {activeItem.title}
                             </h3>
 

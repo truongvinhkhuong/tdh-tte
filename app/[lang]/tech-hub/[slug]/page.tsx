@@ -75,7 +75,7 @@ export default async function TechArticlePage({
                             <ArrowLeft size={20} />
                             {dict.common.back}
                         </Link>
-                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-white">
+                        <h1 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-white">
                             {article.title}
                         </h1>
                     </div>

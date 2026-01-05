@@ -61,7 +61,7 @@ export default async function ServiceDetailPage({
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Link
                         href={`/${lang}/services`}
-                        className="inline-flex items-center gap-2 text-white/80 hover:text-white font-heading font-semibold mb-8"
+                        className="inline-flex items-center gap-2 text-white/80 hover:text-white font-svn-avo-bold mb-8"
                     >
                         <ArrowLeft size={20} />
                         {dict.common.back}
@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({
                         <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                             <IconComponent size={40} className="text-white" />
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-heading font-bold text-white">
+                        <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold text-white">
                             {service.title}
                         </h1>
                     </div>
@@ -87,7 +87,7 @@ export default async function ServiceDetailPage({
 
                     {/* Contact Form */}
                     <div className="mt-16 bg-gradient-to-br from-gray-50 to-[#364fa1]/5 p-8 rounded-2xl">
-                        <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
+                        <h2 className="text-2xl font-svn-avo-extra-bold text-gray-900 mb-6">
                             {lang === 'vi' ? 'Yêu cầu dịch vụ' : 'Request Service'}
                         </h2>
                         <form className="space-y-4">
@@ -115,7 +115,7 @@ export default async function ServiceDetailPage({
                             ></textarea>
                             <button
                                 type="submit"
-                                className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+                                className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-lg transition-all duration-300"
                             >
                                 {dict.contact.form.submit}
                             </button>

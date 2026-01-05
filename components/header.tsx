@@ -87,7 +87,7 @@ export function Header({ lang, dict }: HeaderProps) {
                 key={item.href}
                 href={item.href}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className={`relative px-3 py-2 text-sm font-heading font-semibold transition-all duration-300 rounded-lg group overflow-hidden ${isScrolled
+                className={`relative px-3 py-2 text-sm font-svn-avo-bold transition-all duration-300 rounded-lg group overflow-hidden ${isScrolled
                   ? 'text-gray-700 hover:text-[#2B54A7]'
                   : 'text-white/95 hover:text-white drop-shadow-sm'
                   }`}
@@ -121,7 +121,7 @@ export function Header({ lang, dict }: HeaderProps) {
             {/* Language Switcher */}
             <Link
               href={`/${otherLang}`}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-heading font-semibold text-sm transition-all duration-300 ${isScrolled
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-svn-avo-bold text-sm transition-all duration-300 ${isScrolled
                 ? 'hover:bg-gray-100 text-gray-700'
                 : 'hover:bg-white/20 text-white'
                 }`}
@@ -133,7 +133,7 @@ export function Header({ lang, dict }: HeaderProps) {
             {/* CTA Button */}
             <Link
               href={`/${lang}/contact`}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${isScrolled
+              className={`inline-flex items-center gap-2 px-5 py-2.5 font-svn-avo-bold rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-2xl ${isScrolled
                 ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white hover:shadow-[#2B54A7]/30'
                 : 'bg-white text-[#2B54A7] hover:bg-gray-50 hover:shadow-white/20'
                 }`}
@@ -185,7 +185,7 @@ export function Header({ lang, dict }: HeaderProps) {
             {/* Language Switcher Mobile */}
             <Link
               href={`/${otherLang}`}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl font-heading font-medium transition-all duration-300 ${isScrolled
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl font-svn-avo-bold transition-all duration-300 ${isScrolled
                 ? 'text-gray-700 hover:bg-[#2B54A7]/10 hover:text-[#2B54A7]'
                 : 'text-white hover:bg-white/20'
                 }`}
@@ -199,7 +199,7 @@ export function Header({ lang, dict }: HeaderProps) {
                 key={item.href}
                 href={item.href}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className={`block px-4 py-3 rounded-xl font-heading font-medium transition-all duration-300 transform hover:translate-x-2 hover:scale-105 ${isMobileMenuOpen ? 'animate-fade-in-up' : ''
+                className={`block px-4 py-3 rounded-xl font-svn-avo-bold transition-all duration-300 transform hover:translate-x-2 hover:scale-105 ${isMobileMenuOpen ? 'animate-fade-in-up' : ''
                   } ${isScrolled
                     ? 'text-gray-700 hover:bg-[#2B54A7]/10 hover:text-[#2B54A7]'
                     : 'text-white hover:bg-white/20 backdrop-blur-sm'
@@ -215,7 +215,7 @@ export function Header({ lang, dict }: HeaderProps) {
             ))}
             <Link
               href={`/${lang}/contact`}
-              className={`w-full mt-3 px-4 py-3 font-heading font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${isScrolled
+              className={`w-full mt-3 px-4 py-3 font-svn-avo-bold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg ${isScrolled
                 ? 'bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white'
                 : 'bg-white text-[#2B54A7] hover:bg-gray-50'
                 } ${isMobileMenuOpen ? 'animate-fade-in-up' : ''}`}

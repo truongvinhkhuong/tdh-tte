@@ -48,11 +48,12 @@ export function CustomersSection({ lang, dict, variant = 'home' }: CustomersSect
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4 pb-2">
-                        {customers?.title || 'Khách hàng tiêu biểu'}
-                    </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full mx-auto mb-4"></div>
-                    <p className="text-gray-800 font-svn-avo-bold max-w-2xl mx-auto">
+                    <div className="inline-block">
+                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2">
+                            {customers?.title || 'Khách hàng tiêu biểu'}
+                        </h2>
+                    </div>
+                    <p className="text-lg font-svn-avo-bold text-gray-800 max-w-2xl mx-auto mt-8">
                         {customers?.subtitle || 'Chúng tôi tự hào được hợp tác với các doanh nghiệp hàng đầu trong ngành'}
                     </p>
                 </div>
@@ -101,15 +102,15 @@ export function CustomersSection({ lang, dict, variant = 'home' }: CustomersSect
                 {/* Stats or Trust indicators */}
                 <div className="mt-12 flex flex-wrap justify-center gap-8 md:gap-16">
                     <div className="text-center">
-                        <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">500+</div>
+                        <div className="text-3xl md:text-4xl font-svn-avo-extra-bold text-[#364fa1]">500+</div>
                         <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.projects || 'Dự án thành công'}</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">30+</div>
+                        <div className="text-3xl md:text-4xl font-svn-avo-extra-bold text-[#364fa1]">30+</div>
                         <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.years || 'Năm kinh nghiệm'}</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-3xl md:text-4xl font-heading font-bold text-[#364fa1]">100%</div>
+                        <div className="text-3xl md:text-4xl font-svn-avo-extra-bold text-[#364fa1]">100%</div>
                         <div className="text-gray-800 font-svn-avo-bold text-sm mt-1">{customers?.satisfaction || 'Khách hàng hài lòng'}</div>
                     </div>
                 </div>

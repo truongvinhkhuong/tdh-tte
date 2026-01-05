@@ -16,10 +16,11 @@ export function CertificatesSection({ lang, dict }: CertificatesSectionProps) {
         <section className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">
-                        {dict.about.certificates}
-                    </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] rounded-full mx-auto"></div>
+                    <div className="inline-block">
+                        <h2 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2">
+                            {dict.about.certificates}
+                        </h2>
+                    </div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
@@ -34,13 +35,13 @@ export function CertificatesSection({ lang, dict }: CertificatesSectionProps) {
                                     <Award size={48} className="text-[#364fa1] group-hover:scale-110 transition-transform duration-300" />
                                 </div>
                             </div>
-                            <h3 className="text-xl font-heading font-bold text-gray-900 mb-2">
+                            <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-2">
                                 {cert.name}
                             </h3>
                             <p className="font-svn-avo-bold text-gray-800 text-sm mb-2">
                                 {cert.issuer}
                             </p>
-                            <span className="inline-block px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-xs font-heading font-bold rounded-full">
+                            <span className="inline-block px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-xs font-svn-avo-bold rounded-full">
                                 {cert.year}
                             </span>
                         </div>

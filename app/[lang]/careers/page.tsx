@@ -46,7 +46,7 @@ export default async function CareersPage({
             {/* Hero Section */}
             <section className="py-24 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-6">
+                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold text-white mb-6">
                         {dict.careers.title}
                     </h1>
                     <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
@@ -58,7 +58,7 @@ export default async function CareersPage({
             {/* Vacancies List */}
             <section className="py-16 bg-gray-50">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
+                    <h2 className="text-2xl font-svn-avo-extra-bold text-gray-900 mb-8">
                         {dict.careers.positions}
                     </h2>
 
@@ -72,7 +72,7 @@ export default async function CareersPage({
                                 >
                                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                         <div>
-                                            <h3 className="text-xl font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
+                                            <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                                 {vacancy.title}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
@@ -99,12 +99,12 @@ export default async function CareersPage({
                                                 <p className="text-sm font-svn-avo-bold text-gray-800">
                                                     {dict.careers.deadline}
                                                 </p>
-                                                <p className="flex items-center gap-1 text-sm font-heading font-semibold text-orange-600">
+                                                <p className="flex items-center gap-1 text-sm font-svn-avo-bold text-orange-600">
                                                     <Calendar size={14} />
                                                     {formatDate(vacancy.deadline)}
                                                 </p>
                                             </div>
-                                            <span className="px-4 py-2 bg-[#364fa1] text-white font-heading font-semibold rounded-lg group-hover:bg-[#2d4388] transition-colors">
+                                            <span className="px-4 py-2 bg-[#364fa1] text-white font-svn-avo-bold rounded-lg group-hover:bg-[#2d4388] transition-colors">
                                                 {dict.careers.apply}
                                             </span>
                                         </div>
@@ -125,7 +125,7 @@ export default async function CareersPage({
             {/* Contact HR */}
             <section className="py-16 bg-white">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">
+                    <h2 className="text-2xl font-svn-avo-extra-bold text-gray-900 mb-4">
                         {lang === 'vi' ? 'Không tìm thấy vị trí phù hợp?' : "Couldn't find a suitable position?"}
                     </h2>
                     <p className="font-svn-avo-bold text-gray-800 mb-6">
@@ -135,7 +135,7 @@ export default async function CareersPage({
                     </p>
                     <a
                         href="mailto:hr@toanthang.vn"
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-xl transition-all duration-300"
                     >
                         <Mail size={20} />
                         hr@toanthang.vn

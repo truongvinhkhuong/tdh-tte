@@ -84,7 +84,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
         <div className="space-y-6">
             {/* Brand Filter with Logos */}
             <div>
-                <h3 className="font-heading font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
                     {dict.products.filter.brand}
                 </h3>
@@ -132,7 +132,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                         onClick={() => handleBrandSelect(brand.id)}
                                         className="flex-1 min-w-0"
                                     >
-                                        <p className={`font-heading font-semibold text-sm truncate ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                                        <p className={`font-svn-avo-bold text-sm truncate ${isSelected ? 'text-white' : 'text-gray-800'}`}>
                                             {brand.name}
                                         </p>
                                         {brand.subBrands && (
@@ -183,7 +183,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                                         key={subBrand.id}
                                                         onClick={() => handleSubBrandSelect(subBrand.id, brand.id)}
                                                         className={`
-                                                            w-full text-left px-3 py-2.5 rounded-lg text-sm font-heading font-medium
+                                                            w-full text-left px-3 py-2.5 rounded-lg text-sm font-svn-avo-bold
                                                             transition-all duration-200 flex items-start gap-2
                                                             ${isSubSelected
                                                                 ? 'bg-[#364fa1] text-white shadow-md'
@@ -213,7 +213,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
 
             {/* Category Filter */}
             <div>
-                <h3 className="font-heading font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
                     {dict.products.filter.category}
                 </h3>
@@ -238,7 +238,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
 
             {/* Industry Filter */}
             <div>
-                <h3 className="font-heading font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
                     {dict.products.filter.industry}
                 </h3>
@@ -265,7 +265,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
             {hasActiveFilters && (
                 <button
                     onClick={clearFilters}
-                    className="w-full px-4 py-2.5 border-2 border-gray-300 text-gray-600 rounded-xl hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all duration-200 font-heading font-semibold text-sm flex items-center justify-center gap-2"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 text-gray-600 rounded-xl hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all duration-200 font-svn-avo-bold text-sm flex items-center justify-center gap-2"
                 >
                     <X size={16} />
                     {lang === 'vi' ? 'Xóa bộ lọc' : 'Clear Filters'}
@@ -279,7 +279,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-heading font-black bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-2 pb-2">
+                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4 pb-2">
                         {dict.products.title}
                     </h1>
                     <p className="font-svn-avo-bold text-gray-800">
@@ -291,7 +291,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                     {/* Desktop Sidebar */}
                     <aside className="hidden lg:block w-72 flex-shrink-0">
                         <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
-                            <h2 className="font-heading font-bold text-lg text-gray-900 mb-6 pb-4 border-b border-gray-200 flex items-center gap-2">
+                            <h2 className="font-svn-avo-bold text-lg text-gray-900 mb-6 pb-4 border-b border-gray-200 flex items-center gap-2">
                                 <Filter size={20} className="text-[#364fa1]" />
                                 {lang === 'vi' ? 'Bộ lọc' : 'Filters'}
                             </h2>
@@ -305,7 +305,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                         <div className="lg:hidden mb-6">
                             <button
                                 onClick={() => setShowMobileFilters(true)}
-                                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl shadow-md font-heading font-semibold text-gray-700 hover:shadow-lg transition-shadow"
+                                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl shadow-md font-svn-avo-bold text-gray-700 hover:shadow-lg transition-shadow"
                             >
                                 <Filter size={20} />
                                 {lang === 'vi' ? 'Bộ lọc' : 'Filters'}
@@ -393,17 +393,17 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                                     }}
                                                 />
                                             </div>
-                                            <span className="text-xs font-heading font-bold text-gray-700">
+                                            <span className="text-xs font-svn-avo-bold text-gray-700">
                                                 {product.brand.name}
                                             </span>
                                         </div>
                                     </div>
 
                                     <div className="p-6">
-                                        <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-heading font-bold rounded-full mb-3">
+                                        <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-xs font-svn-avo-bold rounded-full mb-3">
                                             {product.category.name}
                                         </div>
-                                        <h3 className="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
+                                        <h3 className="text-lg font-svn-avo-extra-bold text-gray-900 mb-2 group-hover:text-[#364fa1] transition-colors">
                                             {product.name}
                                         </h3>
                                         <p className="text-sm font-svn-avo-bold text-gray-800 mb-4">
@@ -411,7 +411,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                         </p>
                                         <div className="flex justify-between items-center">
                                             <span className="font-svn-avo-bold text-gray-800 font-semibold">{dict.products.contact}</span>
-                                            <span className="flex items-center gap-1 text-[#364fa1] font-heading font-semibold text-sm group-hover:gap-2 transition-all">
+                                            <span className="flex items-center gap-1 text-[#364fa1] font-svn-avo-bold text-sm group-hover:gap-2 transition-all">
                                                 {dict.products.viewDetails}
                                                 <ArrowRight size={16} />
                                             </span>
@@ -434,7 +434,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                 </p>
                                 <button
                                     onClick={clearFilters}
-                                    className="px-6 py-2 bg-[#364fa1] text-white rounded-lg font-heading font-semibold hover:bg-[#2d4388] transition-colors"
+                                    className="px-6 py-2 bg-[#364fa1] text-white rounded-lg font-svn-avo-bold hover:bg-[#2d4388] transition-colors"
                                 >
                                     {lang === 'vi' ? 'Xóa bộ lọc' : 'Clear Filters'}
                                 </button>
@@ -452,7 +452,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                         ></div>
                         <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-6 overflow-y-auto shadow-2xl">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="font-heading font-bold text-lg text-gray-900 flex items-center gap-2">
+                                <h2 className="font-svn-avo-bold text-lg text-gray-900 flex items-center gap-2">
                                     <Filter size={20} className="text-[#364fa1]" />
                                     {lang === 'vi' ? 'Bộ lọc' : 'Filters'}
                                 </h2>

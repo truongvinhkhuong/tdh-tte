@@ -67,7 +67,7 @@ export default async function ProjectDetailPage({
                         <span className="inline-block px-4 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-sm font-heading font-bold rounded-full mb-4">
                             {project.industry.name}
                         </span>
-                        <h1 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
+                        <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold text-white mb-4">
                             {project.title}
                         </h1>
                     </div>

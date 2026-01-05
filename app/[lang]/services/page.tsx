@@ -42,7 +42,7 @@ export default async function ServicesPage({
             {/* Hero Section */}
             <section className="py-24 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-5xl font-heading font-black text-white mb-6">
+                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold text-white mb-6">
                         {dict.services.title}
                     </h1>
                     <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
@@ -65,7 +65,7 @@ export default async function ServicesPage({
                                     <div className="w-16 h-16 bg-gradient-to-br from-[#364fa1] to-[#5a7ec9] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                         <IconComponent size={32} className="text-white" />
                                     </div>
-                                    <h3 className="text-xl font-heading font-bold text-gray-900 mb-4">
+                                    <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-4">
                                         {service.title}
                                     </h3>
                                     <p className="font-svn-avo-bold text-gray-800 leading-relaxed mb-6">
@@ -73,7 +73,7 @@ export default async function ServicesPage({
                                     </p>
                                     <Link
                                         href={`/${lang}/services/${service.slug}`}
-                                        className="inline-flex items-center gap-2 text-[#364fa1] font-heading font-semibold group-hover:gap-3 transition-all"
+                                        className="inline-flex items-center gap-2 text-[#364fa1] font-svn-avo-bold group-hover:gap-3 transition-all"
                                     >
                                         {dict.services.learnMore}
                                         <ArrowRight size={18} />
@@ -88,7 +88,7 @@ export default async function ServicesPage({
             {/* CTA Section */}
             <section className="py-16 bg-white">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl font-heading font-bold text-gray-900 mb-4">
+                    <h2 className="text-3xl font-svn-avo-extra-bold text-gray-900 mb-4">
                         {lang === 'vi' ? 'Cần tư vấn thêm?' : 'Need more consultation?'}
                     </h2>
                     <p className="font-svn-avo-bold text-gray-800 mb-8">
@@ -98,7 +98,7 @@ export default async function ServicesPage({
                     </p>
                     <Link
                         href={`/${lang}/contact`}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-xl transition-all duration-300"
                     >
                         {dict.header.contactNow}
                         <ArrowRight size={20} />

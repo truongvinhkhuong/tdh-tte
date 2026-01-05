@@ -104,7 +104,7 @@ export function Footer({ lang, dict }: FooterProps) {
           {/* Footer Links */}
           {footerLinks.map((section, index) => (
             <div key={index}>
-              <h3 className="font-heading font-bold text-lg mb-6 text-slate-900">{section.title}</h3>
+              <h3 className="font-svn-avo-extra-bold text-lg mb-6 text-slate-900">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
@@ -125,7 +125,7 @@ export function Footer({ lang, dict }: FooterProps) {
         <div className="bg-white/60 rounded-2xl p-6 mb-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="font-heading font-bold text-lg text-slate-900 mb-1">
+              <h3 className="font-svn-avo-extra-bold text-lg text-slate-900 mb-1">
                 {dict.footer.newsletter}
               </h3>
               <p className="font-svn-avo-bold text-slate-800 text-sm">
@@ -140,7 +140,7 @@ export function Footer({ lang, dict }: FooterProps) {
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white font-heading font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
+                className="px-6 py-3 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75] text-white font-svn-avo-bold rounded-lg hover:shadow-lg transition-all duration-300"
               >
                 {dict.footer.subscribe}
               </button>

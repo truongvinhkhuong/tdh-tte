@@ -76,7 +76,7 @@ export default async function NewsArticlePage({
                         <span className="inline-block px-3 py-1 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white text-sm font-heading font-bold rounded-full mb-4">
                             {article.category === 'company' ? dict.news.categories.company : dict.news.categories.industry}
                         </span>
-                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-white">
+                        <h1 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-white">
                             {article.title}
                         </h1>
                     </div>

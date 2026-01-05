@@ -32,7 +32,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                 <div className="mb-8">
                     <Link
                         href={`/${lang}/products`}
-                        className="inline-flex items-center gap-2 text-[#364fa1] hover:text-[#2d4388] font-heading font-semibold"
+                        className="inline-flex items-center gap-2 text-[#364fa1] hover:text-[#2d4388] font-svn-avo-bold"
                     >
                         <ArrowLeft size={20} />
                         {lang === 'vi' ? 'Quay lại sản phẩm' : 'Back to Products'}
@@ -75,12 +75,12 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                     <div>
                         {/* Brand Badge */}
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-full mb-4">
-                            <span className="text-sm font-heading font-semibold text-gray-600">
+                            <span className="text-sm font-svn-avo-bold text-gray-600">
                                 {product.brand.name}
                             </span>
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-2">
+                        <h1 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-gray-900 mb-2">
                             {product.name}
                         </h1>
 
@@ -94,13 +94,13 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
 
                         {/* Category & Industry Tags */}
                         <div className="flex flex-wrap gap-2 mb-8">
-                            <span className="px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-sm font-heading font-semibold rounded-full">
+                            <span className="px-3 py-1 bg-[#364fa1]/10 text-[#364fa1] text-sm font-svn-avo-bold rounded-full">
                                 {product.category.name}
                             </span>
                             {product.industries.map((industry) => (
                                 <span
                                     key={industry.id}
-                                    className="px-3 py-1 bg-[#5a7ec9]/10 text-[#4a5ea0] text-sm font-heading font-semibold rounded-full"
+                                    className="px-3 py-1 bg-[#5a7ec9]/10 text-[#4a5ea0] text-sm font-svn-avo-bold rounded-full"
                                 >
                                     {industry.name}
                                 </span>
@@ -111,14 +111,14 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
                                 onClick={() => setShowQuoteForm(true)}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-xl transition-all duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-xl transition-all duration-300"
                             >
                                 <Send size={20} />
                                 {dict.products.requestQuote}
                             </button>
                             <Link
                                 href={`/${lang}/contact`}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#364fa1] text-[#364fa1] font-heading font-semibold rounded-xl hover:bg-[#364fa1]/5 transition-all duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#364fa1] text-[#364fa1] font-svn-avo-bold rounded-xl hover:bg-[#364fa1]/5 transition-all duration-300"
                             >
                                 {dict.contact.title}
                             </Link>
@@ -134,7 +134,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 px-6 py-4 font-heading font-semibold transition-all duration-200 ${activeTab === tab.id
+                                className={`flex-1 px-6 py-4 font-svn-avo-bold transition-all duration-200 ${activeTab === tab.id
                                     ? 'text-[#364fa1] border-b-2 border-[#364fa1] bg-[#364fa1]/5'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                     }`}
@@ -159,7 +159,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     <tbody>
                                         {product.specifications.map((spec, index) => (
                                             <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                                                <td className="px-6 py-4 font-heading font-semibold text-gray-900 w-1/3">
+                                                <td className="px-6 py-4 font-svn-avo-bold text-gray-900 w-1/3">
                                                     {spec.key}
                                                 </td>
                                                 <td className="px-6 py-4 font-svn-avo-bold text-gray-800">
@@ -191,7 +191,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                             <FileText size={24} className="text-[#364fa1]" />
                                         </div>
                                         <div className="flex-1">
-                                            <h4 className="font-heading font-semibold text-gray-900">{doc.name}</h4>
+                                            <h4 className="font-svn-avo-bold text-gray-900">{doc.name}</h4>
                                             <p className="text-sm font-svn-avo-bold text-gray-800">
                                                 {doc.type.toUpperCase()} {doc.size && `• ${doc.size}`}
                                             </p>
@@ -212,7 +212,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                 {/* Related Projects */}
                 {product.relatedProjects.length > 0 && (
                     <div>
-                        <h2 className="text-2xl font-heading font-bold text-gray-900 mb-8">
+                        <h2 className="text-2xl font-svn-avo-extra-bold text-gray-900 mb-8">
                             {dict.products.relatedProjects}
                         </h2>
                         <div className="grid md:grid-cols-3 gap-6">
@@ -230,7 +230,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                     <div className="absolute bottom-0 left-0 right-0 p-6">
-                                        <h3 className="text-lg font-heading font-bold text-white group-hover:text-[#a8bcdf] transition-colors">
+                                        <h3 className="text-lg font-svn-avo-extra-bold text-white group-hover:text-[#a8bcdf] transition-colors">
                                             {project.title}
                                         </h3>
                                     </div>
@@ -249,7 +249,7 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                         onClick={() => setShowQuoteForm(false)}
                     ></div>
                     <div className="relative bg-white rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                        <h3 className="text-2xl font-heading font-bold text-gray-900 mb-6">
+                        <h3 className="text-2xl font-svn-avo-extra-bold text-gray-900 mb-6">
                             {dict.products.requestQuote}
                         </h3>
                         <p className="font-svn-avo-bold text-gray-800 mb-6">
@@ -282,13 +282,13 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
                                 <button
                                     type="button"
                                     onClick={() => setShowQuoteForm(false)}
-                                    className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-600 font-heading font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                                    className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-600 font-svn-avo-bold rounded-xl hover:bg-gray-50 transition-colors"
                                 >
                                     {dict.common.close}
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-heading font-semibold rounded-xl hover:shadow-lg transition-all"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-lg transition-all"
                                 >
                                     {dict.contact.form.submit}
                                 </button>
