@@ -46,7 +46,8 @@ export const brands: Brand[] = [
         description: 'Leading provider of flow control products',
         subBrands: [
             { id: '2-1', slug: 'pumps', name: 'PUMPS' },
-            { id: '2-2', slug: 'mechanical-seals', name: 'Mechanical Seals and Dry Gas Seals' },
+            { id: '2-2', slug: 'mechanical-seals', name: 'Mechanical Seals' },
+            { id: '2-3', slug: 'dry-gas-seals', name: 'Dry Gas Seals' },
         ],
     },
     {
@@ -58,13 +59,6 @@ export const brands: Brand[] = [
         subBrands: [
             { id: '3-1', slug: 'submersible-pump', name: 'Submersible Pump' },
         ],
-    },
-    {
-        id: '4',
-        slug: 'solar-turbines',
-        name: 'Solar Turbines',
-        logo: '/brands/solar-turbines-logo.png',
-        description: 'Industrial gas turbines manufacturer',
     },
     {
         id: '5',
@@ -208,7 +202,7 @@ export const products: Product[] = [
         shortDescription: 'Nồi hơi công nghiệp hiệu suất cao',
         description: '<p>Nồi hơi công nghiệp với công nghệ đốt tiên tiến, hiệu suất cao.</p>',
         images: ['/industrial-boiler-equipment.jpg'],
-        brand: brands[3],
+        brand: brands[4],
         category: categories[5],
         industries: [industries[2], industries[4]],
         specifications: [
