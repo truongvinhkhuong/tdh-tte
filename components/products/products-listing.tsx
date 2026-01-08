@@ -279,7 +279,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4 pb-2">
+                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-4 pb-2 leading-relaxed">
                         {dict.products.title}
                     </h1>
                     <p className="font-svn-avo-bold text-gray-800">
