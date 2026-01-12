@@ -158,7 +158,7 @@ export function NewsListing({ lang, dict }: NewsListingProps) {
                                 >
                                     <div className="relative aspect-[16/9] overflow-hidden">
                                         <Image
-                                            src={featuredArticle.coverImage || "/placeholder.svg"}
+                                            src="/placeholder.svg"
                                             alt={lang === 'vi' ? featuredArticle.title : (featuredArticle.titleEn || featuredArticle.title)}
                                             fill
                                             className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -217,7 +217,7 @@ export function NewsListing({ lang, dict }: NewsListingProps) {
                                     >
                                         <div className="relative aspect-[16/10] overflow-hidden">
                                             <Image
-                                                src={article.coverImage || "/placeholder.svg"}
+                                                src="/placeholder.svg"
                                                 alt={lang === 'vi' ? article.title : (article.titleEn || article.title)}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"

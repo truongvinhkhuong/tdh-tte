@@ -75,7 +75,7 @@ export default async function NewsArticlePage({
             {/* Hero */}
             <section className="relative h-[40vh] min-h-[300px]">
                 <Image
-                    src={article.coverImage || "/placeholder.svg"}
+                    src="/placeholder.svg"
                     alt={title}
                     fill
                     className="object-cover"

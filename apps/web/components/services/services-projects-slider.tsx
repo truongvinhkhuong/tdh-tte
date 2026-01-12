@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight, MapPin, Briefcase } from "lucide-react"
+import { ChevronLeft, ChevronRight, MapPin, Briefcase, FolderOpen } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 
 interface ServicesProjectsSliderProps {
@@ -142,8 +142,14 @@ export function ServicesProjectsSlider({ lang }: ServicesProjectsSliderProps) {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-gray-900 mb-4">
-                        {isVi ? 'Dự án Tiêu biểu' : 'Featured Projects'}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#364fa1]/10 rounded-full mb-4">
+                        <FolderOpen className="w-5 h-5 text-[#364fa1]" />
+                        <span className="text-sm font-svn-avo-bold text-[#364fa1]">
+                            {isVi ? 'Kinh nghiệm dự án thực tế' : 'Real Project Experience'}
+                        </span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2 mb-4">
+                        {isVi ? 'Dự án tiêu biểu' : 'Featured Projects'}
                     </h2>
                     <p className="text-gray-600 font-svn-avo-bold max-w-2xl mx-auto">
                         {isVi

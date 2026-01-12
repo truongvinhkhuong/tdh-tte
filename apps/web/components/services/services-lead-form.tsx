@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Send, Phone, Mail, MapPin, Clock, CheckCircle2 } from "lucide-react"
+import { Send, Phone, Mail, MapPin, Clock, CheckCircle2, MessageSquare } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 
 interface ServicesLeadFormProps {
@@ -115,8 +115,14 @@ export function ServicesLeadForm({ lang }: ServicesLeadFormProps) {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-svn-avo-extra-bold text-gray-900 mb-4">
-                        {isVi ? 'Liên hệ Tư vấn Nhanh' : 'Quick Consultation'}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#364fa1]/10 rounded-full mb-4">
+                        <MessageSquare className="w-5 h-5 text-[#364fa1]" />
+                        <span className="text-sm font-svn-avo-bold text-[#364fa1]">
+                            {isVi ? 'Hỗ trợ tư vấn miễn phí' : 'Free Consultation Support'}
+                        </span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent pb-2 mb-4">
+                        {isVi ? 'Liên hệ tư vấn nhanh' : 'Quick Consultation'}
                     </h2>
                     <p className="text-gray-600 font-svn-avo-bold max-w-2xl mx-auto">
                         {isVi
