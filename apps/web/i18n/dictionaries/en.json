@@ -121,10 +121,37 @@
     "techHub": {
         "title": "Tech Hub",
         "subtitle": "Technical knowledge center and technology solutions",
-        "solutions": "Solutions",
-        "library": "Library",
+        "heroStats": {
+            "years": "32+ years of experience",
+            "docs": "500+ technical documents",
+            "solutions": "100+ implemented solutions"
+        },
+        "tabs": {
+            "solutions": "Solutions & Applications",
+            "whitepapers": "Technical Documents",
+            "caseStudies": "Case Studies"
+        },
+        "solutions": {
+            "title": "Solutions & Applications",
+            "description": "Technology solutions that optimize operations in the industry"
+        },
+        "whitepapers": {
+            "title": "Technical Documents",
+            "description": "Catalog library, equipment selection guides and technical standards",
+            "download": "Download"
+        },
+        "caseStudies": {
+            "title": "Case Studies",
+            "description": "Successful projects showcasing TTE's 32+ years of capability",
+            "viewProject": "View Details",
+            "results": "Results Achieved",
+            "client": "Client",
+            "year": "Year",
+            "industry": "Industry"
+        },
+        "readMore": "Read More",
         "downloadCatalog": "Download Catalog",
-        "readMore": "Read More"
+        "contactCta": "Contact for Solutions"
     },
     "news": {
         "title": "News",

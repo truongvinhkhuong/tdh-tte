@@ -92,14 +92,32 @@ export interface TechArticle {
     id: string;
     slug: string;
     title: string;
+    titleEn?: string;
     excerpt: string;
+    excerptEn?: string;
     content: string;
+    contentEn?: string;
     coverImage: string;
     author?: string;
     publishedAt: string;
-    category: 'solution' | 'library';
+    category: 'solution' | 'whitepaper' | 'case-study';
     downloadUrl?: string;
     readTime?: number;
+    // Fields for whitepapers
+    fileType?: 'pdf' | 'doc' | 'xls';
+    fileSize?: string;
+    documentType?: 'catalog' | 'whitepaper' | 'guide' | 'standard' | 'manual' | 'datasheet';
+    // Fields for case studies
+    client?: string;
+    location?: string;
+    projectYear?: number;
+    industry?: string;
+    challenge?: string;
+    solution?: string;
+    results?: string[];
+    resultsEn?: string[];
+    gallery?: string[];
+    relatedProducts?: string[];
 }
 
 // News Types

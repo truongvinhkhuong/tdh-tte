@@ -119,12 +119,39 @@
         "learnMore": "Tìm hiểu thêm"
     },
     "techHub": {
-        "title": "Tech hub",
+        "title": "Tech Hub",
         "subtitle": "Trung tâm kiến thức kỹ thuật và giải pháp công nghệ",
-        "solutions": "Giải pháp",
-        "library": "Thư viện",
+        "heroStats": {
+            "years": "32+ năm kinh nghiệm",
+            "docs": "500+ tài liệu kỹ thuật",
+            "solutions": "100+ giải pháp triển khai"
+        },
+        "tabs": {
+            "solutions": "Giải pháp & Ứng dụng",
+            "whitepapers": "Tài liệu Kỹ thuật",
+            "caseStudies": "Dự án Tiêu biểu"
+        },
+        "solutions": {
+            "title": "Giải pháp & Ứng dụng",
+            "description": "Các giải pháp công nghệ giúp tối ưu hóa vận hành trong ngành công nghiệp"
+        },
+        "whitepapers": {
+            "title": "Tài liệu kỹ thuật",
+            "description": "Thư viện catalog, hướng dẫn chọn thiết bị và tiêu chuẩn kỹ thuật",
+            "download": "Tải về"
+        },
+        "caseStudies": {
+            "title": "Dự án tiêu biểu",
+            "description": "Các dự án thành công thể hiện năng lực 32+ năm của TTE",
+            "viewProject": "Xem chi tiết",
+            "results": "Kết quả đạt được",
+            "client": "Khách hàng",
+            "year": "Năm thực hiện",
+            "industry": "Ngành"
+        },
+        "readMore": "Đọc thêm",
         "downloadCatalog": "Tải catalog",
-        "readMore": "Đọc thêm"
+        "contactCta": "Liên hệ tư vấn giải pháp"
     },
     "news": {
         "title": "Tin tức",

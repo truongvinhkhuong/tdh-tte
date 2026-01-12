@@ -353,40 +353,438 @@ export const services: Service[] = [
 // TECH ARTICLES
 // =========================
 export const techArticles: TechArticle[] = [
+    // ========================
+    // SOLUTIONS (Giải pháp & Ứng dụng)
+    // ========================
     {
-        id: '1',
-        slug: 'valve-selection-guide',
-        title: 'Hướng dẫn Lựa chọn Van Công nghiệp',
-        excerpt: 'Tìm hiểu cách lựa chọn van phù hợp cho từng ứng dụng cụ thể trong ngành công nghiệp.',
-        content: '<h2>Giới thiệu</h2><p>Van công nghiệp là thiết bị quan trọng...</p>',
-        coverImage: '/technology-solution-industrial-plant.jpg',
-        author: 'Kỹ sư Nguyễn Văn A',
-        publishedAt: '2024-01-15',
+        id: 'sol-1',
+        slug: 'giai-phap-giam-sat-an-mon-duong-ong',
+        title: 'Giải pháp giám sát ăn mòn trong đường ống dẫn dầu',
+        titleEn: 'Pipeline Corrosion Monitoring Solution',
+        excerpt: 'Hệ thống đo lường và giám sát ăn mòn thời gian thực với cảm biến thông minh, giúp dự đoán và ngăn ngừa sự cố đường ống.',
+        excerptEn: 'Real-time corrosion monitoring system with smart sensors, helping predict and prevent pipeline incidents.',
+        content: `
+            <h2>Thách thức</h2>
+            <p>Ăn mòn đường ống là nguyên nhân hàng đầu gây ra sự cố trong ngành dầu khí, gây thiệt hại hàng triệu đô la mỗi năm và rủi ro môi trường nghiêm trọng.</p>
+            
+            <h2>Giải pháp TTE</h2>
+            <p>Chúng tôi cung cấp hệ thống giám sát ăn mòn toàn diện từ Emerson, bao gồm:</p>
+            <ul>
+                <li>Cảm biến đo độ dày thành ống thời gian thực</li>
+                <li>Hệ thống phân tích dữ liệu AI dự đoán tuổi thọ đường ống</li>
+                <li>Dashboard giám sát từ xa 24/7</li>
+                <li>Tích hợp với hệ thống DCS/SCADA hiện có</li>
+            </ul>
+            
+            <h2>Lợi ích</h2>
+            <p>Giảm 70% chi phí bảo trì không kế hoạch, kéo dài tuổi thọ đường ống 15-20%, đảm bảo an toàn vận hành.</p>
+        `,
+        coverImage: '/offshore-oil-platform-vietnam.jpg',
+        author: 'Kỹ sư Nguyễn Văn Minh',
+        publishedAt: '2024-11-15',
+        category: 'solution',
+        readTime: 12,
+    },
+    {
+        id: 'sol-2',
+        slug: 'toi-uu-hoa-van-dieu-khien-nha-may-loc-dau',
+        title: 'Tối ưu hóa hệ thống van điều khiển trong nhà máy lọc dầu',
+        titleEn: 'Control Valve Optimization in Oil Refineries',
+        excerpt: 'Giải pháp nâng cấp hệ thống van Fisher với bộ điều khiển DVC6200, tăng độ chính xác điều khiển và giảm tiêu hao năng lượng.',
+        excerptEn: 'Upgrade solution with Fisher valves and DVC6200 controllers for improved accuracy and energy savings.',
+        content: `
+            <h2>Vấn đề thường gặp</h2>
+            <p>Nhiều nhà máy lọc dầu tại Việt Nam đang sử dụng van điều khiển cũ với bộ định vị cơ học, dẫn đến độ chính xác kém và tiêu hao khí nén cao.</p>
+            
+            <h2>Giải pháp Fisher DVC6200</h2>
+            <p>Bộ định vị kỹ thuật số DVC6200 mang lại:</p>
+            <ul>
+                <li>Độ chính xác định vị ±0.1%</li>
+                <li>Giảm 60% tiêu hao khí nén</li>
+                <li>Chẩn đoán van nâng cao - phát hiện sớm sự cố</li>
+                <li>Giao tiếp HART/Foundation Fieldbus</li>
+            </ul>
+        `,
+        coverImage: '/industrial-control-system-panel.jpg',
+        author: 'Kỹ sư Trần Đức Thắng',
+        publishedAt: '2024-10-20',
         category: 'solution',
         readTime: 10,
     },
     {
-        id: '2',
-        slug: 'pump-maintenance-best-practices',
-        title: 'Best Practices Bảo trì Máy bơm',
-        excerpt: 'Các phương pháp tốt nhất để bảo trì máy bơm công nghiệp, kéo dài tuổi thọ thiết bị.',
-        content: '<h2>Tầm quan trọng của bảo trì</h2><p>Bảo trì định kỳ...</p>',
-        coverImage: '/industrial-pump-facility.jpg',
-        author: 'Kỹ sư Trần Văn B',
-        publishedAt: '2024-02-20',
+        id: 'sol-3',
+        slug: 'he-thong-bom-chim-gian-khoan',
+        title: 'Hệ thống bơm chìm cho giàn khoan ngoài khơi',
+        titleEn: 'Submersible Pump System for Offshore Platforms',
+        excerpt: 'Giải pháp Pleuger submersible pump cho ứng dụng offshore với khả năng chịu áp suất cao và độ bền vượt trội trong môi trường khắc nghiệt.',
+        excerptEn: 'Pleuger submersible pump solution for offshore with high pressure tolerance and superior durability.',
+        content: `
+            <h2>Yêu cầu đặc biệt của Offshore</h2>
+            <p>Môi trường giàn khoan ngoài khơi đòi hỏi thiết bị có độ bền cao, chịu được nước biển, áp suất lớn và hoạt động liên tục.</p>
+            
+            <h2>Giải pháp Pleuger</h2>
+            <p>Máy bơm chìm Pleuger với các đặc điểm:</p>
+            <ul>
+                <li>Vật liệu Duplex Stainless Steel chống ăn mòn</li>
+                <li>Công suất từ 100 đến 5,000 m³/h</li>
+                <li>Cột áp tới 500m</li>
+                <li>Tuổi thọ 25+ năm</li>
+            </ul>
+        `,
+        coverImage: '/submersible-pump-offshore-equipment.jpg',
+        author: 'Kỹ sư Lê Hoàng Nam',
+        publishedAt: '2024-09-10',
         category: 'solution',
         readTime: 8,
     },
     {
-        id: '3',
-        slug: 'emerson-catalog-2024',
-        title: 'Catalog Emerson 2024',
-        excerpt: 'Tải về catalog đầy đủ các sản phẩm Emerson năm 2024.',
+        id: 'sol-4',
+        slug: 'giam-sat-rung-dong-may-nen-khi',
+        title: 'Giám sát rung động và nhiệt độ máy nén khí',
+        titleEn: 'Compressor Vibration & Temperature Monitoring',
+        excerpt: 'Hệ thống predictive maintenance với cảm biến Rosemount, phát hiện sớm sự cố trước khi xảy ra dừng máy ngoài kế hoạch.',
+        excerptEn: 'Predictive maintenance system with Rosemount sensors for early fault detection.',
+        content: `
+            <h2>Tầm quan trọng của Predictive Maintenance</h2>
+            <p>Máy nén khí là thiết bị quan trọng trong nhà máy. Một lần dừng máy ngoài kế hoạch có thể gây thiệt hại hàng trăm nghìn đô la.</p>
+            
+            <h2>Giải pháp giám sát liên tục</h2>
+            <ul>
+                <li>Cảm biến rung động Rosemount 5900S</li>
+                <li>Cảm biến nhiệt độ RTD/Thermocouple</li>
+                <li>Phần mềm phân tích xu hướng</li>
+                <li>Cảnh báo tự động qua SMS/Email</li>
+            </ul>
+        `,
+        coverImage: '/industrial-air-compressor-equipment.jpg',
+        author: 'Kỹ sư Phạm Văn Hùng',
+        publishedAt: '2024-08-25',
+        category: 'solution',
+        readTime: 9,
+    },
+    {
+        id: 'sol-5',
+        slug: 'tu-dong-hoa-xu-ly-khi-tu-nhien',
+        title: 'Tự động hóa quy trình xử lý khí tự nhiên',
+        titleEn: 'Natural Gas Processing Automation',
+        excerpt: 'Giải pháp DCS và thiết bị đo lường cho Gas Processing Unit, tối ưu hóa hiệu suất và đảm bảo an toàn vận hành.',
+        excerptEn: 'DCS and instrumentation solution for GPU optimization and safety.',
+        content: `
+            <h2>Quy trình xử lý khí</h2>
+            <p>Khí tự nhiên cần được xử lý để loại bỏ tạp chất, tách các thành phần có giá trị trước khi đưa vào sử dụng.</p>
+            
+            <h2>Giải pháp tích hợp</h2>
+            <ul>
+                <li>Hệ thống DCS DeltaV điều khiển toàn bộ quy trình</li>
+                <li>Thiết bị đo lưu lượng Micro Motion</li>
+                <li>Van điều khiển Fisher</li>
+                <li>Hệ thống an toàn SIS</li>
+            </ul>
+        `,
+        coverImage: '/gas-processing-system-industrial-equipment.jpg',
+        author: 'Kỹ sư Võ Thành Đạt',
+        publishedAt: '2024-07-15',
+        category: 'solution',
+        readTime: 11,
+    },
+
+    // ========================
+    // WHITEPAPERS (Tài liệu kỹ thuật)
+    // ========================
+    {
+        id: 'wp-1',
+        slug: 'huong-dan-chon-van-api-6d',
+        title: 'Hướng dẫn chọn van theo tiêu chuẩn API 6D',
+        titleEn: 'Valve Selection Guide per API 6D Standard',
+        excerpt: 'Tài liệu hướng dẫn chi tiết lựa chọn van cổng, van bi, van bướm theo tiêu chuẩn API 6D cho ứng dụng pipeline.',
+        excerptEn: 'Detailed guide for gate, ball, butterfly valve selection per API 6D for pipeline applications.',
         content: '',
-        coverImage: '/placeholder.jpg',
-        publishedAt: '2024-01-01',
-        category: 'library',
+        coverImage: '/technology-solution-industrial-plant.jpg',
+        publishedAt: '2024-12-01',
+        category: 'whitepaper',
         downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '2.5 MB',
+        documentType: 'guide',
+    },
+    {
+        id: 'wp-2',
+        slug: 'so-sanh-cam-bien-ap-suat',
+        title: 'So sánh các loại cảm biến áp suất công nghiệp',
+        titleEn: 'Industrial Pressure Sensor Comparison',
+        excerpt: 'Phân tích ưu nhược điểm của các công nghệ cảm biến: Capacitive, Piezoresistive, Resonant, giúp lựa chọn phù hợp.',
+        excerptEn: 'Analysis of sensor technologies: Capacitive, Piezoresistive, Resonant for optimal selection.',
+        content: '',
+        coverImage: '/industrial-control-system-panel.jpg',
+        publishedAt: '2024-11-20',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '1.8 MB',
+        documentType: 'whitepaper',
+    },
+    {
+        id: 'wp-3',
+        slug: 'catalog-fisher-control-valves-2024',
+        title: 'Catalog Fisher Control Valves 2024',
+        titleEn: 'Fisher Control Valves Catalog 2024',
+        excerpt: 'Catalog đầy đủ các dòng van điều khiển Fisher: easy-e, GX, Vee-Ball, HP, với thông số kỹ thuật và hướng dẫn chọn.',
+        excerptEn: 'Complete Fisher control valve catalog: easy-e, GX, Vee-Ball, HP series with specifications.',
+        content: '',
+        coverImage: '/advanced-technology-industrial-solutions.jpg',
+        publishedAt: '2024-01-01',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '15 MB',
+        documentType: 'catalog',
+    },
+    {
+        id: 'wp-4',
+        slug: 'tieu-chuan-iso-14001-dau-khi',
+        title: 'Tiêu chuẩn ISO 14001 trong công nghiệp dầu khí',
+        titleEn: 'ISO 14001 Standard in Oil & Gas Industry',
+        excerpt: 'Hướng dẫn áp dụng hệ thống quản lý môi trường ISO 14001:2015 cho các doanh nghiệp dầu khí Việt Nam.',
+        excerptEn: 'Guide to implementing ISO 14001:2015 environmental management in Vietnam oil & gas sector.',
+        content: '',
+        coverImage: '/petrochemical-plant-industrial-project.jpg',
+        publishedAt: '2024-08-01',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '3.2 MB',
+        documentType: 'standard',
+    },
+    {
+        id: 'wp-5',
+        slug: 'huong-dan-bao-tri-may-bom-flowserve',
+        title: 'Hướng dẫn bảo trì máy bơm ly tâm Flowserve',
+        titleEn: 'Flowserve Centrifugal Pump Maintenance Manual',
+        excerpt: 'Manual bảo trì định kỳ và xử lý sự cố cho các dòng bơm Flowserve: CPX, LNN, HPX với checklist đầy đủ.',
+        excerptEn: 'Maintenance and troubleshooting manual for Flowserve CPX, LNN, HPX pumps with checklists.',
+        content: '',
+        coverImage: '/industrial-pump-equipment.jpg',
+        publishedAt: '2024-06-15',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '5.5 MB',
+        documentType: 'manual',
+    },
+    {
+        id: 'wp-6',
+        slug: 'datasheet-rosemount-transmitters',
+        title: 'Datasheet Rosemount Pressure Transmitters',
+        titleEn: 'Rosemount Pressure Transmitters Datasheet',
+        excerpt: 'Thông số kỹ thuật chi tiết cho dòng transmitter Rosemount 3051, 2088, với bảng lựa chọn model.',
+        excerptEn: 'Technical specifications for Rosemount 3051, 2088 transmitters with model selection table.',
+        content: '',
+        coverImage: '/industrial-equipment-oil-gas-technology.jpg',
+        publishedAt: '2024-05-01',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '800 KB',
+        documentType: 'datasheet',
+    },
+    {
+        id: 'wp-7',
+        slug: 'best-practices-van-an-toan-crosby',
+        title: 'Best Practices - Lắp đặt van an toàn Crosby',
+        titleEn: 'Crosby Safety Valve Installation Best Practices',
+        excerpt: 'Hướng dẫn lắp đặt, cài đặt áp suất và bảo trì van an toàn Crosby theo tiêu chuẩn API 520/521.',
+        excerptEn: 'Installation, set pressure, and maintenance guide for Crosby safety valves per API 520/521.',
+        content: '',
+        coverImage: '/oil-refinery-project-industrial.jpg',
+        publishedAt: '2024-04-10',
+        category: 'whitepaper',
+        downloadUrl: '#',
+        fileType: 'pdf',
+        fileSize: '2.1 MB',
+        documentType: 'guide',
+    },
+
+    // ========================
+    // CASE STUDIES (Dự án tiêu biểu)
+    // ========================
+    {
+        id: 'cs-1',
+        slug: 'case-study-nsrp-van-dieu-khien',
+        title: 'Cung cấp hệ thống van điều khiển cho NSRP',
+        titleEn: 'Control Valve System Supply for NSRP',
+        excerpt: 'TTE cung cấp hơn 500 van điều khiển Fisher cho Nhà máy Lọc dầu Nghi Sơn, góp phần vận hành ổn định từ 2017.',
+        excerptEn: 'TTE supplied 500+ Fisher control valves for Nghi Son Refinery, ensuring stable operation since 2017.',
+        content: `
+            <h2>Về dự án</h2>
+            <p>Nhà máy Lọc dầu Nghi Sơn (NSRP) là một trong những nhà máy lọc dầu lớn nhất Việt Nam với công suất 200,000 bbl/ngày.</p>
+            
+            <h2>Phạm vi cung cấp</h2>
+            <ul>
+                <li>500+ van điều khiển Fisher (GX, easy-e, Vee-Ball)</li>
+                <li>Bộ định vị kỹ thuật số DVC6200</li>
+                <li>Van an toàn Crosby</li>
+                <li>Dịch vụ lắp đặt và commissioning</li>
+            </ul>
+        `,
+        coverImage: '/oil-refinery-project-industrial.jpg',
+        publishedAt: '2024-03-15',
+        category: 'case-study',
+        client: 'Nhà máy Lọc dầu Nghi Sơn (NSRP)',
+        location: 'Thanh Hóa, Việt Nam',
+        projectYear: 2017,
+        industry: 'Dầu khí',
+        results: [
+            'Giảm 25% thời gian dừng máy',
+            '99.5% độ sẵn sàng thiết bị',
+            'Tiết kiệm $200K/năm bảo trì'
+        ],
+        resultsEn: [
+            '25% reduction in downtime',
+            '99.5% equipment availability',
+            '$200K/year maintenance savings'
+        ],
+        gallery: ['/oil-refinery-project-industrial.jpg', '/petrochemical-plant-industrial-project.jpg'],
+    },
+    {
+        id: 'cs-2',
+        slug: 'case-study-bsr-nang-cap-bom',
+        title: 'Nâng cấp hệ thống bơm xử lý nước BSR',
+        titleEn: 'Water Treatment Pump Upgrade for BSR',
+        excerpt: 'Dự án thay thế và nâng cấp hệ thống bơm tại Nhà máy Lọc dầu Bình Sơn, tăng hiệu suất xử lý nước thải 30%.',
+        excerptEn: 'Pump replacement and upgrade project at Binh Son Refinery, increasing wastewater treatment by 30%.',
+        content: `
+            <h2>Thách thức</h2>
+            <p>Hệ thống bơm cũ đã hoạt động 15 năm, hiệu suất giảm, chi phí bảo trì tăng cao.</p>
+            
+            <h2>Giải pháp</h2>
+            <p>TTE cung cấp giải pháp thay thế toàn bộ bằng bơm Flowserve HPX với hiệu suất cao hơn 15% và tuổi thọ dự kiến 25 năm.</p>
+        `,
+        coverImage: '/industrial-pump-facility.jpg',
+        publishedAt: '2024-02-20',
+        category: 'case-study',
+        client: 'Bình Sơn Refining (BSR)',
+        location: 'Quảng Ngãi, Việt Nam',
+        projectYear: 2022,
+        industry: 'Hóa dầu',
+        results: [
+            'Tăng 30% hiệu suất xử lý',
+            'Giảm 40% chi phí điện năng',
+            'ROI trong 2 năm'
+        ],
+        resultsEn: [
+            '30% processing efficiency increase',
+            '40% energy cost reduction',
+            'ROI within 2 years'
+        ],
+        gallery: ['/industrial-pump-facility.jpg', '/industrial-pump-equipment.jpg'],
+    },
+    {
+        id: 'cs-3',
+        slug: 'case-study-pvdrilling-giam-sat',
+        title: 'Lắp đặt thiết bị giám sát cho PVDrilling',
+        titleEn: 'Monitoring Equipment Installation for PVDrilling',
+        excerpt: 'Triển khai hệ thống giám sát rung động và tình trạng thiết bị trên 5 giàn khoan, giảm $500K/năm chi phí bảo trì.',
+        excerptEn: 'Vibration monitoring system deployment on 5 drilling rigs, saving $500K/year in maintenance.',
+        content: `
+            <h2>Phạm vi dự án</h2>
+            <p>Lắp đặt hệ thống giám sát liên tục cho 5 giàn khoan PVDrilling hoạt động tại vùng biển Việt Nam.</p>
+            
+            <h2>Thiết bị cung cấp</h2>
+            <ul>
+                <li>Cảm biến rung động Emerson</li>
+                <li>Hệ thống thu thập dữ liệu wireless</li>
+                <li>Phần mềm phân tích AMS</li>
+            </ul>
+        `,
+        coverImage: '/offshore-oil-platform-vietnam.jpg',
+        publishedAt: '2024-01-10',
+        category: 'case-study',
+        client: 'PV Drilling',
+        location: 'Vùng biển Việt Nam',
+        projectYear: 2021,
+        industry: 'Khoan dầu khí',
+        results: [
+            'Tiết kiệm $500K/năm bảo trì',
+            'Phát hiện sớm 12 sự cố tiềm ẩn',
+            'Tăng 15% uptime giàn khoan'
+        ],
+        resultsEn: [
+            '$500K/year maintenance savings',
+            '12 potential failures detected early',
+            '15% rig uptime increase'
+        ],
+        gallery: ['/offshore-oil-platform-vietnam.jpg', '/full-field-development-oil-platform.jpg'],
+    },
+    {
+        id: 'cs-4',
+        slug: 'case-study-vietsovpetro-do-luong',
+        title: 'Hệ thống đo lường cho trạm khí Bạch Hổ',
+        titleEn: 'Measurement System for Bach Ho Gas Station',
+        excerpt: 'Cung cấp và lắp đặt hệ thống đo lường khí thiên nhiên với độ chính xác 99.9% cho Vietsovpetro.',
+        excerptEn: 'Natural gas measurement system with 99.9% accuracy for Vietsovpetro.',
+        content: `
+            <h2>Yêu cầu dự án</h2>
+            <p>Vietsovpetro cần hệ thống đo lường khí độ chính xác cao để tính toán sản lượng và thuế.</p>
+            
+            <h2>Giải pháp</h2>
+            <p>TTE cung cấp hệ thống hoàn chỉnh từ Emerson với đồng hồ Coriolis Micro Motion.</p>
+        `,
+        coverImage: '/natural-gas-station-industrial.jpg',
+        publishedAt: '2023-12-15',
+        category: 'case-study',
+        client: 'Vietsovpetro',
+        location: 'Bà Rịa - Vũng Tàu, Việt Nam',
+        projectYear: 2023,
+        industry: 'Dầu khí',
+        results: [
+            'Đạt độ chính xác 99.9%',
+            'Đáp ứng tiêu chuẩn đo lường quốc tế',
+            'Vận hành ổn định 24/7'
+        ],
+        resultsEn: [
+            '99.9% measurement accuracy',
+            'International metering standards met',
+            '24/7 stable operation'
+        ],
+        gallery: ['/natural-gas-station-industrial.jpg', '/gas-processing-system-industrial-equipment.jpg'],
+    },
+    {
+        id: 'cs-5',
+        slug: 'case-study-pvgas-may-nen-khi',
+        title: 'Cung cấp máy nén khí cho PV Gas',
+        titleEn: 'Gas Compressor Supply for PV Gas',
+        excerpt: 'Dự án cung cấp và lắp đặt hệ thống máy nén khí công suất lớn cho trạm nén GPP Dinh Cố.',
+        excerptEn: 'High-capacity gas compressor system supply and installation for GPP Dinh Co station.',
+        content: `
+            <h2>Tổng quan dự án</h2>
+            <p>Trạm xử lý khí Dinh Cố cần nâng cấp hệ thống máy nén để tăng công suất xử lý.</p>
+            
+            <h2>Phạm vi cung cấp</h2>
+            <ul>
+                <li>2 máy nén khí piston Cooper</li>
+                <li>Hệ thống điều khiển tự động</li>
+                <li>Thiết bị phụ trợ</li>
+                <li>Dịch vụ lắp đặt và commissioning</li>
+            </ul>
+        `,
+        coverImage: '/industrial-air-compressor-equipment.jpg',
+        publishedAt: '2023-10-20',
+        category: 'case-study',
+        client: 'PV Gas',
+        location: 'Bà Rịa - Vũng Tàu, Việt Nam',
+        projectYear: 2020,
+        industry: 'Khí đốt',
+        results: [
+            'Vận hành liên tục 24/7',
+            'Tăng 20% công suất xử lý',
+            'Đạt tiêu chuẩn an toàn ATEX'
+        ],
+        resultsEn: [
+            '24/7 continuous operation',
+            '20% processing capacity increase',
+            'ATEX safety standards met'
+        ],
+        gallery: ['/industrial-air-compressor-equipment.jpg', '/gas-processing-system-industrial-equipment.jpg'],
     },
 ];
 
