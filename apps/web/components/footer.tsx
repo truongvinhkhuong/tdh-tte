@@ -66,7 +66,7 @@ export function Footer({ lang, dict }: FooterProps) {
             </p>
             <div className="space-y-2 text-sm text-slate-800 mb-6">
               <p>{companyInfo.address}</p>
-              <p>{dict.contact.phone}: {companyInfo.phone}</p>
+              <p>{dict.contact.phone}: <a href={`tel:${companyInfo.phone}`} className="hover:text-[#2B54A7] transition-colors">{companyInfo.phone}</a></p>
               <p>{dict.contact.email}: {companyInfo.email}</p>
             </div>
 

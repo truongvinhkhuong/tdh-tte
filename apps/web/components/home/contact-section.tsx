@@ -81,6 +81,23 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12 lg:mb-16">
                     {contactInfo.map((info, index) => {
                         const IconComponent = info.icon
+                        const renderContent = () => {
+                            if (info.icon === Phone) {
+                                return (
+                                    <a href={`tel:${info.content}`} className="hover:text-[#364fa1] transition-colors">
+                                        {info.content}
+                                    </a>
+                                )
+                            }
+                            if (info.icon === Mail) {
+                                return (
+                                    <a href={`mailto:${info.content}`} className="hover:text-[#364fa1] transition-colors">
+                                        {info.content}
+                                    </a>
+                                )
+                            }
+                            return info.content
+                        }
                         return (
                             <div
                                 key={index}
@@ -92,7 +109,7 @@ export function ContactSection({ lang, dict }: ContactSectionProps) {
                                     <IconComponent size={28} className="hidden md:block" strokeWidth={1.5} />
                                 </div>
                                 <h3 className="text-sm sm:text-base md:text-lg font-svn-avo-extra-bold text-gray-900 mb-1 md:mb-2">{info.title}</h3>
-                                <p className="font-svn-avo-bold text-gray-800 text-xs sm:text-sm md:text-base line-clamp-2 sm:line-clamp-none">{info.content}</p>
+                                <p className="font-svn-avo-bold text-gray-800 text-xs sm:text-sm md:text-base line-clamp-2 sm:line-clamp-none">{renderContent()}</p>
                             </div>
                         )
                     })}
