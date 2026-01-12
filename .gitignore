@@ -1,49 +1,48 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules
+.pnpm-store
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+# Build outputs
+dist
+build
+.next
+.turbo
 
-# testing
-/coverage
+# Environment files
+.env
+.env.local
+.env.*.local
 
-# next.js
-/.next/
-/out/
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
 
-# production
-/build
-
-# misc
+# OS
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env
+# Testing
+coverage
+.nyc_output
 
-# vercel
-.vercel
-
-# typescript
+# Generated files
 *.tsbuildinfo
-next-env.d.ts
+apps/cms/src/payload-types.ts
+packages/shared-types/dist
 
-# ide
-.vscode
-.idea
-*.swp
-*.swo
-*~
+# Docker volumes (local)
+postgres_data
+redis_data
+backups
 
-# lock files (keep only one)
-pnpm-lock.yaml
-package-lock.json
-
+# Misc
+*.orig
+*.bak
