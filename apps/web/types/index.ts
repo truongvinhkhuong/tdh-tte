@@ -125,12 +125,17 @@ export interface NewsArticle {
     id: string;
     slug: string;
     title: string;
+    titleEn?: string;
     excerpt: string;
+    excerptEn?: string;
     content: string;
+    contentEn?: string;
     coverImage: string;
     author?: string;
     publishedAt: string;
-    category: 'company' | 'industry';
+    category: 'company' | 'partner' | 'industry';
+    // Optional tags for filtering
+    tags?: string[];
 }
 
 // Career Types

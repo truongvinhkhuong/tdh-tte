@@ -154,16 +154,18 @@
         "contactCta": "Contact for Solutions"
     },
     "news": {
-        "title": "News",
-        "subtitle": "Latest updates from Toan Thang Engineering",
+        "title": "News & Events",
+        "subtitle": "TTE activities, partner updates, and industry trends",
         "latest": "Latest News",
         "categories": {
             "all": "All",
-            "company": "Company News",
+            "company": "TTE News",
+            "partner": "Partner & Brand",
             "industry": "Industry News"
         },
         "readMore": "Read More",
-        "publishedAt": "Published on"
+        "publishedAt": "Published on",
+        "author": "Author"
     },
     "careers": {
         "title": "Careers",

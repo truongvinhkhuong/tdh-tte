@@ -154,16 +154,18 @@
         "contactCta": "Liên hệ tư vấn giải pháp"
     },
     "news": {
-        "title": "Tin tức",
-        "subtitle": "Cập nhật tin tức mới nhất từ Toàn Thắng Engineering",
+        "title": "Tin tức & Sự kiện",
+        "subtitle": "Cập nhật tin tức hoạt động TTE, đối tác và xu hướng ngành công nghiệp",
         "latest": "Tin mới nhất",
         "categories": {
             "all": "Tất cả",
-            "company": "Tin công ty",
+            "company": "Tin TTE",
+            "partner": "Đối tác & Hãng",
             "industry": "Tin ngành"
         },
         "readMore": "Đọc thêm",
-        "publishedAt": "Đăng ngày"
+        "publishedAt": "Đăng ngày",
+        "author": "Tác giả"
     },
     "careers": {
         "title": "Tuyển dụng",

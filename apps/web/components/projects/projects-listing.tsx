@@ -148,16 +148,6 @@ export function ProjectsListing({ lang, dict }: ProjectsListingProps) {
     return (
         <section className="py-8 md:py-12 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="text-center mb-8 md:mb-12">
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-svn-avo-extra-bold bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] bg-clip-text text-transparent mb-3 md:mb-4 leading-relaxed pt-2">
-                        {dict.projects.title}
-                    </h1>
-                    <p className="font-svn-avo-bold text-gray-800 text-base md:text-lg max-w-2xl mx-auto">
-                        {dict.projects.subtitle}
-                    </p>
-                </div>
-
                 {/* Desktop Filter Bar */}
                 <div className="hidden md:flex items-center justify-between gap-4 mb-8 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                     <div className="flex items-center gap-3 flex-wrap">

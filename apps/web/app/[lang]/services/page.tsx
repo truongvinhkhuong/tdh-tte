@@ -1,18 +1,7 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { Lightbulb, Package, Wrench, Settings, Users, Headphones, ArrowRight } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
-import { services } from "@/lib/data"
-
-const iconMap = {
-    Lightbulb,
-    Package,
-    Wrench,
-    Settings,
-    Users,
-    Headphones,
-}
+import { ServicesPageContent } from "@/components/services/services-page-content"
 
 export async function generateMetadata({
     params,
@@ -22,10 +11,15 @@ export async function generateMetadata({
     const { lang } = await params
 
     return {
-        title: lang === 'vi' ? 'Dịch Vụ' : 'Services',
+        title: lang === 'vi'
+            ? 'Dịch Vụ Kỹ Thuật & Bảo Dưỡng Công Nghiệp | TTE'
+            : 'Technical & Industrial Maintenance Services | TTE',
         description: lang === 'vi'
-            ? 'Các dịch vụ kỹ thuật toàn diện từ Toàn Thắng Engineering'
-            : 'Comprehensive technical services from Toan Thang Engineering',
+            ? 'Dịch vụ kỹ thuật và bảo dưỡng công nghiệp toàn diện. Đối tác ủy quyền của Emerson & Flowserve tại Việt Nam. Van, Bơm, Máy nén khí, Seal cơ khí, Skid.'
+            : 'Comprehensive technical and industrial maintenance services. Authorized partner of Emerson & Flowserve in Vietnam. Valves, Pumps, Compressors, Mechanical Seals, Skid.',
+        keywords: lang === 'vi'
+            ? 'dịch vụ van, dịch vụ bơm, máy nén khí, seal cơ khí, skid, Emerson, Flowserve, bảo trì công nghiệp, đại tu thiết bị'
+            : 'valve services, pump services, compressor, mechanical seals, skid fabrication, Emerson, Flowserve, industrial maintenance, equipment overhaul',
     }
 }
 
@@ -37,74 +31,5 @@ export default async function ServicesPage({
     const { lang } = await params
     const dict = await getDictionary(lang)
 
-    return (
-        <main className="pt-20">
-            {/* Hero Section */}
-            <section className="py-24 bg-gradient-to-r from-[#2B54A7] to-[#1e3a75]">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-5xl font-svn-avo-extra-bold text-white mb-6">
-                        {dict.services.title}
-                    </h1>
-                    <p className="text-xl font-svn-avo-bold text-white/80 max-w-3xl mx-auto">
-                        {dict.services.subtitle}
-                    </p>
-                </div>
-            </section>
-
-            {/* Services Grid */}
-            <section className="py-24 bg-gray-50">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {services.map((service) => {
-                            const IconComponent = iconMap[service.icon as keyof typeof iconMap]
-                            return (
-                                <div
-                                    key={service.id}
-                                    className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#364fa1]/40"
-                                >
-                                    <div className="w-16 h-16 bg-gradient-to-br from-[#364fa1] to-[#5a7ec9] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                        <IconComponent size={32} className="text-white" />
-                                    </div>
-                                    <h3 className="text-xl font-svn-avo-extra-bold text-gray-900 mb-4">
-                                        {service.title}
-                                    </h3>
-                                    <p className="font-svn-avo-bold text-gray-800 leading-relaxed mb-6">
-                                        {service.shortDescription}
-                                    </p>
-                                    <Link
-                                        href={`/${lang}/services/${service.slug}`}
-                                        className="inline-flex items-center gap-2 text-[#364fa1] font-svn-avo-bold group-hover:gap-3 transition-all"
-                                    >
-                                        {dict.services.learnMore}
-                                        <ArrowRight size={18} />
-                                    </Link>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="py-16 bg-white">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl font-svn-avo-extra-bold text-gray-900 mb-4">
-                        {lang === 'vi' ? 'Cần tư vấn thêm?' : 'Need more consultation?'}
-                    </h2>
-                    <p className="font-svn-avo-bold text-gray-800 mb-8">
-                        {lang === 'vi'
-                            ? 'Liên hệ với chúng tôi để được hỗ trợ nhanh chóng'
-                            : 'Contact us for quick support'}
-                    </p>
-                    <Link
-                        href={`/${lang}/contact`}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white font-svn-avo-bold rounded-xl hover:shadow-xl transition-all duration-300"
-                    >
-                        {dict.header.contactNow}
-                        <ArrowRight size={20} />
-                    </Link>
-                </div>
-            </section>
-        </main>
-    )
+    return <ServicesPageContent lang={lang} dict={dict} />
 }

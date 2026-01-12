@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import type { Locale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
+import { ProjectsHero } from "@/components/projects/projects-hero"
 import { ProjectsListing } from "@/components/projects/projects-listing"
 
 export async function generateMetadata({
@@ -27,7 +28,8 @@ export default async function ProjectsPage({
     const dict = await getDictionary(lang)
 
     return (
-        <main className="pt-20">
+        <main className="pt-16 md:pt-20">
+            <ProjectsHero lang={lang} dict={dict} />
             <ProjectsListing lang={lang} dict={dict} />
         </main>
     )
