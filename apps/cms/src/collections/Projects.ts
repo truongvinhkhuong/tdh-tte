@@ -24,13 +24,13 @@ export const Projects: CollectionConfig = {
         {
             name: 'slug',
             type: 'text',
-            localized: true,
             unique: true,
             hooks: {
                 beforeChange: [formatSlug('name')],
             },
             admin: {
                 position: 'sidebar',
+                description: 'URL slug (không dịch, tự động tạo từ tên)',
             },
         },
         {

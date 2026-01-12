@@ -77,10 +77,10 @@ export default buildConfig({
 
     localization: {
         locales: [
-            { label: 'English', code: 'en' },
             { label: 'Tiếng Việt', code: 'vi' },
+            { label: 'English', code: 'en' },
         ],
-        defaultLocale: 'en',
+        defaultLocale: 'vi',
         fallback: true,
     },
 

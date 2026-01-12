@@ -20,10 +20,10 @@ export const ProductCategories: CollectionConfig = {
         {
             name: 'slug',
             type: 'text',
-            localized: true,
             unique: true,
             admin: {
                 position: 'sidebar',
+                description: 'URL slug (không dịch)',
             },
         },
         {
