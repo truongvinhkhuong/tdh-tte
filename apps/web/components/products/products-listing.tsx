@@ -81,13 +81,58 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
     }
 
     const FilterContent = () => (
-        <div className="space-y-6">
+        <div className="space-y-4">
+            {/* Category & Industry - Compact Select Style */}
+            <div className="space-y-3">
+                {/* Category Select */}
+                <div>
+                    <label className="font-svn-avo-bold text-xs text-gray-500 mb-1.5 block">
+                        {dict.products.filter.category}
+                    </label>
+                    <select
+                        value={selectedCategory || ''}
+                        onChange={(e) => setSelectedCategory(e.target.value || null)}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-svn-avo-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#364fa1]/30 focus:border-[#364fa1] transition-all cursor-pointer appearance-none"
+                        style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                    >
+                        <option value="">{lang === 'vi' ? 'Tất cả danh mục' : 'All categories'}</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Industry Select */}
+                <div>
+                    <label className="font-svn-avo-bold text-xs text-gray-500 mb-1.5 block">
+                        {dict.products.filter.industry}
+                    </label>
+                    <select
+                        value={selectedIndustry || ''}
+                        onChange={(e) => setSelectedIndustry(e.target.value || null)}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-svn-avo-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#364fa1]/30 focus:border-[#364fa1] transition-all cursor-pointer appearance-none"
+                        style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                    >
+                        <option value="">{lang === 'vi' ? 'Tất cả ngành' : 'All industries'}</option>
+                        {industries.map((industry) => (
+                            <option key={industry.id} value={industry.id}>
+                                {industry.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-200"></div>
+
             {/* Brand Filter with Logos */}
             <div>
-                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
+                <label className="font-svn-avo-bold text-xs text-gray-500 mb-2 block">
                     {dict.products.filter.brand}
-                </h3>
+                </label>
                 <div className="space-y-2">
                     {brands.map((brand) => {
                         const isSelected = selectedBrand === brand.id
@@ -95,24 +140,24 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                         const hasSubBrands = brand.subBrands && brand.subBrands.length > 0
 
                         return (
-                            <div key={brand.id} className="rounded-xl overflow-hidden">
+                            <div key={brand.id} className="rounded-xl overflow-hidden border border-gray-200 hover:border-[#364fa1]/50 transition-colors">
                                 {/* Brand Card */}
                                 <div
+                                    onClick={() => handleBrandSelect(brand.id)}
                                     className={`
                                         flex items-center gap-3 p-3 cursor-pointer transition-all duration-300
                                         ${isSelected
-                                            ? 'bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white shadow-lg'
-                                            : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                                            ? 'bg-gradient-to-r from-[#364fa1] to-[#5a7ec9] text-white'
+                                            : 'bg-white hover:bg-gray-50 text-gray-700'
                                         }
                                     `}
                                 >
                                     {/* Logo */}
                                     <div
-                                        onClick={() => handleBrandSelect(brand.id)}
                                         className={`
-                                            relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 
-                                            ${isSelected ? 'bg-white/20' : 'bg-white'} 
-                                            p-1.5 shadow-sm
+                                            relative w-11 h-11 rounded-lg overflow-hidden flex-shrink-0 
+                                            ${isSelected ? 'bg-white' : 'bg-gray-50 border border-gray-100'} 
+                                            p-1.5
                                         `}
                                     >
                                         <Image
@@ -128,18 +173,10 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                     </div>
 
                                     {/* Brand Name */}
-                                    <div
-                                        onClick={() => handleBrandSelect(brand.id)}
-                                        className="flex-1 min-w-0"
-                                    >
-                                        <p className={`font-svn-avo-bold text-sm truncate ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                                    <div className="flex-1 min-w-0">
+                                        <p className={`font-svn-avo-bold text-sm ${isSelected ? 'text-white' : 'text-gray-900'}`}>
                                             {brand.name}
                                         </p>
-                                        {brand.subBrands && (
-                                            <p className={`text-xs ${isSelected ? 'text-white/70' : 'text-gray-500'}`}>
-                                                {brand.subBrands.length} {lang === 'vi' ? 'nhãn hàng' : 'sub-brands'}
-                                            </p>
-                                        )}
                                     </div>
 
                                     {/* Expand Toggle */}
@@ -153,7 +190,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                                 p-1.5 rounded-lg transition-all duration-200
                                                 ${isSelected
                                                     ? 'hover:bg-white/20 text-white'
-                                                    : 'hover:bg-gray-200 text-gray-500'
+                                                    : 'hover:bg-gray-100 text-gray-400'
                                                 }
                                             `}
                                         >
@@ -174,31 +211,29 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                                             ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}
                                         `}
                                     >
-                                        <div className="pl-3 pr-2 py-3 bg-gray-50/80 border-l-2 border-[#364fa1]/30 ml-5 space-y-1.5">
-                                            {brand.subBrands?.map((subBrand) => {
-                                                const isSubSelected = selectedSubBrand === subBrand.id
+                                        <div className="px-3 py-2 bg-gray-50 border-t border-gray-100">
+                                            <div className="grid grid-cols-2 gap-1.5">
+                                                {brand.subBrands?.map((subBrand) => {
+                                                    const isSubSelected = selectedSubBrand === subBrand.id
 
-                                                return (
-                                                    <button
-                                                        key={subBrand.id}
-                                                        onClick={() => handleSubBrandSelect(subBrand.id, brand.id)}
-                                                        className={`
-                                                            w-full text-left px-3 py-2.5 rounded-lg text-sm font-svn-avo-bold
-                                                            transition-all duration-200 flex items-start gap-2
-                                                            ${isSubSelected
-                                                                ? 'bg-[#364fa1] text-white shadow-md'
-                                                                : 'hover:bg-white hover:shadow-sm text-gray-700 hover:text-gray-900'
-                                                            }
-                                                        `}
-                                                    >
-                                                        <span className={`
-                                                            w-2 h-2 rounded-full flex-shrink-0 mt-1.5
-                                                            ${isSubSelected ? 'bg-white' : 'bg-[#364fa1]/50'}
-                                                        `}></span>
-                                                        <span className="leading-snug">{subBrand.name}</span>
-                                                    </button>
-                                                )
-                                            })}
+                                                    return (
+                                                        <button
+                                                            key={subBrand.id}
+                                                            onClick={() => handleSubBrandSelect(subBrand.id, brand.id)}
+                                                            className={`
+                                                                text-left px-2.5 py-2 rounded-lg text-xs font-svn-avo-bold
+                                                                transition-all duration-200
+                                                                ${isSubSelected
+                                                                    ? 'bg-[#364fa1] text-white'
+                                                                    : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200'
+                                                                }
+                                                            `}
+                                                        >
+                                                            {subBrand.name}
+                                                        </button>
+                                                    )
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -208,66 +243,13 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                 </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-gray-200"></div>
-
-            {/* Category Filter */}
-            <div>
-                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
-                    {dict.products.filter.category}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    {categories.map((category) => (
-                        <button
-                            key={category.id}
-                            onClick={() => setSelectedCategory(selectedCategory === category.id ? null : category.id)}
-                            className={`
-                                px-3 py-1.5 rounded-full text-sm font-svn-avo-bold transition-all duration-200
-                                ${selectedCategory === category.id
-                                    ? 'bg-[#364fa1] text-white shadow-md'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                                }
-                            `}
-                        >
-                            {category.name}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Industry Filter */}
-            <div>
-                <h3 className="font-svn-avo-extra-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-gradient-to-b from-[#364fa1] to-[#5a7ec9] rounded-full"></span>
-                    {dict.products.filter.industry}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    {industries.map((industry) => (
-                        <button
-                            key={industry.id}
-                            onClick={() => setSelectedIndustry(selectedIndustry === industry.id ? null : industry.id)}
-                            className={`
-                                px-3 py-1.5 rounded-full text-sm font-svn-avo-bold transition-all duration-200
-                                ${selectedIndustry === industry.id
-                                    ? 'bg-[#364fa1] text-white shadow-md'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                                }
-                            `}
-                        >
-                            {industry.name}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
             {/* Clear Filters */}
             {hasActiveFilters && (
                 <button
                     onClick={clearFilters}
-                    className="w-full px-4 py-2.5 border-2 border-gray-300 text-gray-600 rounded-xl hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all duration-200 font-svn-avo-bold text-sm flex items-center justify-center gap-2"
+                    className="w-full px-3 py-2 border-2 border-gray-300 text-gray-600 rounded-lg hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all duration-200 font-svn-avo-bold text-xs flex items-center justify-center gap-1.5"
                 >
-                    <X size={16} />
+                    <X size={14} />
                     {lang === 'vi' ? 'Xóa bộ lọc' : 'Clear Filters'}
                 </button>
             )}
@@ -450,7 +432,7 @@ export function ProductsListing({ lang, dict }: ProductsListingProps) {
                             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
                             onClick={() => setShowMobileFilters(false)}
                         ></div>
-                        <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-6 overflow-y-auto shadow-2xl">
+                        <div className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-80 bg-white p-6 overflow-y-auto shadow-2xl">
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="font-svn-avo-bold text-lg text-gray-900 flex items-center gap-2">
                                     <Filter size={20} className="text-[#364fa1]" />
