@@ -1056,7 +1056,7 @@ export const companyInfo: CompanyInfo = {
     website: 'https://toanthang.vn',
     socialLinks: {
         facebook: 'https://facebook.com/toanthangengineering',
-        linkedin: 'https://linkedin.com/company/toanthang',
+        linkedin: '/company/công-ty-cổ-phần-kỹ-thuật-toàn-thắng-toan-thang-engineering/',
     },
 };
 
