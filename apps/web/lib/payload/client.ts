@@ -5,18 +5,23 @@
  * It's designed to work with both server-side and client-side rendering in Next.js.
  */
 
-const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
+import type {
+    Brand,
+    ProductCategory,
+    Industry,
+    Product,
+    Project,
+    Service,
+    Article,
+    Vacancy,
+    Homepage,
+    AboutPage,
+    ContactPage,
+    PayloadResponse,
+    Locale,
+} from '@tte/shared-types';
 
-export interface PayloadResponse<T> {
-    docs: T[];
-    totalDocs: number;
-    limit: number;
-    page: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-    pagingCounter: number;
-}
+const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
 
 export interface QueryOptions {
     limit?: number;
@@ -24,7 +29,7 @@ export interface QueryOptions {
     where?: Record<string, unknown>;
     sort?: string;
     depth?: number;
-    locale?: 'en' | 'vi';
+    locale?: Locale;
 }
 
 /**
@@ -82,12 +87,12 @@ async function fetchPayload<T>(
 // COLLECTION FETCHERS
 // ============================================
 
-export async function getBrands(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/brands', { depth: 1, ...options });
+export async function getBrands(options?: QueryOptions): Promise<PayloadResponse<Brand>> {
+    return fetchPayload<PayloadResponse<Brand>>('/brands', { depth: 1, ...options });
 }
 
-export async function getBrand(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/brands', {
+export async function getBrand(slug: string, locale?: Locale): Promise<Brand | null> {
+    const res = await fetchPayload<PayloadResponse<Brand>>('/brands', {
         where: { slug: { equals: slug } },
         limit: 1,
         locale,
@@ -95,34 +100,20 @@ export async function getBrand(slug: string, locale?: 'en' | 'vi') {
     return res.docs[0] || null;
 }
 
-export async function getCategories(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/product-categories', { ...options });
+export async function getCategories(options?: QueryOptions): Promise<PayloadResponse<ProductCategory>> {
+    return fetchPayload<PayloadResponse<ProductCategory>>('/product-categories', { ...options });
 }
 
-export async function getIndustries(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/industries', { ...options });
+export async function getIndustries(options?: QueryOptions): Promise<PayloadResponse<Industry>> {
+    return fetchPayload<PayloadResponse<Industry>>('/industries', { ...options });
 }
 
-export async function getProducts(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/products', { depth: 2, ...options });
+export async function getProducts(options?: QueryOptions): Promise<PayloadResponse<Product>> {
+    return fetchPayload<PayloadResponse<Product>>('/products', { depth: 2, ...options });
 }
 
-export async function getProduct(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/products', {
-        where: { slug: { equals: slug } },
-        depth: 2,
-        limit: 1,
-        locale,
-    });
-    return res.docs[0] || null;
-}
-
-export async function getProjects(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/projects', { depth: 2, ...options });
-}
-
-export async function getProject(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/projects', {
+export async function getProduct(slug: string, locale?: Locale): Promise<Product | null> {
+    const res = await fetchPayload<PayloadResponse<Product>>('/products', {
         where: { slug: { equals: slug } },
         depth: 2,
         limit: 1,
@@ -131,12 +122,26 @@ export async function getProject(slug: string, locale?: 'en' | 'vi') {
     return res.docs[0] || null;
 }
 
-export async function getServices(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/services', { ...options });
+export async function getProjects(options?: QueryOptions): Promise<PayloadResponse<Project>> {
+    return fetchPayload<PayloadResponse<Project>>('/projects', { depth: 2, ...options });
 }
 
-export async function getService(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/services', {
+export async function getProject(slug: string, locale?: Locale): Promise<Project | null> {
+    const res = await fetchPayload<PayloadResponse<Project>>('/projects', {
+        where: { slug: { equals: slug } },
+        depth: 2,
+        limit: 1,
+        locale,
+    });
+    return res.docs[0] || null;
+}
+
+export async function getServices(options?: QueryOptions): Promise<PayloadResponse<Service>> {
+    return fetchPayload<PayloadResponse<Service>>('/services', { ...options });
+}
+
+export async function getService(slug: string, locale?: Locale): Promise<Service | null> {
+    const res = await fetchPayload<PayloadResponse<Service>>('/services', {
         where: { slug: { equals: slug } },
         limit: 1,
         locale,
@@ -144,19 +149,62 @@ export async function getService(slug: string, locale?: 'en' | 'vi') {
     return res.docs[0] || null;
 }
 
-export async function getArticles(options?: QueryOptions & { type?: string }) {
-    const { type, ...rest } = options || {};
-    const where = type ? { type: { equals: type } } : undefined;
-    return fetchPayload<PayloadResponse<any>>('/articles', {
+export interface ArticleQueryOptions extends QueryOptions {
+    contentType?: 'news' | 'tech-hub';
+    newsCategory?: 'company' | 'partner' | 'industry';
+    techCategory?: 'solution' | 'whitepaper' | 'case-study';
+}
+
+export async function getArticles(options?: ArticleQueryOptions): Promise<PayloadResponse<Article>> {
+    const { contentType, newsCategory, techCategory, ...rest } = options || {};
+    
+    // Build where clause based on filters
+    let where: Record<string, unknown> | undefined;
+    
+    if (contentType) {
+        where = { ...where, contentType: { equals: contentType } };
+    }
+    if (newsCategory) {
+        where = { ...where, newsCategory: { equals: newsCategory } };
+    }
+    if (techCategory) {
+        where = { ...where, techCategory: { equals: techCategory } };
+    }
+    
+    return fetchPayload<PayloadResponse<Article>>('/articles', {
         depth: 1,
         where,
-        sort: '-createdAt',
+        sort: '-publishedAt',
         ...rest
     });
 }
 
-export async function getArticle(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/articles', {
+/**
+ * Get news articles only
+ */
+export async function getNewsArticles(options?: QueryOptions & { category?: 'company' | 'partner' | 'industry' }): Promise<PayloadResponse<Article>> {
+    const { category, ...rest } = options || {};
+    return getArticles({
+        contentType: 'news',
+        newsCategory: category,
+        ...rest
+    });
+}
+
+/**
+ * Get tech hub articles only
+ */
+export async function getTechHubArticles(options?: QueryOptions & { category?: 'solution' | 'whitepaper' | 'case-study' }): Promise<PayloadResponse<Article>> {
+    const { category, ...rest } = options || {};
+    return getArticles({
+        contentType: 'tech-hub',
+        techCategory: category,
+        ...rest
+    });
+}
+
+export async function getArticle(slug: string, locale?: Locale): Promise<Article | null> {
+    const res = await fetchPayload<PayloadResponse<Article>>('/articles', {
         where: { slug: { equals: slug } },
         depth: 2,
         limit: 1,
@@ -165,12 +213,12 @@ export async function getArticle(slug: string, locale?: 'en' | 'vi') {
     return res.docs[0] || null;
 }
 
-export async function getVacancies(options?: QueryOptions) {
-    return fetchPayload<PayloadResponse<any>>('/vacancies', { ...options });
+export async function getVacancies(options?: QueryOptions): Promise<PayloadResponse<Vacancy>> {
+    return fetchPayload<PayloadResponse<Vacancy>>('/vacancies', { ...options });
 }
 
-export async function getVacancy(slug: string, locale?: 'en' | 'vi') {
-    const res = await fetchPayload<PayloadResponse<any>>('/vacancies', {
+export async function getVacancy(slug: string, locale?: Locale): Promise<Vacancy | null> {
+    const res = await fetchPayload<PayloadResponse<Vacancy>>('/vacancies', {
         where: { slug: { equals: slug } },
         limit: 1,
         locale,
@@ -182,14 +230,17 @@ export async function getVacancy(slug: string, locale?: 'en' | 'vi') {
 // GLOBALS FETCHERS
 // ============================================
 
-export async function getHomepage(locale?: 'en' | 'vi') {
-    return fetchPayload<any>('/globals/homepage', { depth: 2, locale });
+export async function getHomepage(locale?: Locale): Promise<Homepage> {
+    return fetchPayload<Homepage>('/globals/homepage', { depth: 2, locale });
 }
 
-export async function getAboutPage(locale?: 'en' | 'vi') {
-    return fetchPayload<any>('/globals/about-page', { depth: 1, locale });
+export async function getAboutPage(locale?: Locale): Promise<AboutPage> {
+    return fetchPayload<AboutPage>('/globals/about-page', { depth: 1, locale });
 }
 
-export async function getContactPage(locale?: 'en' | 'vi') {
-    return fetchPayload<any>('/globals/contact-page', { locale });
+export async function getContactPage(locale?: Locale): Promise<ContactPage> {
+    return fetchPayload<ContactPage>('/globals/contact-page', { locale });
 }
+
+// Re-export types for convenience
+export type { PayloadResponse, QueryOptions };

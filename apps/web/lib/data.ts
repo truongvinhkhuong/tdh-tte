@@ -12,7 +12,7 @@ import type {
     TimelineMilestone,
     Certificate,
     Partner,
-} from '@/types';
+} from '@tte/shared-types';
 
 // =========================
 // BRANDS

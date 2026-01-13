@@ -13,7 +13,6 @@ import { Projects } from './collections/Projects'
 import { Services } from './collections/Services'
 import { Articles } from './collections/Articles'
 import { Vacancies } from './collections/Vacancies'
-import { TechArticles } from './collections/TechArticles'
 import { Brands } from './collections/Taxonomies/Brands'
 import { ProductCategories } from './collections/Taxonomies/ProductCategories'
 import { Industries } from './collections/Taxonomies/Industries'
@@ -50,7 +49,6 @@ export default buildConfig({
         Services,
         Articles,
         Vacancies,
-        TechArticles,
         // Taxonomies
         Brands,
         ProductCategories,

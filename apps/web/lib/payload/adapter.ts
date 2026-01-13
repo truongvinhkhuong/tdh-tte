@@ -8,6 +8,23 @@
  * This allows gradual migration from static data to CMS.
  */
 
+import type {
+    Brand,
+    ProductCategory,
+    Industry,
+    Product,
+    Project,
+    Service,
+    Article,
+    TechArticle,
+    NewsArticle,
+    Vacancy,
+    CompanyInfo,
+    TimelineMilestone,
+    Certificate,
+    Partner,
+} from '@tte/shared-types';
+
 import * as cms from './client';
 import * as staticData from '../data';
 
@@ -18,7 +35,7 @@ const USE_CMS = process.env.NEXT_PUBLIC_USE_CMS === 'true';
 // BRANDS
 // ============================================
 
-export async function getBrands() {
+export async function getBrands(): Promise<Brand[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getBrands({ limit: 100 });
@@ -30,7 +47,7 @@ export async function getBrands() {
     return staticData.brands;
 }
 
-export async function getBrand(slug: string) {
+export async function getBrand(slug: string): Promise<Brand | null> {
     if (USE_CMS) {
         try {
             return await cms.getBrand(slug);
@@ -45,7 +62,7 @@ export async function getBrand(slug: string) {
 // CATEGORIES
 // ============================================
 
-export async function getCategories() {
+export async function getCategories(): Promise<ProductCategory[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getCategories({ limit: 100 });
@@ -61,7 +78,7 @@ export async function getCategories() {
 // INDUSTRIES
 // ============================================
 
-export async function getIndustries() {
+export async function getIndustries(): Promise<Industry[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getIndustries({ limit: 100 });
@@ -77,7 +94,7 @@ export async function getIndustries() {
 // PRODUCTS
 // ============================================
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getProducts({ limit: 100 });
@@ -89,7 +106,7 @@ export async function getProducts() {
     return staticData.products;
 }
 
-export async function getProduct(slug: string) {
+export async function getProduct(slug: string): Promise<Product | null> {
     if (USE_CMS) {
         try {
             return await cms.getProduct(slug);
@@ -104,7 +121,7 @@ export async function getProduct(slug: string) {
 // PROJECTS
 // ============================================
 
-export async function getProjects() {
+export async function getProjects(): Promise<Project[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getProjects({ limit: 100 });
@@ -116,7 +133,7 @@ export async function getProjects() {
     return staticData.projects;
 }
 
-export async function getProject(slug: string) {
+export async function getProject(slug: string): Promise<Project | null> {
     if (USE_CMS) {
         try {
             return await cms.getProject(slug);
@@ -131,7 +148,7 @@ export async function getProject(slug: string) {
 // SERVICES
 // ============================================
 
-export async function getServices() {
+export async function getServices(): Promise<Service[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getServices({ limit: 100 });
@@ -143,7 +160,7 @@ export async function getServices() {
     return staticData.services;
 }
 
-export async function getService(slug: string) {
+export async function getService(slug: string): Promise<Service | null> {
     if (USE_CMS) {
         try {
             return await cms.getService(slug);
@@ -158,10 +175,29 @@ export async function getService(slug: string) {
 // ARTICLES
 // ============================================
 
-export async function getTechArticles() {
+/**
+ * Get all articles from CMS or static data
+ */
+export async function getArticles(): Promise<Article[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getArticles({ type: 'Technical_Solution', limit: 100 });
+            const res = await cms.getArticles({ limit: 100 });
+            return res.docs;
+        } catch (error) {
+            console.warn('CMS fetch failed, using static data:', error);
+        }
+    }
+    // Combine static data
+    return [...staticData.techArticles, ...staticData.newsArticles] as unknown as Article[];
+}
+
+/**
+ * Get Tech Hub articles (solutions, whitepapers, case studies)
+ */
+export async function getTechArticles(): Promise<TechArticle[] | Article[]> {
+    if (USE_CMS) {
+        try {
+            const res = await cms.getTechHubArticles({ limit: 100 });
             return res.docs;
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
@@ -170,12 +206,14 @@ export async function getTechArticles() {
     return staticData.techArticles;
 }
 
-export async function getNewsArticles() {
+/**
+ * Get News articles (company, partner, industry news)
+ */
+export async function getNewsArticles(): Promise<NewsArticle[] | Article[]> {
     if (USE_CMS) {
         try {
-            // Both TTE_Event and Industry_News are news
-            const res = await cms.getArticles({ limit: 100 });
-            return res.docs.filter((a: any) => a.type !== 'Technical_Solution');
+            const res = await cms.getNewsArticles({ limit: 100 });
+            return res.docs;
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -183,7 +221,10 @@ export async function getNewsArticles() {
     return staticData.newsArticles;
 }
 
-export async function getArticle(slug: string) {
+/**
+ * Get single article by slug
+ */
+export async function getArticle(slug: string): Promise<TechArticle | NewsArticle | Article | null> {
     if (USE_CMS) {
         try {
             return await cms.getArticle(slug);
@@ -202,7 +243,7 @@ export async function getArticle(slug: string) {
 // VACANCIES
 // ============================================
 
-export async function getVacancies() {
+export async function getVacancies(): Promise<Vacancy[]> {
     if (USE_CMS) {
         try {
             const res = await cms.getVacancies({ limit: 100 });
@@ -214,7 +255,7 @@ export async function getVacancies() {
     return staticData.vacancies;
 }
 
-export async function getVacancy(slug: string) {
+export async function getVacancy(slug: string): Promise<Vacancy | null> {
     if (USE_CMS) {
         try {
             return await cms.getVacancy(slug);
@@ -229,18 +270,18 @@ export async function getVacancy(slug: string) {
 // COMPANY DATA (Static only for now)
 // ============================================
 
-export function getCompanyInfo() {
+export function getCompanyInfo(): CompanyInfo {
     return staticData.companyInfo;
 }
 
-export function getTimeline() {
+export function getTimeline(): TimelineMilestone[] {
     return staticData.timeline;
 }
 
-export function getCertificates() {
+export function getCertificates(): Certificate[] {
     return staticData.certificates;
 }
 
-export function getPartners() {
+export function getPartners(): Partner[] {
     return staticData.partners;
 }

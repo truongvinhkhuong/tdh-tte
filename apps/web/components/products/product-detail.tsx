@@ -6,7 +6,7 @@ import Link from "next/link"
 import { ArrowLeft, Download, FileText, Send } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 import type { Dictionary } from "@/i18n/get-dictionary"
-import type { Product } from "@/types"
+import type { Product } from "@tte/shared-types"
 
 interface ProductDetailProps {
     lang: Locale
