@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { MessageCircle, X, Minimize2, Maximize2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MessageCircle, X, Minimize2, Maximize2, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TechnicalChat } from "./technical-chat";
@@ -17,45 +17,75 @@ export function ChatWidget({
 }: ChatWidgetProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const [showPulse, setShowPulse] = useState(true);
+
+    // Prevent hydration mismatch
+    useEffect(() => {
+        setIsMounted(true);
+        // Stop pulse after 10s
+        const timer = setTimeout(() => setShowPulse(false), 10000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (!isMounted) return null;
 
     const positionClasses = {
-        "bottom-right": "right-4 bottom-4",
-        "bottom-left": "left-4 bottom-4",
+        "bottom-right": "right-4 bottom-4 md:right-6 md:bottom-6",
+        "bottom-left": "left-4 bottom-4 md:left-6 md:bottom-6",
     };
 
     return (
-        <div className={cn("fixed z-50", positionClasses[position])}>
+        <div className={cn("fixed z-[9999]", positionClasses[position])}>
             {/* Chat Window */}
-            {isOpen && (
+            <div
+                className={cn(
+                    "transition-all duration-300 ease-out origin-bottom-right",
+                    isOpen
+                        ? "opacity-100 scale-100 translate-y-0"
+                        : "opacity-0 scale-95 translate-y-10 pointer-events-none absolute bottom-0 right-0"
+                )}
+            >
                 <div
                     className={cn(
-                        "mb-4 transition-all duration-300 ease-in-out",
-                        isMinimized ? "h-14 w-72" : "h-[600px] w-[400px]"
+                        "bg-background/95 backdrop-blur-sm rounded-2xl shadow-2xl border transition-all duration-300 overflow-hidden flex flex-col",
+                        isMinimized
+                            ? "h-14 w-72"
+                            : "h-[85vh] max-h-[650px] w-[90vw] md:w-[420px]"
                     )}
                 >
                     {isMinimized ? (
                         // Minimized Header
-                        <div className="h-full bg-background border rounded-lg shadow-lg flex items-center justify-between px-4">
-                            <div className="flex items-center gap-2">
-                                <MessageCircle className="h-5 w-5 text-blue-600" />
-                                <span className="font-medium">
-                                    {language === "vi" ? "Tư vấn Kỹ thuật" : "Technical Support"}
+                        <div
+                            className="h-full flex items-center justify-between px-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                            onClick={() => setIsMinimized(false)}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <span className="font-semibold text-sm">
+                                    {language === "vi" ? "Trợ lý Kỹ thuật TTE" : "TTE Technical Assistant"}
                                 </span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8"
-                                    onClick={() => setIsMinimized(false)}
+                                    className="h-8 w-8 hover:bg-slate-200 rounded-full"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsMinimized(false);
+                                    }}
                                 >
-                                    <Maximize2 className="h-4 w-4" />
+                                    <ChevronUp className="h-4 w-4" />
                                 </Button>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8"
-                                    onClick={() => setIsOpen(false)}
+                                    className="h-8 w-8 hover:bg-slate-200 rounded-full"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsOpen(false);
+                                    }}
                                 >
                                     <X className="h-4 w-4" />
                                 </Button>
@@ -63,25 +93,27 @@ export function ChatWidget({
                         </div>
                     ) : (
                         // Full Chat Window
-                        <div className="relative h-full bg-background rounded-lg shadow-xl border overflow-hidden">
-                            {/* Window Controls */}
-                            <div className="absolute top-3 right-3 z-10 flex gap-1">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-6 w-6"
-                                    onClick={() => setIsMinimized(true)}
-                                >
-                                    <Minimize2 className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-6 w-6"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    <X className="h-3 w-3" />
-                                </Button>
+                        <div className="relative h-full flex flex-col">
+                            {/* Window Controls Overlay */}
+                            <div className="absolute top-0 left-0 w-full h-14 z-20 pointer-events-none flex justify-end items-center pr-2">
+                                <div className="flex gap-1 pointer-events-auto bg-black/10 backdrop-blur-sm rounded-full p-1 m-2 border border-white/10 shadow-sm">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                                        onClick={() => setIsMinimized(true)}
+                                    >
+                                        <Minimize2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 text-white hover:bg-white/20 hover:text-red-200 rounded-full"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        <X className="h-3.5 w-3.5" />
+                                    </Button>
+                                </div>
                             </div>
 
                             <TechnicalChat
@@ -89,23 +121,45 @@ export function ChatWidget({
                                 apiUrl={process.env.NEXT_PUBLIC_BACKEND_URL
                                     ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rag/chat`
                                     : "/api/rag/chat"}
-                                className="h-full border-0 shadow-none"
+                                className="h-full border-0 shadow-none rounded-none"
                             />
                         </div>
                     )}
                 </div>
-            )}
+            </div>
 
             {/* Floating Button */}
-            {!isOpen && (
-                <Button
-                    onClick={() => setIsOpen(true)}
-                    className="h-14 w-14 rounded-full shadow-lg bg-blue-600 hover:bg-blue-700"
-                    size="icon"
-                >
-                    <MessageCircle className="h-6 w-6" />
-                </Button>
-            )}
+            <div
+                className={cn(
+                    "transition-all duration-300 ease-in-out absolute bottom-0 right-0",
+                    isOpen ? "opacity-0 scale-50 pointer-events-none" : "opacity-100 scale-100"
+                )}
+            >
+                <div className="relative group">
+                    {showPulse && !isOpen && (
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-[#4463b1] opacity-20 animate-ping"></span>
+                    )}
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[9px] text-white font-bold items-center justify-center border-2 border-white">1</span>
+                    </span>
+
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        className="h-14 w-14 md:h-16 md:w-16 rounded-full shadow-lg shadow-blue-500/30 bg-[#4463b1] hover:bg-[#354e8d] hover:scale-105 transition-all duration-300 flex items-center justify-center border-2 border-white/20"
+                        size="icon"
+                        aria-label="Open chat"
+                    >
+                        <MessageCircle className="h-7 w-7 md:h-8 md:w-8 text-white transition-transform duration-300 group-hover:rotate-12" />
+                    </Button>
+                </div>
+
+                {/* Tooltip hint */}
+                <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 whitespace-nowrap bg-white py-1.5 px-3 rounded-xl shadow-lg border text-sm font-medium text-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none md:block hidden">
+                    Chat với AI Kỹ thuật
+                    <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-r border-b transform -rotate-45"></div>
+                </div>
+            </div>
         </div>
     );
 }
