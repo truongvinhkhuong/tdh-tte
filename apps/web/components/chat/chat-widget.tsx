@@ -51,7 +51,7 @@ export function ChatWidget({
                         "bg-background/95 backdrop-blur-sm rounded-2xl shadow-2xl border transition-all duration-300 overflow-hidden flex flex-col",
                         isMinimized
                             ? "h-14 w-72"
-                            : "h-[85vh] max-h-[650px] w-[90vw] md:w-[420px]"
+                            : "h-[80vh] md:h-[85vh] max-h-[700px] w-[calc(100vw-32px)] md:w-[600px] lg:w-[650px]"
                     )}
                 >
                     {isMinimized ? (

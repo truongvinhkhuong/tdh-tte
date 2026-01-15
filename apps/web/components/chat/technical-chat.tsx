@@ -76,7 +76,7 @@ function ChatMessageItem({ message }: { message: ChatMessage }) {
 
             {/* Message Content - Improved typography & spacing */}
             <div className={cn(
-                "flex flex-col gap-1.5 max-w-[85%] md:max-w-[75%]",
+                "flex flex-col gap-1.5 max-w-[72%] md:max-w-[75%]",
                 isUser ? "items-end" : "items-start"
             )}>
                 <span className="text-[11px] font-bold text-muted-foreground px-1 uppercase tracking-wider">
@@ -85,10 +85,10 @@ function ChatMessageItem({ message }: { message: ChatMessage }) {
 
                 <div
                     className={cn(
-                        "rounded-2xl px-5 py-4 shadow-sm text-[15px] leading-relaxed font-medium",
+                        "rounded-2xl px-5 py-4 shadow-sm text-[15px] leading-relaxed font-semibold",
                         isUser
                             ? "bg-[#4463b1] text-white rounded-tr-none"
-                            : "bg-white border text-foreground rounded-tl-none prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:font-bold prose-headings:text-[#4463b1] prose-ul:my-2 prose-li:my-0.5"
+                            : "bg-white border text-foreground rounded-tl-none prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:font-black prose-headings:text-[#4463b1] prose-ul:my-2 prose-li:my-0.5"
                     )}
                 >
                     {isUser ? (
@@ -102,87 +102,87 @@ function ChatMessageItem({ message }: { message: ChatMessage }) {
                         />
                     )}
                 </div>
-
-                {/* Citations - Better visual hierarchy */}
-                {message.citations && message.citations.length > 0 && (
-                    <div className="flex flex-col gap-2 mt-1 w-full animate-in fade-in zoom-in-95 duration-500 delay-100">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Nguồn tham khảo</span>
-                            <div className="h-px bg-border flex-1 opacity-50"></div>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {message.citations.slice(0, 3).map((citation, idx) => (
-                                <TooltipProvider key={idx}>
-                                    <Tooltip delayDuration={300}>
-                                        <TooltipTrigger asChild>
-                                            <Badge
-                                                variant="secondary"
-                                                className="cursor-help py-1.5 px-3 hover:bg-blue-50 hover:text-[#4463b1] transition-colors border border-transparent hover:border-blue-200 font-semibold"
-                                            >
-                                                <FileText className="h-3.5 w-3.5 mr-1.5 text-[#4463b1]" />
-                                                <span className="truncate max-w-[120px]">{citation.source.replace('.pdf', '')}</span>
-                                                <span className="text-muted-foreground/70 ml-1.5 border-l pl-1.5 border-foreground/10 text-[10px]">
-                                                    Tr.{citation.page}
-                                                </span>
-                                            </Badge>
-                                        </TooltipTrigger>
-                                        <TooltipContent side="top" className="max-w-xs p-3 shadow-xl border-blue-100">
-                                            <p className="font-bold text-[#4463b1] text-sm mb-1">{citation.source}</p>
-                                            <p className="text-xs text-muted-foreground mb-2 flex justify-between">
-                                                <span>Trang {citation.page}</span>
-                                                <span className="font-bold text-green-600">{Math.round(citation.relevance_score * 100)}% match</span>
-                                            </p>
-                                            <p className="text-xs bg-muted/50 p-2 rounded italic text-muted-foreground line-clamp-4 border-l-2 border-[#4463b1] font-medium">
-                                                "{citation.content_preview}"
-                                            </p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            ))}
-                            {message.citations.length > 3 && (
-                                <Badge variant="outline" className="text-xs bg-muted/30 font-bold">
-                                    +{message.citations.length - 3}
-                                </Badge>
-                            )}
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );
 }
 
 // ===========================================
-// Markdown Formatter (Enhanced)
+// Markdown Formatter (Stateful Parser)
 // ===========================================
 
 function formatMarkdown(text: string): string {
-    return text
+    const lines = text.split('\n');
+    let output = '';
+    let inTable = false;
+    let tableBuffer = '';
+
+    const processLine = (line: string) => {
         // Bold
-        .replace(/\*\*(.*?)\*\*/g, "<strong class='text-[#4463b1] font-extrabold'>$1</strong>")
+        line = line.replace(/\*\*(.*?)\*\*/g, "<strong class='text-[#4463b1] font-extrabold'>$1</strong>");
         // Italic
-        .replace(/\*(.*?)\*/g, "<em class='text-[#4463b1] font-semibold'>$1</em>")
+        line = line.replace(/\*(.*?)\*/g, "<em class='text-[#4463b1] font-bold'>$1</em>");
         // Code
-        .replace(/`(.*?)`/g, "<code class='bg-slate-100 text-[#4463b1] px-1.5 py-0.5 rounded text-xs font-mono font-bold border border-slate-200'>$1</code>")
+        line = line.replace(/`([^`]+)`/g, "<code class='bg-slate-100 text-[#4463b1] px-1.5 py-0.5 rounded text-xs font-mono font-bold border border-slate-200'>$1</code>");
         // Headers
-        .replace(/^### (.*$)/gim, '<h3 class="text-base font-extrabold text-[#4463b1] mt-4 mb-2 border-b border-blue-100 pb-1">$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2 class="text-lg font-extrabold text-[#4463b1] mt-5 mb-3">$1</h2>')
-        // Tables - Enhanced styling with horizontal scroll container
-        .replace(/\|(.+)\|/g, (match, content) => {
-            const cells = match.split("|").filter(Boolean);
-            const isHeader = match.includes("---");
-            if (isHeader) return ""; // Skip separator lines
+        line = line.replace(/^### (.*$)/, '<h3 class="text-base font-extrabold text-[#4463b1] mt-4 mb-2 border-b border-blue-100 pb-1">$1</h3>');
+        line = line.replace(/^## (.*$)/, '<h2 class="text-lg font-extrabold text-[#4463b1] mt-5 mb-3">$1</h2>');
 
-            // Check if this row looks like a header (bold text often used in headers)
-            // Or if it's the first row in a block of table rows (simplified logic here)
-            return `<tr class="border-b last:border-0 hover:bg-slate-50 transition-colors">${cells.map(c =>
-                `<td class="p-3 align-top border-r last:border-0 text-sm font-medium">${c.trim()}</td>`
-            ).join("")}</tr>`;
-        });
+        // Lists
+        line = line.replace(/^- (.*)/, '<li class="ml-4 list-disc marker:text-[#4463b1] pl-1 mb-1 font-medium">$1</li>');
+        line = line.replace(/^\d+\. (.*)/, '<li class="ml-4 list-decimal marker:text-[#4463b1] pl-1 mb-1 font-medium">$1</li>');
 
-    // Note: A real markdown parser would be better, but for this simpler regex approach:
-    // We need to wrap table rows in a table tag. This is a simple hack.
-    // In production, use `react-markdown` or `remark`.
+        return line;
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        if (line.startsWith('|')) {
+            if (!inTable) {
+                inTable = true;
+                tableBuffer = '<div class="overflow-x-auto my-3 rounded-lg border border-slate-200 shadow-sm"><table class="w-full border-collapse text-sm bg-white">';
+            }
+
+            const isHeaderSeparator = line.includes('---');
+            if (isHeaderSeparator) continue;
+
+            const cells = line.split('|').filter(c => c.trim().length > 0 || c === ' ');
+
+            const rowContent = cells.map(c => {
+                return `<td class="p-3 border-b border-r last:border-r-0 border-slate-100 align-top font-semibold text-slate-700 min-w-[120px]">${processLine(c.trim())}</td>`;
+            }).join('');
+
+            tableBuffer += `<tr class="hover:bg-slate-50 transition-colors">${rowContent}</tr>`;
+
+        } else {
+            if (inTable) {
+                inTable = false;
+                tableBuffer += '</table></div>';
+                output += tableBuffer;
+                tableBuffer = '';
+            }
+
+            if (line === '') {
+                output += '<br/>';
+            } else {
+                let processed = processLine(line);
+                if (!processed.startsWith('<h') && !processed.startsWith('<li')) {
+                    output += `<p class="mb-2 font-semibold text-slate-800 leading-relaxed">${processed}</p>`;
+                } else if (processed.startsWith('<li')) {
+                    output += processed;
+                } else {
+                    output += processed;
+                }
+            }
+        }
+    }
+
+    if (inTable) {
+        output += tableBuffer + '</table></div>';
+    }
+
+    return output;
 }
 
 // ===========================================
@@ -292,50 +292,50 @@ export function TechnicalChat({
 
     return (
         <Card className={cn(
-            "flex flex-col h-[600px] w-full border-0 shadow-2xl overflow-hidden bg-slate-50/50 backdrop-blur-sm",
+            "flex flex-col h-[600px] w-full border-0 shadow-2xl overflow-hidden bg-slate-50/50 backdrop-blur-sm ring-1 ring-black/5",
             className
         )}>
             {/* Header - Brand Color #4463b1 */}
-            <div className="relative overflow-hidden bg-[#4463b1] p-4 shrink-0 transition-colors duration-300">
+            <div className="relative overflow-hidden bg-[#4463b1] p-5 shrink-0 transition-colors duration-300 shadow-md z-20">
                 <div className="absolute top-0 right-0 p-4 opacity-10">
                     <Bot className="w-24 h-24 text-white -rotate-12 translate-x-8 -translate-y-8" />
                 </div>
 
                 <div className="relative z-10 flex items-center gap-3 text-white">
-                    <div className="h-10 w-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
-                        <Sparkles className="h-5 w-5 text-yellow-300" />
+                    <div className="h-11 w-11 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
+                        <Sparkles className="h-6 w-6 text-yellow-300" />
                     </div>
                     <div>
-                        <h3 className="font-extrabold text-lg leading-tight">
+                        <h3 className="font-extrabold text-[19px] leading-tight tracking-tight">
                             {language === "vi" ? "Trợ lý Kỹ thuật AI" : "AI Technical Assistant"}
                         </h3>
-                        <p className="text-xs text-white/80 font-semibold tracking-wide">
+                        <p className="text-[13px] text-white/90 font-bold tracking-wide opacity-90">
                             {language === "vi" ? "Hỗ trợ tra cứu thông số & giải pháp" : "Specs & solutions support"}
                         </p>
                     </div>
                 </div>
             </div>
 
-            <CardContent className="flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative">
+            <CardContent className="flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative bg-slate-50/50">
                 {/* Messages Area */}
                 <ScrollArea className="flex-1 min-h-0" ref={scrollRef}>
                     {/* Access internal viewport for scrolling control */}
                     <div ref={scrollViewportRef} className="h-full w-full px-4 pb-4">
                         {messages.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center py-20 px-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
-                                <div className="h-20 w-20 bg-blue-50 rounded-full flex items-center justify-center mb-6 shadow-sm border border-blue-100">
-                                    <MessageSquare className="h-10 w-10 text-[#4463b1]" />
+                                <div className="h-24 w-24 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-card border border-blue-50">
+                                    <MessageSquare className="h-12 w-12 text-[#4463b1]" />
                                 </div>
-                                <h4 className="text-2xl font-extrabold text-[#4463b1] mb-3">
+                                <h4 className="text-2xl font-black text-[#4463b1] mb-3 tracking-tight">
                                     {language === "vi" ? "Xin chào!" : "Hello there!"}
                                 </h4>
-                                <p className="text-base font-medium text-muted-foreground max-w-xs leading-relaxed">
+                                <p className="text-[15px] font-bold text-slate-500 max-w-xs leading-relaxed mb-8">
                                     {language === "vi"
                                         ? "Tôi có thể giúp bạn tra cứu thông tin sản phẩm và thông số kỹ thuật từ thư viện tài liệu của TTE."
                                         : "I can help you look up product info and technical specs from TTE's document library."}
                                 </p>
 
-                                <div className="mt-8 grid gap-3 w-full max-w-xs">
+                                <div className="grid gap-3 w-full max-w-sm">
                                     <SuggestionButton
                                         text={language === "vi" ? "Van Fisher HP ratings?" : "Fisher HP valve ratings?"}
                                         onClick={() => setInput(language === "vi" ? "Van Fisher HP có thông số áp suất bao nhiêu?" : "What are the pressure ratings for Fisher HP?")}
@@ -347,40 +347,42 @@ export function TechnicalChat({
                                 </div>
                             </div>
                         ) : (
-                            <div className="py-4 space-y-4">
+                            <div className="py-6 space-y-6">
                                 {messages.map((message) => (
                                     <ChatMessageItem key={message.id} message={message} />
                                 ))}
                                 {isLoading && (
-                                    <div className="flex gap-4 py-6 px-2 animate-in fade-in duration-300">
-                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white border shadow-sm">
+                                    <div className="flex gap-4 py-2 px-2 animate-in fade-in duration-300">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white border border-blue-100 shadow-sm">
                                             <Loader2 className="h-5 w-5 text-[#4463b1] animate-spin" />
                                         </div>
-                                        <div className="flex items-center gap-2 text-muted-foreground bg-slate-100/50 px-4 py-3 rounded-2xl rounded-tl-none">
-                                            <span className="flex gap-1.5">
-                                                <span className="h-2 w-2 rounded-full bg-[#4463b1]/60 animate-bounce delay-0"></span>
-                                                <span className="h-2 w-2 rounded-full bg-[#4463b1]/60 animate-bounce delay-150"></span>
-                                                <span className="h-2 w-2 rounded-full bg-[#4463b1]/60 animate-bounce delay-300"></span>
-                                            </span>
-                                            <span className="text-sm font-semibold ml-2 text-[#4463b1]">Đang suy nghĩ...</span>
+                                        <div className="flex items-center gap-3 text-muted-foreground bg-white px-5 py-4 rounded-2xl rounded-tl-none border border-slate-100 shadow-sm">
+                                            <div className="flex gap-1.5 pt-1">
+                                                <span className="h-2 w-2 rounded-full bg-[#4463b1] animate-bounce delay-0"></span>
+                                                <span className="h-2 w-2 rounded-full bg-[#4463b1] animate-bounce delay-150"></span>
+                                                <span className="h-2 w-2 rounded-full bg-[#4463b1] animate-bounce delay-300"></span>
+                                            </div>
+                                            <span className="text-sm font-bold text-[#4463b1]">Đang suy nghĩ...</span>
                                         </div>
                                     </div>
                                 )}
+                                {/* Spacer to prevent content being hidden behind sticky input */}
+                                <div className="h-4" />
                             </div>
                         )}
                     </div>
                 </ScrollArea>
 
                 {/* Input Area - Adjusted styles for visibility */}
-                <div className="p-4 bg-white border-t shrink-0 z-20 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]">
-                    <div className="relative flex gap-3 items-end bg-slate-50 p-2 rounded-2xl border-2 border-slate-100 focus-within:border-[#4463b1] focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                <div className="p-4 bg-white border-t border-slate-100 shrink-0 z-20 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.05)]">
+                    <div className="relative flex gap-3 items-end bg-slate-50/80 p-2.5 rounded-2xl border-2 border-slate-100 focus-within:border-[#4463b1] focus-within:ring-4 focus-within:ring-blue-50 transition-all duration-300">
                         <Textarea
                             ref={inputRef}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                             placeholder={placeholders[language]}
-                            className="min-h-[48px] max-h-[120px] resize-none border-0 bg-transparent focus-visible:ring-0 py-2.5 px-3 text-[15px] font-medium leading-relaxed placeholder:text-muted-foreground/70"
+                            className="min-h-[52px] max-h-[140px] resize-none border-0 bg-transparent focus-visible:ring-0 py-3 px-3 text-[16px] font-semibold text-slate-800 leading-relaxed placeholder:text-slate-400 placeholder:font-medium"
                             disabled={isLoading}
                         />
                         <Button
@@ -388,17 +390,17 @@ export function TechnicalChat({
                             disabled={!input.trim() || isLoading}
                             size="icon"
                             className={cn(
-                                "h-11 w-11 rounded-xl shrink-0 mb-0.5 transition-all shadow-sm",
-                                input.trim() ? "bg-[#4463b1] hover:bg-[#354e8d] hover:scale-105 hover:shadow-md" : "bg-slate-200 text-slate-400 hover:bg-slate-200"
+                                "h-12 w-12 rounded-xl shrink-0 mb-0.5 transition-all shadow-md active:scale-95",
+                                input.trim() ? "bg-[#4463b1] hover:bg-[#354e8d] hover:shadow-lg hover:shadow-blue-200" : "bg-slate-200 text-slate-400 hover:bg-slate-200 shadow-none"
                             )}
                         >
                             <Send className="h-5 w-5 ml-0.5" />
                         </Button>
                     </div>
-                    <p className="text-[11px] text-muted-foreground mt-2.5 text-center font-semibold opacity-70">
+                    <p className="text-[11px] text-slate-400 mt-3 text-center font-bold uppercase tracking-wide opacity-80">
                         {language === "vi"
-                            ? "AI có thể mắc lỗi. Vui lòng kiểm tra lại thông tin quan trọng."
-                            : "AI can make mistakes. Please verify important information."}
+                            ? "AI hỗ trợ tra cứu thông tin kỹ thuật TTE"
+                            : "AI Powered Technical Support"}
                     </p>
                 </div>
             </CardContent>

@@ -177,19 +177,21 @@ class RAGEngine:
 
 QUY TẮC:
 1. CHỈ trả lời dựa trên context bên dưới
-2. Nếu không có thông tin → nói "Không tìm thấy trong tài liệu"
-3. Kèm trích dẫn: [Nguồn: file - Trang X]
-4. Dùng Markdown table cho thông số
-5. Giữ nguyên đơn vị kỹ thuật (PSI, bar, mm)""",
+2. Nếu không có thông tin → nói "Tôi chưa tìm thấy thông tin này trong tài liệu kỹ thuật."
+3. Trả lời TỰ NHIÊN, chuyên nghiệp như một kỹ sư tư vấn.
+4. KHÔNG được nhắc đến tên file, số trang hay nguồn tài liệu trong câu trả lời (Ví dụ: Đừng nói "Theo tài liệu X trang Y...").
+5. Dùng Markdown table cho thông số kỹ thuật.
+6. Giữ nguyên đơn vị kỹ thuật (PSI, bar, mm).""",
 
             "en": """You are a Technical Engineer Consultant for TTE.
 
 RULES:
 1. ONLY answer based on context below
-2. If not found → say "Not found in documents"
-3. Include citations: [Source: file - Page X]
-4. Use Markdown table for specs
-5. Keep original units (PSI, bar, mm)""",
+2. If not found → say "I cannot find this information in the technical documents."
+3. Answer NATURALLY and professionally.
+4. Do NOT mention filenames, page numbers, or sources in your response.
+5. Use Markdown table for specs.
+6. Keep original units (PSI, bar, mm).""",
         }
 
         system_prompt = prompts.get(language, prompts["vi"])
