@@ -48,8 +48,11 @@ interface ChatResponse {
 // Chat Message Component
 // ===========================================
 
-function ChatMessageItem({ message }: { message: ChatMessage }) {
+function ChatMessageItem({ message, language }: { message: ChatMessage; language: "vi" | "en" }) {
     const isUser = message.role === "user";
+    const roleName = isUser
+        ? (language === "vi" ? "Bạn" : "You")
+        : (language === "vi" ? "Trợ lý TTE" : "TTE Assistant");
 
     return (
         <div
@@ -70,7 +73,7 @@ function ChatMessageItem({ message }: { message: ChatMessage }) {
                 {isUser ? (
                     <User className="h-5 w-5 text-white" />
                 ) : (
-                    <Sparkles className="h-5 w-5 text-[#4463b1] animate-pulse-slow" />
+                    <Bot className="h-6 w-6 text-[#4463b1] animate-pulse-slow" />
                 )}
             </div>
 
@@ -80,7 +83,7 @@ function ChatMessageItem({ message }: { message: ChatMessage }) {
                 isUser ? "items-end" : "items-start"
             )}>
                 <span className="text-[11px] font-bold text-muted-foreground px-1 uppercase tracking-wider">
-                    {isUser ? "Bạn" : "Trợ lý TTE"}
+                    {roleName}
                 </span>
 
                 <div
@@ -285,10 +288,36 @@ export function TechnicalChat({
         }
     };
 
-    const placeholders = {
-        vi: "Ví dụ: Van bướm Fisher có thông số áp suất ntn?",
-        en: "Ex: What are the pressure ratings for Fisher butterfly valves?",
+    // Translations
+    const t = {
+        vi: {
+            userRole: "Bạn",
+            aiRole: "Trợ lý TTE",
+            greeting: "Xin chào!",
+            intro: "Tôi có thể giúp bạn tra cứu thông tin sản phẩm và thông số kỹ thuật từ thư viện tài liệu của TTE.",
+            thinking: "Đang suy nghĩ...",
+            disclaimer: "AI có thể mắc lỗi. Vui lòng kiểm tra lại thông tin quan trọng.",
+            placeholders: "Ví dụ: Van bướm Fisher có thông số áp suất ntn?",
+            sug1: "Van Fisher HP ratings?",
+            sug1_query: "Van Fisher HP có thông số áp suất bao nhiêu?",
+            sug2: "Danh mục sản phẩm TTE?",
+            sug2_query: "Liệt kê các danh mục sản phẩm của TTE?",
+        },
+        en: {
+            userRole: "You",
+            aiRole: "TTE Assistant",
+            greeting: "Hello there!",
+            intro: "I can help you look up product info and technical specs from TTE's document library.",
+            thinking: "Thinking...",
+            disclaimer: "AI can make mistakes. Please verify important information.",
+            placeholders: "Ex: What are the pressure ratings for Fisher butterfly valves?",
+            sug1: "Fisher HP valve ratings?",
+            sug1_query: "What are the pressure ratings for Fisher HP?",
+            sug2: "TTE Product portfolio?",
+            sug2_query: "List TTE's product categories?",
+        }
     };
+    const strings = t[language as keyof typeof t] || t.vi;
 
     return (
         <Card className={cn(
@@ -327,29 +356,32 @@ export function TechnicalChat({
                                     <MessageSquare className="h-12 w-12 text-[#4463b1]" />
                                 </div>
                                 <h4 className="text-2xl font-black text-[#4463b1] mb-3 tracking-tight">
-                                    {language === "vi" ? "Xin chào!" : "Hello there!"}
+                                    {strings.greeting}
                                 </h4>
                                 <p className="text-[15px] font-bold text-slate-500 max-w-xs leading-relaxed mb-8">
-                                    {language === "vi"
-                                        ? "Tôi có thể giúp bạn tra cứu thông tin sản phẩm và thông số kỹ thuật từ thư viện tài liệu của TTE."
-                                        : "I can help you look up product info and technical specs from TTE's document library."}
+                                    {strings.intro}
                                 </p>
 
                                 <div className="grid gap-3 w-full max-w-sm">
                                     <SuggestionButton
-                                        text={language === "vi" ? "Van Fisher HP ratings?" : "Fisher HP valve ratings?"}
-                                        onClick={() => setInput(language === "vi" ? "Van Fisher HP có thông số áp suất bao nhiêu?" : "What are the pressure ratings for Fisher HP?")}
+                                        text={strings.sug1}
+                                        onClick={() => setInput(strings.sug1_query)}
                                     />
                                     <SuggestionButton
-                                        text={language === "vi" ? "Danh mục sản phẩm TTE?" : "TTE Product portfolio?"}
-                                        onClick={() => setInput(language === "vi" ? "Liệt kê các danh mục sản phẩm của TTE?" : "List TTE's product categories?")}
+                                        text={strings.sug2}
+                                        onClick={() => setInput(strings.sug2_query)}
                                     />
                                 </div>
                             </div>
                         ) : (
                             <div className="py-6 space-y-6">
                                 {messages.map((message) => (
-                                    <ChatMessageItem key={message.id} message={message} />
+                                    <ChatMessageItem key={message.id} message={message} language={language} /> // Role translation handled in item? No, passing raw role. Need to update item too? 
+                                    // ChatMessageItem handles display logic. I should pass 't' to it or it should derive it? 
+                                    // ChatMessageItem is defined outside. I will need to update it to accept language or translation strings.
+                                    // For now, let's keep ChatMessageItem simple or update it in a separate step if needed. 
+                                    // BUT: ChatMessageItem has hardcoded "Bạn"/"Trợ lý TTE". 
+                                    // I must update ChatMessageItem to accept 'language' prop.
                                 ))}
                                 {isLoading && (
                                     <div className="flex gap-4 py-2 px-2 animate-in fade-in duration-300">
@@ -362,7 +394,7 @@ export function TechnicalChat({
                                                 <span className="h-2 w-2 rounded-full bg-[#4463b1] animate-bounce delay-150"></span>
                                                 <span className="h-2 w-2 rounded-full bg-[#4463b1] animate-bounce delay-300"></span>
                                             </div>
-                                            <span className="text-sm font-bold text-[#4463b1]">Đang suy nghĩ...</span>
+                                            <span className="text-sm font-bold text-[#4463b1]">{strings.thinking}</span>
                                         </div>
                                     </div>
                                 )}
@@ -381,7 +413,7 @@ export function TechnicalChat({
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder={placeholders[language]}
+                            placeholder={strings.placeholders}
                             className="min-h-[52px] max-h-[140px] resize-none border-0 bg-transparent focus-visible:ring-0 py-3 px-3 text-[16px] font-semibold text-slate-800 leading-relaxed placeholder:text-slate-400 placeholder:font-medium"
                             disabled={isLoading}
                         />
@@ -398,9 +430,7 @@ export function TechnicalChat({
                         </Button>
                     </div>
                     <p className="text-[11px] text-slate-400 mt-3 text-center font-bold uppercase tracking-wide opacity-80">
-                        {language === "vi"
-                            ? "AI hỗ trợ tra cứu thông tin kỹ thuật TTE"
-                            : "AI Powered Technical Support"}
+                        {strings.disclaimer}
                     </p>
                 </div>
             </CardContent>

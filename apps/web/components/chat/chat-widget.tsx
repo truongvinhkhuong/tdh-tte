@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MessageCircle, X, Minimize2, Maximize2, ChevronUp } from "lucide-react";
+import { MessageCircle, X, Minimize2, Maximize2, ChevronUp, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TechnicalChat } from "./technical-chat";
@@ -132,32 +132,41 @@ export function ChatWidget({
             <div
                 className={cn(
                     "transition-all duration-300 ease-in-out absolute bottom-0 right-0",
-                    isOpen ? "opacity-0 scale-50 pointer-events-none" : "opacity-100 scale-100"
+                    isOpen ? "opacity-0 scale-50 pointer-events-none" : "opacity-100 scale-100 z-50",
+                    "flex flex-col items-end gap-4"
                 )}
             >
-                <div className="relative group">
+                {/* Enhanced Callout Tooltip - Always visible initially or on hover */}
+                <div
+                    className={cn(
+                        "mr-2 relative bg-white py-2.5 px-4 rounded-xl shadow-xl border border-blue-100/50 text-sm font-bold text-[#4463b1] animate-in fade-in slide-in-from-right-4 duration-700 delay-300 whitespace-nowrap",
+                        "after:content-[''] after:absolute after:right-6 after:-bottom-2 after:w-4 after:h-4 after:bg-white after:border-r after:border-b after:border-blue-100/50 after:rotate-45"
+                    )}
+                >
+                    <span className="relative z-10 flex items-center gap-2">
+                        {language === "vi" ? "Tư vấn ở đây!" : "Chat with AI!"}
+                        <span className=""></span>
+                    </span>
+                </div>
+
+                <div className="relative group mr-1 mb-1">
                     {showPulse && !isOpen && (
                         <span className="absolute inline-flex h-full w-full rounded-full bg-[#4463b1] opacity-20 animate-ping"></span>
                     )}
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[9px] text-white font-bold items-center justify-center border-2 border-white">1</span>
-                    </span>
 
                     <Button
                         onClick={() => setIsOpen(true)}
-                        className="h-14 w-14 md:h-16 md:w-16 rounded-full shadow-lg shadow-blue-500/30 bg-[#4463b1] hover:bg-[#354e8d] hover:scale-105 transition-all duration-300 flex items-center justify-center border-2 border-white/20"
+                        className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] rounded-full shadow-2xl shadow-blue-600/40 bg-[#4463b1] hover:bg-[#354e8d] hover:scale-105 transition-all duration-300 flex items-center justify-center border-[3px] border-white ring-4 ring-blue-50"
                         size="icon"
                         aria-label="Open chat"
                     >
-                        <MessageCircle className="h-7 w-7 md:h-8 md:w-8 text-white transition-transform duration-300 group-hover:rotate-12" />
+                        <div className="relative flex items-center justify-center w-full h-full">
+                            <Bot className="h-8 w-8 md:h-10 md:w-10 text-white transition-transform duration-300 group-hover:rotate-12" />
+                            <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 bg-red-600 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm z-10">
+                                1
+                            </div>
+                        </div>
                     </Button>
-                </div>
-
-                {/* Tooltip hint */}
-                <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 whitespace-nowrap bg-white py-1.5 px-3 rounded-xl shadow-lg border text-sm font-medium text-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none md:block hidden">
-                    Chat với AI Kỹ thuật
-                    <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-r border-b transform -rotate-45"></div>
                 </div>
             </div>
         </div>
