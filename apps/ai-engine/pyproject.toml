@@ -1,0 +1,67 @@
+[project]
+name = "tte-ai-engine"
+version = "0.1.0"
+description = "RAG AI Engine for TTE Technical Consulting - Oil & Gas, Energy, Chemical"
+requires-python = ">=3.11"
+readme = "README.md"
+
+dependencies = [
+    # FastAPI & Server
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    
+    # LlamaIndex Core
+    "llama-index>=0.11.0",
+    "llama-index-llms-openai-like>=0.2.0",
+    "llama-index-embeddings-openai>=0.3.0",
+    "llama-index-vector-stores-qdrant>=0.3.0",
+    
+    # PDF Processing
+    "llama-parse>=0.5.0",
+    
+    # Vector Store
+    "qdrant-client>=1.12.0",
+    
+    # Data Validation
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    
+    # Cache & Queue
+    "redis>=5.2.0",
+    
+    # Google Drive Integration
+    "google-api-python-client>=2.150.0",
+    "google-auth>=2.35.0",
+    
+    # Utilities
+    "httpx>=0.27.0",
+    "tenacity>=9.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.7.0",
+    "mypy>=1.13.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

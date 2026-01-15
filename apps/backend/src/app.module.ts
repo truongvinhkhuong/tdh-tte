@@ -8,6 +8,7 @@ import { AIModule } from './ai/ai.module';
 import { AutomationModule } from './automation/automation.module';
 import { QueueModule } from './queue/queue.module';
 import { PayloadModule } from './payload/payload.module';
+import { RAGModule } from './rag/rag.module';
 import { HealthController } from './health.controller';
 
 @Module({
@@ -38,6 +39,7 @@ import { HealthController } from './health.controller';
         AutomationModule,
         QueueModule,
         PayloadModule,
+        RAGModule,
     ],
     controllers: [HealthController],
 })
