@@ -5,6 +5,7 @@ import { getDictionary } from "@/i18n/get-dictionary"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { OrganizationSchema, LocalBusinessSchema } from "@/components/seo/json-ld"
+import { ChatWidget } from "@/components/chat"
 import "@/styles/globals.css"
 
 export async function generateStaticParams() {
@@ -108,8 +109,9 @@ export default async function LocaleLayout({
                 <Header lang={lang} dict={dict} />
                 {children}
                 <Footer lang={lang} dict={dict} />
+                {/* AI Chat Widget - Floating button */}
+                <ChatWidget language={lang as "vi" | "en"} position="bottom-right" />
             </body>
         </html>
     )
 }
-
