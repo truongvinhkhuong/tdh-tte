@@ -157,12 +157,45 @@ class RAGEngine:
 
         # Calculate confidence based on source relevance
         confidence = self._calculate_confidence(response.source_nodes)
+        sources_count = len(response.source_nodes)
+
+        # PHASE 1 OPTIMIZATION: Programmatic fallback
+        # If confidence is too low or no sources, return fallback message
+        # This is more reliable than letting LLM decide
+        if confidence < 20.0 or sources_count == 0:
+            logger.info(f"Low confidence ({confidence}%) or no sources - returning fallback")
+            return self._get_fallback_response(language)
 
         return {
             "answer": str(response),
             "citations": citations,
             "confidence": confidence,
-            "sources_count": len(response.source_nodes),
+            "sources_count": sources_count,
+        }
+
+    def _get_fallback_response(self, language: str) -> dict[str, Any]:
+        """Return standardized fallback response with contact info."""
+        fallbacks = {
+            "vi": """Xin lỗi, tôi chưa tìm thấy thông tin này trong tài liệu kỹ thuật hiện có. Để được hỗ trợ nhanh nhất, vui lòng liên hệ:
+
+📞 Điện thoại: (84-254) 3522219
+📧 Email: tts@toanthang.vn
+
+Đội ngũ kỹ thuật TTE sẽ phản hồi trong thời gian sớm nhất!""",
+            "en": """I apologize, I couldn't find this information in our current technical documents. For the fastest support, please contact us:
+
+📞 Phone: (84-254) 3522219
+📧 Email: tts@toanthang.vn
+
+Our TTE technical team will respond as soon as possible!"""
+        }
+        
+        return {
+            "answer": fallbacks.get(language, fallbacks["vi"]),
+            "citations": [],
+            "confidence": 0.0,
+            "sources_count": 0,
+            "is_fallback": True,  # Flag for frontend to know this is a fallback
         }
 
     def _build_prompt(
@@ -176,32 +209,22 @@ class RAGEngine:
             "vi": """Bạn là Kỹ sư Tư vấn Kỹ thuật của TTE (Toàn Thắng Engineering).
 
 QUY TẮC:
-1. CHỈ trả lời dựa trên context bên dưới
-2. Nếu không có thông tin trong context → Trả lời: "Xin lỗi, tôi chưa tìm thấy thông tin này trong tài liệu kỹ thuật hiện có. Để được hỗ trợ nhanh nhất, vui lòng liên hệ:
-
-📞 Điện thoại: (84-254) 3522219
-📧 Email: tts@toanthang.vn
-
-Đội ngũ kỹ thuật TTE sẽ phản hồi trong thời gian sớm nhất!"
-3. Trả lời TỰ NHIÊN, chuyên nghiệp như một kỹ sư tư vấn.
-4. KHÔNG được nhắc đến tên file, số trang hay nguồn tài liệu trong câu trả lời.
-5. Dùng Markdown table cho thông số kỹ thuật.
-6. Giữ nguyên đơn vị kỹ thuật (PSI, bar, mm).""",
+1. CHỈ trả lời dựa trên context được cung cấp bên dưới.
+2. Trả lời chi tiết, chuyên nghiệp như một kỹ sư tư vấn.
+3. KHÔNG được nhắc đến tên file, số trang hay nguồn tài liệu trong câu trả lời.
+4. Dùng Markdown table cho thông số kỹ thuật.
+5. Giữ nguyên đơn vị kỹ thuật (PSI, bar, mm).
+6. Nếu context không có đủ thông tin, hãy trả lời ngắn gọn dựa trên những gì có sẵn.""",
 
             "en": """You are a Technical Engineer Consultant for TTE (Toan Thang Engineering).
 
 RULES:
-1. ONLY answer based on context below
-2. If information is not found → Reply: "I apologize, I couldn't find this information in our current technical documents. For the fastest support, please contact us:
-
-📞 Phone: (84-254) 3522219
-📧 Email: tts@toanthang.vn
-
-Our TTE technical team will respond as soon as possible!"
-3. Answer NATURALLY and professionally.
-4. Do NOT mention filenames, page numbers, or sources in your response.
-5. Use Markdown table for specs.
-6. Keep original units (PSI, bar, mm).""",
+1. ONLY answer based on the context provided below.
+2. Answer in detail, professionally as a technical consultant.
+3. Do NOT mention filenames, page numbers, or sources in your response.
+4. Use Markdown table for specs.
+5. Keep original units (PSI, bar, mm).
+6. If context doesn't have enough info, answer briefly based on what's available.""",
         }
 
         system_prompt = prompts.get(language, prompts["vi"])

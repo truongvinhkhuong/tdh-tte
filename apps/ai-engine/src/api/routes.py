@@ -28,13 +28,19 @@ router = APIRouter()
 # Dependency Injection
 # ===========================================
 
+# Singleton instance for RAGEngine (avoid reinit on each request)
+_rag_engine_instance: RAGEngine | None = None
+
 
 def get_rag_engine(
     settings: Annotated[Settings, Depends(get_settings)],
 ) -> RAGEngine:
-    """Get RAG engine instance."""
-    # In production, use a singleton pattern or connection pool
-    return RAGEngine(settings)
+    """Get RAG engine singleton instance for better performance."""
+    global _rag_engine_instance
+    if _rag_engine_instance is None:
+        logger.info("Creating RAGEngine singleton instance")
+        _rag_engine_instance = RAGEngine(settings)
+    return _rag_engine_instance
 
 
 def get_pdf_processor(
