@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Send, Bot, User, FileText, Loader2, MessageSquare, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -207,9 +208,40 @@ export function TechnicalChat({
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [conversationId, setConversationId] = useState<string | null>(null);
+    const [sessionId, setSessionId] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const scrollViewportRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    // Initialize session ID from localStorage or create new one
+    useEffect(() => {
+        const STORAGE_KEY = "tte_chat_session_id";
+        const MESSAGES_KEY = "tte_chat_messages";
+
+        // Load session ID
+        let storedId = localStorage.getItem(STORAGE_KEY);
+        if (!storedId) {
+            storedId = uuidv4();
+            localStorage.setItem(STORAGE_KEY, storedId);
+        }
+        setSessionId(storedId);
+
+        // Load saved messages from localStorage
+        try {
+            const savedMessages = localStorage.getItem(MESSAGES_KEY);
+            if (savedMessages) {
+                const parsed = JSON.parse(savedMessages);
+                // Restore timestamps as Date objects
+                const restored = parsed.map((msg: any) => ({
+                    ...msg,
+                    timestamp: new Date(msg.timestamp)
+                }));
+                setMessages(restored);
+            }
+        } catch (e) {
+            console.warn("Failed to load chat history:", e);
+        }
+    }, []);
 
     // Auto-scroll to bottom with behavior
     useEffect(() => {
@@ -221,6 +253,16 @@ export function TechnicalChat({
             });
         }
     }, [messages, isLoading]);
+
+    // Persist messages to localStorage whenever they change
+    useEffect(() => {
+        if (messages.length > 0) {
+            const MESSAGES_KEY = "tte_chat_messages";
+            // Limit to last 20 messages to avoid localStorage bloat
+            const toSave = messages.slice(-20);
+            localStorage.setItem(MESSAGES_KEY, JSON.stringify(toSave));
+        }
+    }, [messages]);
 
     // Send message
     const handleSend = async () => {
@@ -246,6 +288,7 @@ export function TechnicalChat({
                     question,
                     language,
                     conversationId,
+                    sessionId, // For session tracking & rate limiting
                 }),
             });
 

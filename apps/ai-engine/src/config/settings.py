@@ -49,12 +49,17 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
     cors_origins: list[str] = [
+        # Development
         "http://localhost:3000",
         "http://localhost:4000",
         "http://localhost:4001",
         "http://localhost:4002",
+        # Production - toanthang.vn and subdomains
         "https://toanthang.vn",
+        "https://www.toanthang.vn",
         "https://cms.toanthang.vn",
+        "https://api.toanthang.vn",
+        "https://admin.toanthang.vn",
     ]
 
     # ===========================================

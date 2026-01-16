@@ -3,6 +3,8 @@ import { HttpModule } from '@nestjs/axios';
 import { BullModule } from '@nestjs/bull';
 import { RAGController } from './rag.controller';
 import { RAGService } from './rag.service';
+import { ChatbotSessionService } from './chatbot-session.service';
+import { ChatbotCacheService } from './chatbot-cache.service';
 import { DocumentIngestionProcessor } from './processors/document-ingestion.processor';
 
 @Module({
@@ -16,7 +18,13 @@ import { DocumentIngestionProcessor } from './processors/document-ingestion.proc
         }),
     ],
     controllers: [RAGController],
-    providers: [RAGService, DocumentIngestionProcessor],
+    providers: [
+        RAGService,
+        ChatbotSessionService,
+        ChatbotCacheService,
+        DocumentIngestionProcessor,
+    ],
     exports: [RAGService],
 })
 export class RAGModule { }
+

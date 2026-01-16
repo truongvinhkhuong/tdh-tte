@@ -22,6 +22,7 @@
         "@nestjs/core": "^10.4.0",
         "@nestjs/platform-express": "^10.4.0",
         "@nestjs/schedule": "^4.1.0",
+        "@nestjs/throttler": "^6.5.0",
         "@tte/shared-types": "workspace:*",
         "axios": "^1.7.0",
         "bull": "^4.16.0",
