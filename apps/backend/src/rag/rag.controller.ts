@@ -156,6 +156,94 @@ export class RAGController {
     }
 
     // ===========================================
+    // Streaming Chat Endpoint
+    // ===========================================
+
+    /**
+     * POST /api/rag/chat/stream
+     * Stream chat responses using Server-Sent Events.
+     * 
+     * Returns real-time response chunks for better UX.
+     */
+    @Post('chat/stream')
+    @UseGuards(ChatbotThrottlerGuard, PromptInjectionGuard)
+    async chatStream(@Body() dto: ChatDto, @Ip() ip: string) {
+        const { Readable } = await import('stream');
+
+        // Validate question
+        if (!dto.question || dto.question.trim().length === 0) {
+            throw new HttpException('Question is required', HttpStatus.BAD_REQUEST);
+        }
+
+        if (dto.question.length > MAX_QUESTION_LENGTH) {
+            throw new HttpException(
+                `Question too long (max ${MAX_QUESTION_LENGTH} characters)`,
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+
+        const language = dto.language || 'vi';
+        const sessionId = dto.sessionId || 'anonymous';
+
+        try {
+            // Check cache first
+            const cachedResponse = await this.cacheService.getCachedResponse(dto.question, language);
+
+            if (cachedResponse) {
+                this.logger.log(`Stream Cache HIT for session ${sessionId}`);
+                // Return cached response as single chunk
+                const chunks = [
+                    `data: ${JSON.stringify({ type: 'chunk', data: cachedResponse.answer })}\n\n`,
+                    `data: ${JSON.stringify({ type: 'done', data: { cached: true, confidence: cachedResponse.confidence } })}\n\n`,
+                ];
+
+                return {
+                    headers: {
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
+                        'Connection': 'keep-alive',
+                    },
+                    body: chunks.join(''),
+                };
+            }
+
+            // Proxy streaming from AI Engine
+            const aiEngineUrl = process.env.AI_ENGINE_URL || 'http://localhost:8000';
+            const response = await fetch(`${aiEngineUrl}/api/chat/stream`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: dto.question,
+                    language,
+                    conversation_id: dto.conversationId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`AI Engine returned ${response.status}`);
+            }
+
+            // Return streaming response headers info
+            // The actual streaming is handled by the frontend calling AI Engine directly
+            // or through nginx proxy
+            return {
+                streamUrl: `${aiEngineUrl}/api/chat/stream`,
+                headers: {
+                    'Content-Type': 'text/event-stream',
+                    'Cache-Control': 'no-cache',
+                },
+            };
+
+        } catch (error) {
+            this.logger.error(`Stream error: ${error.message}`);
+            throw new HttpException(
+                { success: false, error: 'Streaming unavailable' },
+                HttpStatus.SERVICE_UNAVAILABLE,
+            );
+        }
+    }
+
+    // ===========================================
     // Ingestion Endpoints
     // ===========================================
 

@@ -156,19 +156,47 @@ class RAGEngine:
             logger.info(f"FAQ match found: '{faq_match.question_key}' - skipping LLM")
             return faq_filter.get_response(faq_match, language)
         
+        # PHASE 2 OPTIMIZATION: Semantic cache
+        # Check if semantically similar question was answered before
+        from .semantic_cache import get_semantic_cache
+        
+        semantic_cache = get_semantic_cache()
+        
+        # Initialize cache with embedding model if needed
+        if not semantic_cache.embed_model:
+            semantic_cache.set_embed_model(LlamaSettings.embed_model)
+        
+        cached_response = semantic_cache.get(question, language)
+        if cached_response:
+            logger.info(f"Semantic cache HIT - skipping LLM")
+            cached_response["from_cache"] = True
+            return cached_response
+        
         # Build context-aware prompt
         prompt = self._build_prompt(question, language, conversation_history)
 
-        # Execute query
-        query_engine = self._get_query_engine()
-        response = await query_engine.aquery(prompt)
+        # Execute query with LLM fallback chain
+        try:
+            query_engine = self._get_query_engine()
+            response = await query_engine.aquery(prompt)
+        except Exception as primary_error:
+            logger.warning(f"Primary LLM (DeepSeek) failed: {primary_error}")
+            
+            # Try OpenAI fallback
+            try:
+                response = await self._query_with_fallback_llm(prompt)
+                logger.info("Fallback LLM (OpenAI) succeeded")
+            except Exception as fallback_error:
+                logger.error(f"Fallback LLM also failed: {fallback_error}")
+                return self._get_fallback_response(language)
 
         # Extract citations from source nodes
-        citations = self._extract_citations(response.source_nodes)
+        source_nodes = getattr(response, 'source_nodes', [])
+        citations = self._extract_citations(source_nodes)
 
         # Calculate confidence based on source relevance
-        confidence = self._calculate_confidence(response.source_nodes)
-        sources_count = len(response.source_nodes)
+        confidence = self._calculate_confidence(source_nodes)
+        sources_count = len(source_nodes)
 
         # PHASE 1 OPTIMIZATION: Programmatic fallback
         # If confidence is too low or no sources, return fallback message
@@ -177,12 +205,42 @@ class RAGEngine:
             logger.info(f"Low confidence ({confidence}%) or no sources - returning fallback")
             return self._get_fallback_response(language)
 
-        return {
+        result = {
             "answer": str(response),
             "citations": citations,
             "confidence": confidence,
             "sources_count": sources_count,
         }
+        
+        # Cache successful response for semantic matching
+        semantic_cache.set(question, language, result)
+        
+        return result
+    
+    async def _query_with_fallback_llm(self, prompt: str) -> Any:
+        """Query using OpenAI as fallback LLM."""
+        from llama_index.llms.openai import OpenAI as OpenAILLM
+        
+        # Create temporary OpenAI LLM
+        fallback_llm = OpenAILLM(
+            model="gpt-4o-mini",
+            api_key=self.settings.openai_api_key,
+            temperature=self.settings.llm_temperature,
+            max_tokens=self.settings.llm_max_tokens,
+        )
+        
+        # Simple completion without RAG context (for reliability)
+        response = await fallback_llm.acomplete(prompt)
+        
+        # Wrap in a mock response object
+        class MockResponse:
+            def __init__(self, text):
+                self.text = text
+                self.source_nodes = []
+            def __str__(self):
+                return self.text
+        
+        return MockResponse(response.text)
 
     def _get_fallback_response(self, language: str) -> dict[str, Any]:
         """Return standardized fallback response with contact info."""

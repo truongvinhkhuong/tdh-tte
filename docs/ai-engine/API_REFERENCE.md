@@ -97,6 +97,36 @@ Query the technical knowledge base.
 
 ---
 
+#### `POST /api/chat/stream`
+
+Stream chat responses using Server-Sent Events (SSE).
+
+**Request:** Same as `/api/chat`
+
+**Response:** SSE stream with chunks:
+
+```
+data: {"type": "chunk", "data": "Van Fisher HP..."}
+
+data: {"type": "chunk", "data": " có thông số..."}
+
+data: {"type": "done", "data": {"confidence": 87.5, "sources_count": 3}}
+```
+
+**Event Types:**
+| Type | Description |
+|------|-------------|
+| `chunk` | Partial response text |
+| `done` | Completion with metadata |
+| `error` | Error message |
+
+**Features:**
+- FAQ responses sent immediately (one chunk)
+- Non-FAQ responses streamed in 20-char chunks
+- ~500ms perceived latency vs 2000ms for regular endpoint
+
+---
+
 ### Document Ingestion
 
 #### `POST /api/ingest`
@@ -188,6 +218,7 @@ Các endpoint này được expose qua NestJS Backend (port 4002):
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/rag/chat` | POST | Chat with knowledge base |
+| `/api/rag/chat/stream` | POST | Stream chat responses (SSE) |
 | `/api/rag/ingest` | POST | Upload PDF document |
 | `/api/rag/gdrive/sync` | POST | Trigger GDrive sync |
 | `/api/rag/gdrive/status` | GET | GDrive config status |

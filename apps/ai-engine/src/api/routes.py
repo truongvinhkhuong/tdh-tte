@@ -109,6 +109,71 @@ async def chat(
         raise HTTPException(status_code=500, detail=f"Chat processing failed: {str(e)}")
 
 
+@router.post("/chat/stream", tags=["Chat"])
+async def chat_stream(
+    request: ChatRequest,
+    rag_engine: Annotated[RAGEngine, Depends(get_rag_engine)],
+):
+    """
+    Stream chat responses using Server-Sent Events (SSE).
+    
+    Returns real-time response chunks for better UX.
+    Each chunk is a JSON object with 'type' and 'data' fields:
+    - type: 'chunk' | 'done' | 'error'
+    - data: The content or metadata
+    """
+    from fastapi.responses import StreamingResponse
+    import json
+    import asyncio
+    
+    async def generate_stream():
+        try:
+            # Check FAQ first
+            from ..core.faq_filter import get_faq_filter
+            faq_filter = get_faq_filter()
+            faq_match = faq_filter.check(request.question, request.language)
+            
+            if faq_match:
+                # FAQ response - send immediately
+                response = faq_filter.get_response(faq_match, request.language)
+                yield f"data: {json.dumps({'type': 'chunk', 'data': response['answer']})}\n\n"
+                yield f"data: {json.dumps({'type': 'done', 'data': {'is_faq': True, 'confidence': 100}})}\n\n"
+                return
+            
+            # For non-FAQ, query RAG engine and stream
+            result = await rag_engine.query(
+                question=request.question,
+                language=request.language,
+                conversation_history=None,
+            )
+            
+            # Stream the answer in chunks for perceived speed
+            answer = result["answer"]
+            chunk_size = 20  # Characters per chunk
+            
+            for i in range(0, len(answer), chunk_size):
+                chunk = answer[i:i + chunk_size]
+                yield f"data: {json.dumps({'type': 'chunk', 'data': chunk})}\n\n"
+                await asyncio.sleep(0.02)  # Small delay for smooth streaming
+            
+            # Send completion with metadata
+            yield f"data: {json.dumps({'type': 'done', 'data': {'confidence': result['confidence'], 'sources_count': result['sources_count']}})}\n\n"
+            
+        except Exception as e:
+            logger.error(f"Stream error: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'data': str(e)})}\n\n"
+    
+    return StreamingResponse(
+        generate_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",  # Disable nginx buffering
+        }
+    )
+
+
 # ===========================================
 # Ingestion Endpoints
 # ===========================================
