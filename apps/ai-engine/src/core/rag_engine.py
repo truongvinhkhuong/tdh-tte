@@ -145,6 +145,17 @@ class RAGEngine:
         Returns:
             Dictionary with answer, citations, and confidence score
         """
+        # PHASE 1 OPTIMIZATION: FAQ Pre-filter
+        # Check FAQ first to skip LLM calls for common questions
+        from .faq_filter import get_faq_filter
+        
+        faq_filter = get_faq_filter()
+        faq_match = faq_filter.check(question, language)
+        
+        if faq_match:
+            logger.info(f"FAQ match found: '{faq_match.question_key}' - skipping LLM")
+            return faq_filter.get_response(faq_match, language)
+        
         # Build context-aware prompt
         prompt = self._build_prompt(question, language, conversation_history)
 
