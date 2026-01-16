@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MessageCircle, X, Minimize2, Maximize2, ChevronUp, Bot } from "lucide-react";
+import { MessageCircle, X, Minimize2, Maximize2, ChevronUp, Bot, Expand, Shrink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TechnicalChat } from "./technical-chat";
@@ -17,6 +17,7 @@ export function ChatWidget({
 }: ChatWidgetProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [showPulse, setShowPulse] = useState(true);
 
@@ -51,7 +52,9 @@ export function ChatWidget({
                         "bg-background/95 backdrop-blur-sm rounded-2xl shadow-2xl border transition-all duration-300 overflow-hidden flex flex-col",
                         isMinimized
                             ? "h-14 w-72"
-                            : "h-[80vh] md:h-[85vh] max-h-[700px] w-[calc(100vw-32px)] md:w-[600px] lg:w-[650px]"
+                            : isFullscreen
+                                ? "h-[95vh] w-[95vw] md:w-[900px] lg:w-[1000px] max-h-none"
+                                : "h-[80vh] md:h-[85vh] max-h-[700px] w-[calc(100vw-32px)] md:w-[600px] lg:w-[650px]"
                     )}
                 >
                     {isMinimized ? (
@@ -97,6 +100,20 @@ export function ChatWidget({
                             {/* Window Controls Overlay */}
                             <div className="absolute top-0 left-0 w-full h-14 z-20 pointer-events-none flex justify-end items-center pr-2">
                                 <div className="flex gap-1 pointer-events-auto bg-black/10 backdrop-blur-sm rounded-full p-1 m-2 border border-white/10 shadow-sm">
+                                    {/* Fullscreen toggle - only on desktop */}
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="hidden md:flex h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                                        onClick={() => setIsFullscreen(!isFullscreen)}
+                                        title={isFullscreen ? (language === "vi" ? "Thu nhỏ" : "Exit fullscreen") : (language === "vi" ? "Toàn màn hình" : "Fullscreen")}
+                                    >
+                                        {isFullscreen ? (
+                                            <Shrink className="h-3.5 w-3.5" />
+                                        ) : (
+                                            <Expand className="h-3.5 w-3.5" />
+                                        )}
+                                    </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon"

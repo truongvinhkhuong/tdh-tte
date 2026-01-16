@@ -243,15 +243,28 @@ export function TechnicalChat({
         }
     }, []);
 
-    // Auto-scroll to bottom with behavior
-    useEffect(() => {
-        if (scrollViewportRef.current) {
-            const scrollElement = scrollViewportRef.current;
-            scrollElement.scrollTo({
-                top: scrollElement.scrollHeight,
-                behavior: "smooth"
-            });
+    // Helper function to scroll to bottom
+    const scrollToBottom = (smooth = true) => {
+        // ScrollArea uses Radix UI which creates a viewport element
+        // We need to find the actual scrollable element
+        if (scrollRef.current) {
+            const viewport = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
+            const scrollElement = viewport || scrollViewportRef.current;
+
+            if (scrollElement) {
+                requestAnimationFrame(() => {
+                    scrollElement.scrollTo({
+                        top: scrollElement.scrollHeight,
+                        behavior: smooth ? "smooth" : "instant"
+                    });
+                });
+            }
         }
+    };
+
+    // Auto-scroll to bottom when messages change or loading state changes
+    useEffect(() => {
+        scrollToBottom();
     }, [messages, isLoading]);
 
     // Persist messages to localStorage whenever they change
@@ -278,6 +291,9 @@ export function TechnicalChat({
         };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
+
+        // Scroll immediately when sending (instant for better UX)
+        setTimeout(() => scrollToBottom(false), 50);
         setIsLoading(true);
 
         try {
@@ -339,7 +355,6 @@ export function TechnicalChat({
             greeting: "Xin chào!",
             intro: "Tôi có thể giúp bạn tra cứu thông tin sản phẩm và thông số kỹ thuật từ thư viện tài liệu của TTE.",
             thinking: "Đang suy nghĩ...",
-            disclaimer: "AI có thể mắc lỗi. Vui lòng kiểm tra lại thông tin quan trọng.",
             placeholders: "Ví dụ: Van bướm Fisher có thông số áp suất ntn?",
             sug1: "Van Fisher HP ratings?",
             sug1_query: "Van Fisher HP có thông số áp suất bao nhiêu?",
@@ -352,7 +367,6 @@ export function TechnicalChat({
             greeting: "Hello there!",
             intro: "I can help you look up product info and technical specs from TTE's document library.",
             thinking: "Thinking...",
-            disclaimer: "AI can make mistakes. Please verify important information.",
             placeholders: "Ex: What are the pressure ratings for Fisher butterfly valves?",
             sug1: "Fisher HP valve ratings?",
             sug1_query: "What are the pressure ratings for Fisher HP?",
@@ -364,7 +378,7 @@ export function TechnicalChat({
 
     return (
         <Card className={cn(
-            "flex flex-col h-[600px] w-full border-0 shadow-2xl overflow-hidden bg-slate-50/50 backdrop-blur-sm ring-1 ring-black/5",
+            "flex flex-col h-full w-full border-0 shadow-2xl overflow-hidden bg-slate-50/50 backdrop-blur-sm ring-1 ring-black/5",
             className
         )}>
             {/* Header - Brand Color #4463b1 */}
@@ -472,9 +486,6 @@ export function TechnicalChat({
                             <Send className="h-5 w-5 ml-0.5" />
                         </Button>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-3 text-center font-bold uppercase tracking-wide opacity-80">
-                        {strings.disclaimer}
-                    </p>
                 </div>
             </CardContent>
         </Card>
