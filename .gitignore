@@ -46,3 +46,4 @@ backups
 # Misc
 *.orig
 *.bak
+.logs
