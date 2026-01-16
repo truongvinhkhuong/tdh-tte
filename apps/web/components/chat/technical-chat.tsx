@@ -49,6 +49,9 @@ interface ChatResponse {
 // Chat Message Component
 // ===========================================
 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 function ChatMessageItem({ message, language }: { message: ChatMessage; language: "vi" | "en" }) {
     const isUser = message.role === "user";
     const roleName = isUser
@@ -92,18 +95,62 @@ function ChatMessageItem({ message, language }: { message: ChatMessage; language
                         "rounded-2xl px-5 py-4 shadow-sm text-[15px] leading-relaxed font-semibold",
                         isUser
                             ? "bg-[#4463b1] text-white rounded-tr-none"
-                            : "bg-white border text-foreground rounded-tl-none prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:font-black prose-headings:text-[#4463b1] prose-ul:my-2 prose-li:my-0.5"
+                            : "bg-white border text-foreground rounded-tl-none"
                     )}
                 >
                     {isUser ? (
                         <p className="whitespace-pre-wrap break-words">{message.content}</p>
                     ) : (
-                        <div
-                            className="whitespace-pre-wrap break-words overflow-x-auto"
-                            dangerouslySetInnerHTML={{
-                                __html: formatMarkdown(message.content),
-                            }}
-                        />
+                        <div className="markdown-content prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:font-black prose-headings:text-[#4463b1] prose-ul:my-2 prose-li:my-0.5 prose-table:my-3 prose-th:bg-slate-50 prose-th:p-3 prose-td:p-3 prose-table:border prose-table:rounded-lg overflow-x-auto">
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    strong: ({ children }) => (
+                                        <strong className="text-[#4463b1] font-extrabold">{children}</strong>
+                                    ),
+                                    em: ({ children }) => (
+                                        <em className="text-[#4463b1] font-bold">{children}</em>
+                                    ),
+                                    h2: ({ children }) => (
+                                        <h2 className="text-lg font-extrabold text-[#4463b1] mt-5 mb-3">{children}</h2>
+                                    ),
+                                    h3: ({ children }) => (
+                                        <h3 className="text-base font-extrabold text-[#4463b1] mt-4 mb-2 border-b border-blue-100 pb-1">{children}</h3>
+                                    ),
+                                    table: ({ children }) => (
+                                        <div className="overflow-x-auto my-3 rounded-lg border border-slate-200 shadow-sm">
+                                            <table className="w-full border-collapse text-sm bg-white">{children}</table>
+                                        </div>
+                                    ),
+                                    th: ({ children }) => (
+                                        <th className="p-3 bg-slate-50 border-b border-slate-200 text-left font-bold text-slate-700">{children}</th>
+                                    ),
+                                    td: ({ children }) => (
+                                        <td className="p-3 border-b border-slate-100 text-slate-700">{children}</td>
+                                    ),
+                                    tr: ({ children }) => (
+                                        <tr className="hover:bg-slate-50 transition-colors">{children}</tr>
+                                    ),
+                                    code: ({ children }) => (
+                                        <code className="bg-slate-100 text-[#4463b1] px-1.5 py-0.5 rounded text-xs font-mono font-bold border border-slate-200">{children}</code>
+                                    ),
+                                    ul: ({ children }) => (
+                                        <ul className="ml-4 list-disc marker:text-[#4463b1] space-y-1">{children}</ul>
+                                    ),
+                                    ol: ({ children }) => (
+                                        <ol className="ml-4 list-decimal marker:text-[#4463b1] space-y-1">{children}</ol>
+                                    ),
+                                    li: ({ children }) => (
+                                        <li className="font-medium">{children}</li>
+                                    ),
+                                    p: ({ children }) => (
+                                        <p className="mb-2 font-semibold text-slate-800 leading-relaxed">{children}</p>
+                                    ),
+                                }}
+                            >
+                                {message.content}
+                            </ReactMarkdown>
+                        </div>
                     )}
                 </div>
             </div>
@@ -132,9 +179,10 @@ function formatMarkdown(text: string): string {
         line = line.replace(/^### (.*$)/, '<h3 class="text-base font-extrabold text-[#4463b1] mt-4 mb-2 border-b border-blue-100 pb-1">$1</h3>');
         line = line.replace(/^## (.*$)/, '<h2 class="text-lg font-extrabold text-[#4463b1] mt-5 mb-3">$1</h2>');
 
-        // Lists
+        // Lists - bullet points
         line = line.replace(/^- (.*)/, '<li class="ml-4 list-disc marker:text-[#4463b1] pl-1 mb-1 font-medium">$1</li>');
-        line = line.replace(/^\d+\. (.*)/, '<li class="ml-4 list-decimal marker:text-[#4463b1] pl-1 mb-1 font-medium">$1</li>');
+        // Lists - numbered (only match "1. text" format, not "1.2" decimals)
+        line = line.replace(/^(\d+)\.\s+(.*)/, '<li class="ml-4 list-decimal marker:text-[#4463b1] pl-1 mb-1 font-medium">$2</li>');
 
         return line;
     };
@@ -151,10 +199,14 @@ function formatMarkdown(text: string): string {
             const isHeaderSeparator = line.includes('---');
             if (isHeaderSeparator) continue;
 
-            const cells = line.split('|').filter(c => c.trim().length > 0 || c === ' ');
+            // Split by | and keep all cells (including empty ones between delimiters)
+            // Filter out the first and last empty strings from split
+            const rawCells = line.split('|');
+            const cells = rawCells.slice(1, rawCells.length - 1); // Remove first/last empty entries
 
             const rowContent = cells.map(c => {
-                return `<td class="p-3 border-b border-r last:border-r-0 border-slate-100 align-top font-semibold text-slate-700 min-w-[120px]">${processLine(c.trim())}</td>`;
+                const cellContent = c.trim() || '&nbsp;'; // Use nbsp for truly empty cells
+                return `<td class="p-3 border-b border-r last:border-r-0 border-slate-100 align-top font-semibold text-slate-700 min-w-[120px]">${processLine(cellContent)}</td>`;
             }).join('');
 
             tableBuffer += `<tr class="hover:bg-slate-50 transition-colors">${rowContent}</tr>`;
