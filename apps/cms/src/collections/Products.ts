@@ -118,6 +118,16 @@ export const Products: CollectionConfig = {
                             hasMany: false,
                         },
                         {
+                            name: 'subBrand',
+                            type: 'relationship',
+                            relationTo: 'sub-brands',
+                            hasMany: false,
+                            admin: {
+                                description: 'Chọn danh mục con (nếu có). Lưu ý: Phải chọn Brand trước.',
+                                condition: (data) => Boolean(data?.brand),
+                            },
+                        },
+                        {
                             name: 'category',
                             type: 'relationship',
                             relationTo: 'product-categories',

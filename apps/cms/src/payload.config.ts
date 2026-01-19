@@ -15,7 +15,9 @@ import { Articles } from './collections/Articles'
 import { Vacancies } from './collections/Vacancies'
 import { Brands } from './collections/Taxonomies/Brands'
 import { ProductCategories } from './collections/Taxonomies/ProductCategories'
+
 import { Industries } from './collections/Taxonomies/Industries'
+import { SubBrands } from './collections/Taxonomies/SubBrands'
 
 // Globals
 import { Homepage } from './globals/Homepage'
@@ -51,6 +53,7 @@ export default buildConfig({
         Vacancies,
         // Taxonomies
         Brands,
+        SubBrands,
         ProductCategories,
         Industries,
     ],
