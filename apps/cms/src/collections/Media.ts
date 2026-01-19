@@ -35,6 +35,13 @@ export const Media: CollectionConfig = {
     },
     fields: [
         {
+            name: 'externalURL',
+            type: 'text',
+            admin: {
+                description: 'URL ảnh từ nguồn bên ngoài (Cloudinary, S3...). Nếu có, sẽ ưu tiên hiển thị thay vì file upload.',
+            },
+        },
+        {
             name: 'alt',
             type: 'text',
             localized: true,
