@@ -28,7 +28,7 @@ class PDFProcessor:
         self.parser = LlamaParse(
             api_key=settings.llama_cloud_api_key,
             result_type="markdown",  # Best for preserving tables
-            parsing_instruction=self._get_parsing_instructions(),
+            system_prompt=self._get_parsing_instructions(),  # Updated from deprecated parsing_instruction
             language="en",  # Primary language for technical docs
             verbose=settings.debug,
         )

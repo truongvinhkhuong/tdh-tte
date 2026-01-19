@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     deepseek_api_key: str
     openai_api_key: str
     llama_cloud_api_key: str
+    voyageai_api_key: Optional[str] = None  # For Voyage AI embeddings
 
     # ===========================================
     # Qdrant Cloud
@@ -70,9 +71,10 @@ class Settings(BaseSettings):
     llm_temperature: float = 0.1  # Low for factual responses
     llm_max_tokens: int = 4096
 
-    # Embedding Settings
-    embedding_model: str = "text-embedding-3-small"
-    embedding_dimensions: int = 1536
+    # Embedding Settings (Voyage AI for 60% cost savings)
+    embedding_provider: str = "voyageai"  # 'openai' or 'voyageai'
+    embedding_model: str = "voyage-3.5-lite"  # or text-embedding-3-small for OpenAI
+    embedding_dimensions: int = 1024  # voyage-3.5-lite default
 
     # Retrieval Settings
     retrieval_top_k: int = 5  # Keep low for DeepSeek context limits

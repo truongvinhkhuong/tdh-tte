@@ -53,15 +53,26 @@ class RAGEngine:
         LlamaSettings.context_window = 32000
         LlamaSettings.num_output = self.settings.llm_max_tokens
 
-        # OpenAI embedding (best price/performance)
-        LlamaSettings.embed_model = OpenAIEmbedding(
-            model=self.settings.embedding_model,
-            api_key=self.settings.openai_api_key,
-            dimensions=self.settings.embedding_dimensions,
-        )
+        # Configure embedding model based on provider
+        if self.settings.embedding_provider == "voyageai" and self.settings.voyageai_api_key:
+            # Voyage AI embedding (60% cheaper than OpenAI)
+            from llama_index.embeddings.voyageai import VoyageEmbedding
+            
+            LlamaSettings.embed_model = VoyageEmbedding(
+                model_name=self.settings.embedding_model,
+                voyage_api_key=self.settings.voyageai_api_key,
+            )
+            logger.info(f"Embedding configured: Voyage AI {self.settings.embedding_model}")
+        else:
+            # Fallback to OpenAI embedding
+            LlamaSettings.embed_model = OpenAIEmbedding(
+                model=self.settings.embedding_model if "voyage" not in self.settings.embedding_model else "text-embedding-3-small",
+                api_key=self.settings.openai_api_key,
+                dimensions=self.settings.embedding_dimensions,
+            )
+            logger.info(f"Embedding configured: OpenAI {self.settings.embedding_model}")
 
         logger.info(f"LLM configured: {self.settings.llm_model}")
-        logger.info(f"Embedding configured: {self.settings.embedding_model}")
 
     def _setup_vector_store(self) -> None:
         """Initialize Qdrant vector store connection."""
