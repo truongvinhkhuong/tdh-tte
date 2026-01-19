@@ -4,7 +4,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              FRONTEND (Next.js)                               │
+│                              FRONTEND (Next.js)                              │
 │  ┌─────────────────┐    ┌─────────────────────┐    ┌──────────────────┐      │
 │  │   ChatWidget    │───▶│   TechnicalChat     │───▶│   localStorage   │      │
 │  │  (Floating UI)  │    │  (Messages, Input)  │    │ (Session, Msgs)  │      │
@@ -13,12 +13,12 @@
                                      │ POST /api/rag/chat
                                      ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                             BACKEND (NestJS)                                  │
+│                             BACKEND (NestJS)                                 │
 │  ┌─────────────────┐    ┌─────────────────────┐    ┌──────────────────┐      │
 │  │ ThrottlerGuard  │───▶│ PromptInjection     │───▶│  RAGController   │      │
 │  │ (Rate Limiting) │    │     Guard           │    │                  │      │
 │  └─────────────────┘    └─────────────────────┘    └────────┬─────────┘      │
-│                                                              │                │
+│                                                             │                │
 │  ┌─────────────────┐    ┌─────────────────────┐             │                │
 │  │ SessionService  │◀───│   CacheService      │◀────────────┘                │
 │  │    (Redis)      │    │     (Redis)         │                              │
@@ -27,21 +27,21 @@
             │                         │ HTTP (if cache miss)
             ▼                         ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                            AI ENGINE (FastAPI)                                │
+│                            AI ENGINE (FastAPI)                               │  
 │  ┌─────────────────┐    ┌─────────────────────┐    ┌──────────────────┐      │
 │  │  /api/chat      │───▶│    RAGEngine        │───▶│  DeepSeek LLM    │      │
 │  │   (Routes)      │    │   (Singleton)       │    │  (Chat Model)    │      │
 │  └─────────────────┘    └──────────┬──────────┘    └──────────────────┘      │
 │                                    │                                          │
 │                         ┌──────────▼──────────┐                              │
-│                         │  OpenAI Embeddings  │                              │
-│                         │ (text-embedding-3)  │                              │
+│                         │ Voyage AI Embeddings│                              │
+│                         │  (voyage-3.5-lite)  │                              │
 │                         └──────────┬──────────┘                              │
 └────────────────────────────────────┼─────────────────────────────────────────┘
                                      │
                                      ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              STORAGE LAYER                                    │
+│                              STORAGE LAYER                                   │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────────┐      │
 │  │         Redis               │    │       Qdrant Cloud              │      │
 │  │  • Session data (30min)     │    │  • Vector embeddings            │      │
@@ -100,7 +100,7 @@
 **RAGEngine Features:**
 - Singleton pattern for performance
 - FAQ pre-filter (7 common questions)
-- Semantic cache (cosine similarity ≥ 0.92)
+- Semantic cache (Redis-backed, cosine similarity ≥ 0.92)
 - LLM fallback chain (DeepSeek → OpenAI)
 - Programmatic fallback (confidence < 20%)
 - Streaming responses (SSE)
@@ -152,6 +152,8 @@ CHATBOT_CACHE_ENABLED=true
 # AI Engine
 DEEPSEEK_API_KEY=xxx
 OPENAI_API_KEY=xxx
+VOYAGEAI_API_KEY=xxx
+EMBEDDING_PROVIDER=voyageai
 QDRANT_URL=xxx
 QDRANT_API_KEY=xxx
 ```
@@ -182,7 +184,7 @@ Question → FAQ Filter → Semantic Cache → Model Router → RAG Query → LL
 | Feature | Impact | Implementation |
 |---------|--------|----------------|
 | FAQ Pre-filter | -50% LLM calls | 7 common questions, Vietnamese normalization |
-| Semantic Cache | +30% cache hits | Cosine similarity ≥ 0.92, 1000 entries max |
+| Semantic Cache | +30% cache hits | Redis persistence, Cosine similarity ≥ 0.92 |
 | Smart Model Routing | -40% LLM costs | Simple/Medium/Complex classification |
 | LLM Fallback | 99.9% uptime | DeepSeek → OpenAI gpt-4o-mini |
 | Streaming (SSE) | ~500ms perceived | `/chat/stream` endpoint |
