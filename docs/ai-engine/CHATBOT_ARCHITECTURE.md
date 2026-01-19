@@ -194,3 +194,26 @@ At 10,000 queries/day:
 - **Before:** ~$400/month
 - **After:** ~$140/month
 - **Savings:** ~65%
+
+## Future Improvements
+
+### 1. Expand FAQ Database (Deferred)
+Analyze chat logs after 2-4 weeks of production usage to identify common questions.
+- **Goal:** Increase FAQ coverage from 7 to ~50 entries.
+- **Process:**
+  1. Export logs from `apps/ai-engine/logs`
+  2. Identify top 20 recurring questions
+  3. Add to `faq_filter.py`
+  4. Measure hit rate improvement
+
+### 2. Persist Semantic Cache
+Use Redis for semantic cache storage instead of in-memory.
+- **Benefit:** Persistence across restarts, shared cache across instances.
+- **Implementation:** Update `semantic_cache.py` to use `redis_client`.
+
+### 3. UX Optimizations (Recommended)
+Enhance perceived performance and engagement:
+- **Streaming Responses:** Implement SSE to show text character-by-character, reducing perceived latency.
+- **Reference Cards:** Convert citation text into clickable UI cards (PDF preview/download).
+- **Smart Suggestions:** Generate 3 follow-up questions after each response to guide the user (e.g., "View Catalogue?", "Technical Specs?").
+

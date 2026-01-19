@@ -105,7 +105,7 @@ class SmartModelRouter:
                 complexity=QueryComplexity.COMPLEX,
                 model=self.primary_model,
                 reason=f"Complex query ({complex_count} technical terms, {word_count} words)",
-                max_tokens=1024,
+                max_tokens=2048,
             )
         
         # 2. Check for simple patterns
@@ -115,7 +115,7 @@ class SmartModelRouter:
                     complexity=QueryComplexity.SIMPLE,
                     model=self.lite_model,
                     reason="Simple pattern match",
-                    max_tokens=256,
+                    max_tokens=512,
                 )
         
         # 3. Short questions without complex terms = simple
@@ -124,7 +124,7 @@ class SmartModelRouter:
                 complexity=QueryComplexity.SIMPLE,
                 model=self.lite_model,
                 reason=f"Short question ({word_count} words)",
-                max_tokens=256,
+                max_tokens=512,
             )
         
         # 4. Default to medium
@@ -132,7 +132,7 @@ class SmartModelRouter:
             complexity=QueryComplexity.MEDIUM,
             model=self.primary_model,
             reason="Standard query",
-            max_tokens=512,
+            max_tokens=1024,
         )
     
     def get_stats(self) -> dict:
