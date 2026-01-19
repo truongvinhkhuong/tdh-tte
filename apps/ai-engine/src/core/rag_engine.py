@@ -183,19 +183,79 @@ class RAGEngine:
             cached_response["from_cache"] = True
             return cached_response
         
-        # Build context-aware prompt
-        prompt = self._build_prompt(question, language, conversation_history)
+        # PHASE 3 OPTIMIZATION: Smart Model Routing
+        # Adjust max_tokens based on query complexity to reduce costs
+        from .model_router import get_model_router
+        
+        model_router = get_model_router()
+        routing = model_router.route(question)
+        
+        logger.info(
+            f"Query routed: complexity={routing.complexity.value}, "
+            f"max_tokens={routing.max_tokens}, reason={routing.reason}"
+        )
+        
+        # Configure LLM based on routing (Thread-safe approach)
+        custom_llm = None
+        if routing.max_tokens != self.settings.llm_max_tokens:
+            custom_llm = OpenAILike(
+                model=self.settings.llm_model,
+                api_base="https://api.deepseek.com/v1",
+                api_key=self.settings.deepseek_api_key,
+                temperature=self.settings.llm_temperature,
+                max_tokens=routing.max_tokens,
+                is_chat_model=True,
+                context_window=32000,
+            )
 
-        # Execute query with LLM fallback chain
         try:
-            query_engine = self._get_query_engine()
-            response = await query_engine.aquery(prompt)
+            # 1. RETRIEVAL STEP
+            logger.info(f"Retrieving for question: '{question}'")
+            
+            query_engine_base = self._get_query_engine()
+            retriever = query_engine_base.retriever
+            
+            # Retrieve nodes
+            source_nodes = await retriever.aretrieve(question)
+            
+            logger.info(f"Retrieved {len(source_nodes)} nodes")
+            if source_nodes:
+                logger.info(f"Top score: {source_nodes[0].score}")
+            
+            # extract nodes for context building
+            context_str = "\n\n".join([n.node.text for n in source_nodes]) if source_nodes else ""
+            
+            # 2. GENERATION STEP
+            # Build context-aware prompt with retrieved information
+            prompt = self._build_prompt_with_context(question, context_str, language, conversation_history)
+            
+            # Use custom LLM if routed, else default
+            llm = custom_llm if custom_llm else LlamaSettings.llm
+            
+            # Generate response
+            response_text = await llm.acomplete(prompt)
+            
+            # Mock response object to maintain compatibility with existing logic
+            class RAGResponse:
+                def __init__(self, text, nodes):
+                    self.text = str(text)
+                    self.source_nodes = nodes
+                def __str__(self):
+                    return self.text
+            
+            response = RAGResponse(response_text, source_nodes)
+
         except Exception as primary_error:
-            logger.warning(f"Primary LLM (DeepSeek) failed: {primary_error}")
+            logger.warning(f"Primary LLM/Retrieval failed: {primary_error}")
+            import traceback
+            logger.error(traceback.format_exc())
             
             # Try OpenAI fallback
             try:
-                response = await self._query_with_fallback_llm(prompt)
+                # For fallback, we just do a direct query without RAG if RAG failed,
+                # or we could try RAG again with fallback LLM via similar manual steps.
+                # Here we stick to the simple completion fallback for robustness.
+                response = await self._query_with_fallback_llm(self._build_prompt(question, language, conversation_history))
                 logger.info("Fallback LLM (OpenAI) succeeded")
             except Exception as fallback_error:
                 logger.error(f"Fallback LLM also failed: {fallback_error}")
@@ -318,6 +378,54 @@ RULES:
                 context += f"{role}: {msg.get('content', '')[:100]}\n"
 
         return f"{system_prompt}{context}\n\nCâu hỏi: {question}"
+
+    def _build_prompt_with_context(
+        self,
+        question: str,
+        context_str: str,
+        language: str,
+        history: Optional[list[dict]] = None,
+    ) -> str:
+        """Build system prompt including retrieved context."""
+        prompts = {
+            "vi": """Bạn là Kỹ sư Tư vấn Kỹ thuật của TTE (Toàn Thắng Engineering).
+
+QUY TẮC:
+1. CHỈ trả lời dựa trên THÔNG TIN KỸ THUẬT được cung cấp bên dưới.
+2. Trả lời chi tiết, chuyên nghiệp như một kỹ sư tư vấn.
+3. KHÔNG được nhắc đến tên file, số trang hay nguồn tài liệu trong câu trả lời.
+4. Dùng Markdown table cho thông số kỹ thuật.
+5. Giữ nguyên đơn vị kỹ thuật (PSI, bar, mm).
+6. Nếu context không có đủ thông tin, hãy trả lời ngắn gọn: "Tài liệu hiện tại chưa có thông tin này."
+
+THÔNG TIN KỸ THUẬT (CONTEXT):
+{context_str}""",
+
+            "en": """You are a Technical Engineer Consultant for TTE (Toan Thang Engineering).
+
+RULES:
+1. ONLY answer based on the TECHNICAL CONTEXT provided below.
+2. Answer in detail, professionally as a technical consultant.
+3. Do NOT mention filenames, page numbers, or sources in your response.
+4. Use Markdown table for specs.
+5. Keep original units (PSI, bar, mm).
+6. If context doesn't have enough info, say: "Current documentation does not contain this information."
+
+TECHNICAL CONTEXT:
+{context_str}""",
+        }
+
+        system_prompt = prompts.get(language, prompts["vi"]).format(context_str=context_str)
+
+        # Add conversation history
+        history_str = ""
+        if history:
+            history_str = "\n\nLịch sử chat:\n"
+            for msg in history[-3:]:
+                role = "U" if msg.get("role") == "user" else "A"
+                history_str += f"{role}: {msg.get('content', '')[:100]}\n"
+
+        return f"{system_prompt}{history_str}\n\nCâu hỏi: {question}"
 
     def _extract_citations(self, source_nodes: list[NodeWithScore]) -> list[dict]:
         """Extract citation information from source nodes."""

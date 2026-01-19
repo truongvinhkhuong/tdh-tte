@@ -23,6 +23,18 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     logger.info("=" * 50)
     logger.info("TTE AI Engine starting...")
+    
+    # Initialize Redis
+    from .core.redis_client import get_redis_client
+    redis = get_redis_client(settings)
+    await redis.connect()
+    
+    # Initialize Semantic Cache with persistence
+    from .core.semantic_cache import get_semantic_cache
+    semantic_cache = get_semantic_cache()
+    if redis.is_connected():
+        await semantic_cache.load_from_redis()
+    
     logger.info(f"Debug mode: {settings.debug}")
     logger.info(f"LLM Model: {settings.llm_model}")
     logger.info(f"Embedding Model: {settings.embedding_model}")
@@ -34,6 +46,7 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     logger.info("TTE AI Engine shutting down...")
+    await redis.close()
 
 
 # Create FastAPI application
