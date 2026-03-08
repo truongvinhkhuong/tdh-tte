@@ -17,6 +17,7 @@ help:
 	@echo "  make dev-web      - Start web frontend only (port 4000)"
 	@echo "  make dev-cms      - Start CMS only (port 4001)"
 	@echo "  make dev-backend  - Start backend only (port 4002)"
+	@echo "  make dev-ai       - Start AI engine only (port 4003)"
 	@echo "  make dev-logs     - Start all with separate log files"
 	@echo ""
 	@echo "Tail Logs (after dev-logs):"
@@ -83,6 +84,9 @@ dev-cms:
 dev-backend:
 	pnpm dev:backend
 
+dev-ai:
+	pnpm dev:ai
+
 # Dev with separate log files (easier to tail)
 LOGS_DIR := .logs
 dev-logs:
@@ -92,6 +96,7 @@ dev-logs:
 	@(pnpm --filter @tte/web dev 2>&1 | tee $(LOGS_DIR)/web.log) & \
 	 (pnpm --filter @tte/cms dev 2>&1 | tee $(LOGS_DIR)/cms.log) & \
 	 (pnpm --filter @tte/backend dev 2>&1 | tee $(LOGS_DIR)/backend.log) & \
+	 (pnpm --filter @tte/ai-engine dev 2>&1 | tee $(LOGS_DIR)/ai-engine.log) & \
 	 wait
 
 # Tail individual log files
@@ -214,6 +219,7 @@ d: dev
 w: dev-web
 c: dev-cms
 b: dev-backend
+a: dev-ai
 l: logs
 k: kill-ports
 

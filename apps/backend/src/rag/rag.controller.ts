@@ -12,6 +12,7 @@ import {
     Ip,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { IsString, IsOptional, IsIn, IsBoolean, MaxLength, MinLength } from 'class-validator';
 import { RAGService } from './rag.service';
 import { ChatbotSessionService, ChatMessage } from './chatbot-session.service';
 import { ChatbotCacheService } from './chatbot-cache.service';
@@ -23,13 +24,28 @@ import { PromptInjectionGuard } from '../common/guards/prompt-injection.guard';
 // ===========================================
 
 class ChatDto {
+    @IsString()
+    @MinLength(1)
+    @MaxLength(500)
     question: string;
+
+    @IsOptional()
+    @IsString()
+    @IsIn(['vi', 'en'])
     language?: 'vi' | 'en';
+
+    @IsOptional()
+    @IsString()
     conversationId?: string;
+
+    @IsOptional()
+    @IsString()
     sessionId?: string; // Client-generated UUID for session tracking
 }
 
 class SyncDto {
+    @IsOptional()
+    @IsBoolean()
     forceFullSync?: boolean;
 }
 

@@ -14,6 +14,7 @@
     "dev:web": "turbo dev --filter=@tte/web",
     "dev:cms": "turbo dev --filter=@tte/cms",
     "dev:backend": "turbo dev --filter=@tte/backend",
+    "dev:ai": "turbo dev --filter=@tte/ai-engine",
     "build:web": "turbo build --filter=@tte/web",
     "build:cms": "turbo build --filter=@tte/cms",
     "build:backend": "turbo build --filter=@tte/backend",
