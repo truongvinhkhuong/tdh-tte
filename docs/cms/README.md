@@ -10,10 +10,11 @@
 
 | File | Nội dung |
 |------|----------|
-| [CURRENT_STATE.md](./CURRENT_STATE.md) | Hiện trạng chính xác — ER diagrams, field tables, globals, frontend data layer |
-| [DATA_MODEL.md](./DATA_MODEL.md) | Trực quan hoá chi tiết — class diagrams, fields, relationships, embedded structures |
-| [ISSUES_AND_GAPS.md](./ISSUES_AND_GAPS.md) | 16 issues phát hiện — phân loại CRITICAL / HIGH / MEDIUM / LOW |
-| [STANDARDIZATION_PROPOSAL.md](./STANDARDIZATION_PROPOSAL.md) | Lộ trình chuẩn hoá 5 phase — từ zero-risk đến full CMS integration |
+| [current-state.md](./current-state.md) | Hiện trạng chính xác — ER diagrams, field tables, globals, frontend data layer |
+| [data-model.md](./data-model.md) | Trực quan hoá chi tiết — class diagrams, fields, relationships, embedded structures |
+| [issues-and-gaps.md](./issues-and-gaps.md) | 16 issues phát hiện — phân loại CRITICAL / HIGH / MEDIUM / LOW |
+| [standardization-proposal.md](./standardization-proposal.md) | Lộ trình chuẩn hoá 5 phase — từ zero-risk đến full CMS integration |
+| [product-data-entry-guide.md](./product-data-entry-guide.md) | Hướng dẫn nhập liệu sản phẩm — flow từng bước, ví dụ data mẫu, checklist |
 
 ---
 

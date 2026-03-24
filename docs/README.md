@@ -9,43 +9,44 @@ Tài liệu kỹ thuật cho hệ thống TTE (Toan Thang Engineering) monorepo 
 ## Table of Contents
 
 ### Architecture
-- [System Architecture](./architecture/SYSTEM_ARCHITECTURE.md) — Kiến trúc hệ thống, components, communication patterns
-- [Monorepo Structure](./architecture/MONOREPO_STRUCTURE.md) — Cấu trúc thư mục, workspace commands
-- [Data Flow](./architecture/DATA_FLOW.md) — Luồng dữ liệu giữa các services
+- [System Architecture](./architecture/system-architecture.md) — Kiến trúc hệ thống, components, communication patterns
+- [Monorepo Structure](./architecture/monorepo-structure.md) — Cấu trúc thư mục, workspace commands
+- [Data Flow](./architecture/data-flow.md) — Luồng dữ liệu giữa các services
 
 ### CMS (PayloadCMS)
 - [CMS Documentation Index](./cms/README.md) — Tổng quan và quick reference
-- [Current State](./cms/CURRENT_STATE.md) — Hiện trạng chính xác — ER diagrams, field tables
-- [Data Model](./cms/DATA_MODEL.md) — Class diagrams, fields, relationships chi tiết
-- [Issues & Gaps](./cms/ISSUES_AND_GAPS.md) — 16 issues phát hiện, phân loại severity
-- [Standardization Proposal](./cms/STANDARDIZATION_PROPOSAL.md) — Lộ trình chuẩn hoá 5 phase
+- [Current State](./cms/current-state.md) — Hiện trạng chính xác — ER diagrams, field tables
+- [Data Model](./cms/data-model.md) — Class diagrams, fields, relationships chi tiết
+- [Issues & Gaps](./cms/issues-and-gaps.md) — 16 issues phát hiện, phân loại severity
+- [Standardization Proposal](./cms/standardization-proposal.md) — Lộ trình chuẩn hoá 5 phase
+- [Product Data Entry Guide](./cms/product-data-entry-guide.md) — Hướng dẫn nhập liệu sản phẩm
 
 ### API
-- [CMS API Reference](./api/CMS_API.md) — Payload CMS REST API endpoints
-- [Backend API Reference](./api/BACKEND_API.md) — NestJS Backend API (AI, RAG, health)
+- [CMS API Reference](./api/cms-api.md) — Payload CMS REST API endpoints
+- [Backend API Reference](./api/backend-api.md) — NestJS Backend API (AI, RAG, health)
 
 ### AI Engine
 - [AI Engine Overview](./ai-engine/README.md) — FastAPI RAG pipeline
-- [Architecture](./ai-engine/ARCHITECTURE.md) — LlamaIndex, Qdrant, LlamaParse
-- [Chatbot Architecture](./ai-engine/CHATBOT_ARCHITECTURE.md) — Chat system design
-- [Chatbot Security](./ai-engine/CHATBOT_SECURITY.md) — Rate limiting, prompt injection
-- [API Reference](./ai-engine/API_REFERENCE.md) — FastAPI endpoints
-- [Deployment](./ai-engine/DEPLOYMENT.md) — AI Engine deployment guide
-- [Operations](./ai-engine/OPERATIONS.md) — Monitoring, maintenance
+- [Architecture](./ai-engine/architecture.md) — LlamaIndex, Qdrant, LlamaParse
+- [Chatbot Architecture](./ai-engine/chatbot-architecture.md) — Chat system design
+- [Chatbot Security](./ai-engine/chatbot-security.md) — Rate limiting, prompt injection
+- [API Reference](./ai-engine/api-reference.md) — FastAPI endpoints
+- [Deployment](./ai-engine/deployment.md) — AI Engine deployment guide
+- [Operations](./ai-engine/operations.md) — Monitoring, maintenance
 
 ### SEO
-- [SEO Guide](./seo/SEO_GUIDE.md) — Hướng dẫn SEO cho Next.js
-- [SEO Checklist](./seo/SEO_CHECKLIST.md) — Checklist kiểm tra SEO
-- [Content Guidelines](./seo/CONTENT_GUIDELINES.md) — Quy chuẩn nội dung
+- [SEO Guide](./seo/seo-guide.md) — Hướng dẫn SEO cho Next.js
+- [SEO Checklist](./seo/seo-checklist.md) — Checklist kiểm tra SEO
+- [Content Guidelines](./seo/content-guidelines.md) — Quy chuẩn nội dung
 
 ### Development
-- [Getting Started](./development/GETTING_STARTED.md) — Cài đặt và chạy dự án
+- [Getting Started](./development/getting-started.md) — Cài đặt và chạy dự án
 
 ### Deployment
-- [Production Deployment](./deployment/PRODUCTION.md) — Docker + Nginx production setup
+- [Production Deployment](./deployment/production.md) — Docker + Nginx production setup
 
 ### Database
-- [Schema](./database/SCHEMA.md) — *(deprecated — xem [CMS Current State](./cms/CURRENT_STATE.md))*
+- [Schema](./database/schema.md) — *(deprecated — xem [CMS Current State](./cms/current-state.md))*
 
 ---
 

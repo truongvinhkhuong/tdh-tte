@@ -189,4 +189,4 @@ gantt
     ISS-004 SubBrand aggregation            :5, 6
 ```
 
-> Xem chi tiết lộ trình tại [STANDARDIZATION_PROPOSAL.md](./STANDARDIZATION_PROPOSAL.md)
+> Xem chi tiết lộ trình tại [standardization-proposal.md](./standardization-proposal.md)

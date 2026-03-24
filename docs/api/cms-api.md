@@ -5,7 +5,7 @@
 Payload CMS cung cấp REST API cho tất cả collections và globals. API trả về JSON responses.
 
 > **Source:** `apps/cms/src/payload.config.ts`
-> **Schema chi tiết:** xem [CMS Current State](../cms/CURRENT_STATE.md) và [Data Model](../cms/DATA_MODEL.md)
+> **Schema chi tiết:** xem [CMS Current State](../cms/current-state.md) và [Data Model](../cms/data-model.md)
 
 ---
 

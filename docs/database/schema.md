@@ -1,8 +1,8 @@
 # Database Schema
 
 > **⚠️ DEPRECATED:** Tài liệu này đã lỗi thời và có nhiều điểm sai so với code thực tế.
-> Xem **[/docs/cms/CURRENT_STATE.md](../cms/CURRENT_STATE.md)** để có thông tin chính xác.
-> Chi tiết các điểm sai: [/docs/cms/ISSUES_AND_GAPS.md — ISS-014](../cms/ISSUES_AND_GAPS.md#iss-014-schemamd-outdated-15-inaccuracies)
+> Xem **[/docs/cms/current-state.md](../cms/current-state.md)** để có thông tin chính xác.
+> Chi tiết các điểm sai: [/docs/cms/issues-and-gaps.md — ISS-014](../cms/issues-and-gaps.md#iss-014-schemamd-outdated-15-inaccuracies)
 
 ## Overview
 

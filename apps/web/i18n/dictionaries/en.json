@@ -75,6 +75,28 @@
         "viewDetails": "Details",
         "contact": "Contact",
         "requestQuote": "Request Quote",
+        "search": "Search products...",
+        "showing": "Showing",
+        "of": "/",
+        "product": "products",
+        "resultsFor": "results for",
+        "allCategories": "All categories",
+        "allIndustries": "All industries",
+        "noResults": "No products found matching your criteria",
+        "clearFilters": "Clear Filters",
+        "filters": "Filters",
+        "sort": {
+            "label": "Sort by",
+            "default": "Default",
+            "nameAZ": "Name A → Z",
+            "nameZA": "Name Z → A",
+            "newest": "Newest",
+            "brand": "By brand"
+        },
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next"
+        },
         "filter": {
             "brand": "Brand",
             "category": "Category",
@@ -87,6 +109,10 @@
             "documents": "Documents"
         },
         "relatedProjects": "Projects using this product"
+    },
+    "breadcrumb": {
+        "home": "Home",
+        "products": "Products"
     },
     "projects": {
         "title": "Projects",

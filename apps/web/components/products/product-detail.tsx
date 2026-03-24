@@ -3,10 +3,18 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Download, FileText, Send } from "lucide-react"
+import { Download, FileText, Send } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 import type { Dictionary } from "@/i18n/get-dictionary"
 import type { Product } from "@tte/shared-types"
+import {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 interface ProductDetailProps {
     lang: Locale
@@ -29,15 +37,27 @@ export function ProductDetail({ lang, dict, product }: ProductDetailProps) {
         <section className="py-12 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Breadcrumb */}
-                <div className="mb-8">
-                    <Link
-                        href={`/${lang}/products`}
-                        className="inline-flex items-center gap-2 text-[#364fa1] hover:text-[#2d4388] font-svn-avo-bold"
-                    >
-                        <ArrowLeft size={20} />
-                        {lang === 'vi' ? 'Quay lại sản phẩm' : 'Back to Products'}
-                    </Link>
-                </div>
+                <Breadcrumb className="mb-6">
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`/${lang}`} className="font-svn-avo-bold text-sm text-gray-500 hover:text-[#364fa1]">
+                                {dict.breadcrumb?.home || (lang === 'vi' ? 'Trang chủ' : 'Home')}
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`/${lang}/products`} className="font-svn-avo-bold text-sm text-gray-500 hover:text-[#364fa1]">
+                                {dict.breadcrumb?.products || (lang === 'vi' ? 'Sản phẩm' : 'Products')}
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage className="font-svn-avo-bold text-sm text-gray-900 line-clamp-1 max-w-[200px] sm:max-w-none">
+                                {product.name}
+                            </BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
 
                 <div className="grid lg:grid-cols-2 gap-12 mb-16">
                     {/* Image Gallery */}

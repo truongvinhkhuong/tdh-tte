@@ -75,6 +75,28 @@
         "viewDetails": "Chi tiết",
         "contact": "Liên hệ",
         "requestQuote": "Yêu cầu báo giá",
+        "search": "Tìm kiếm sản phẩm...",
+        "showing": "Hiển thị",
+        "of": "/",
+        "product": "sản phẩm",
+        "resultsFor": "kết quả cho",
+        "allCategories": "Tất cả danh mục",
+        "allIndustries": "Tất cả ngành",
+        "noResults": "Không tìm thấy sản phẩm phù hợp",
+        "clearFilters": "Xóa bộ lọc",
+        "filters": "Bộ lọc",
+        "sort": {
+            "label": "Sắp xếp",
+            "default": "Mặc định",
+            "nameAZ": "Tên A → Z",
+            "nameZA": "Tên Z → A",
+            "newest": "Mới nhất",
+            "brand": "Theo thương hiệu"
+        },
+        "pagination": {
+            "previous": "Trước",
+            "next": "Sau"
+        },
         "filter": {
             "brand": "Thương hiệu",
             "category": "Danh mục",
@@ -87,6 +109,10 @@
             "documents": "Tài liệu"
         },
         "relatedProjects": "Dự án sử dụng sản phẩm này"
+    },
+    "breadcrumb": {
+        "home": "Trang chủ",
+        "products": "Sản phẩm"
     },
     "projects": {
         "title": "Dự án",

@@ -6,10 +6,10 @@ Technical documentation for the TTE AI Engine RAG Chatbot.
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](./ARCHITECTURE.md) | System architecture, components, data flow |
-| [API Reference](./API_REFERENCE.md) | API endpoints, request/response examples |
-| [Deployment](./DEPLOYMENT.md) | Setup guide, Docker, external services |
-| [Operations](./OPERATIONS.md) | Day-to-day operations, monitoring |
+| [Architecture](./architecture.md) | System architecture, components, data flow |
+| [API Reference](./api-reference.md) | API endpoints, request/response examples |
+| [Deployment](./deployment.md) | Setup guide, Docker, external services |
+| [Operations](./operations.md) | Day-to-day operations, monitoring |
 
 ## Overview
 
@@ -31,7 +31,7 @@ FastAPI + LlamaIndex + Qdrant Cloud + DeepSeek + LlamaParse
 
 ## Getting Started
 
-1. [Clone and configure environment](./DEPLOYMENT.md#2-environment-configuration)
-2. [Setup external services](./DEPLOYMENT.md#1-thiết-lập-external-services)
-3. [Deploy with Docker](./DEPLOYMENT.md#3-deployment-options)
-4. [Test the API](./API_REFERENCE.md#chat)
+1. [Clone and configure environment](./deployment.md#2-environment-configuration)
+2. [Setup external services](./deployment.md#1-thiết-lập-external-services)
+3. [Deploy with Docker](./deployment.md#3-deployment-options)
+4. [Test the API](./api-reference.md#chat)

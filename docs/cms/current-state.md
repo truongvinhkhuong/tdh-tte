@@ -503,4 +503,4 @@ Frontend Request → lib/data.ts (static arrays) → Component render
 | Brand description | `string` | `richText` (Lexical JSON) |
 | IDs | `string` ("1", "2") | `number` (auto-increment) |
 
-> Chi tiết các inconsistency xem [ISSUES_AND_GAPS.md](./ISSUES_AND_GAPS.md)
+> Chi tiết các inconsistency xem [issues-and-gaps.md](./issues-and-gaps.md)
