@@ -115,6 +115,7 @@ export const Products: CollectionConfig = {
                             name: 'brand',
                             type: 'relationship',
                             relationTo: 'brands',
+                            required: true,
                             hasMany: false,
                         },
                         {
@@ -122,6 +123,9 @@ export const Products: CollectionConfig = {
                             type: 'relationship',
                             relationTo: 'sub-brands',
                             hasMany: false,
+                            filterOptions: ({ data }) => ({
+                                parentBrand: { equals: data?.brand },
+                            }),
                             admin: {
                                 description: 'Chọn danh mục con (nếu có). Lưu ý: Phải chọn Brand trước.',
                                 condition: (data) => Boolean(data?.brand),
@@ -131,6 +135,7 @@ export const Products: CollectionConfig = {
                             name: 'category',
                             type: 'relationship',
                             relationTo: 'product-categories',
+                            required: true,
                             hasMany: false,
                         },
                         {
@@ -147,6 +152,33 @@ export const Products: CollectionConfig = {
                         },
                     ],
                 },
+                {
+                    label: 'SEO',
+                    fields: [
+                        {
+                            name: 'seo',
+                            type: 'group',
+                            fields: [
+                                {
+                                    name: 'metaTitle',
+                                    type: 'text',
+                                    localized: true,
+                                    admin: {
+                                        description: 'Tiêu đề hiển thị trên tab trình duyệt (max 60 ký tự)',
+                                    },
+                                },
+                                {
+                                    name: 'metaDescription',
+                                    type: 'textarea',
+                                    localized: true,
+                                    admin: {
+                                        description: 'Mô tả cho SEO (max 160 ký tự)',
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
             ],
         },
         // Sidebar
@@ -160,6 +192,24 @@ export const Products: CollectionConfig = {
             admin: {
                 position: 'sidebar',
                 description: 'URL slug (không dịch, tự động tạo từ tên)',
+            },
+        },
+        {
+            name: 'featured',
+            type: 'checkbox',
+            defaultValue: false,
+            admin: {
+                position: 'sidebar',
+                description: 'Đánh dấu sản phẩm nổi bật',
+            },
+        },
+        {
+            name: 'sortOrder',
+            type: 'number',
+            defaultValue: 0,
+            admin: {
+                position: 'sidebar',
+                description: 'Thứ tự hiển thị (số nhỏ = ưu tiên cao)',
             },
         },
     ],

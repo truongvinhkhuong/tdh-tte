@@ -317,14 +317,16 @@ For real-time updates after CMS changes:
 
 ### Server State (Primary)
 
-All content data is server-state, fetched at request time.
+> **Hiện trạng:** Frontend đang dùng **100% static data** từ `lib/data.ts`.
+> CMS adapter (`lib/payload/adapter.ts`) sẵn sàng nhưng chưa kích hoạt (`NEXT_PUBLIC_USE_CMS=false`).
+> Khi bật CMS, data sẽ là server-state fetched tại request time.
 
-| Data Type | Source | Caching |
-|-----------|--------|---------|
-| Products | CMS API | ISR 60s |
-| Projects | CMS API | ISR 60s |
-| Articles | CMS API | ISR 60s |
-| Globals | CMS API | ISR 300s |
+| Data Type | Source hiện tại | Source khi CMS bật | Caching |
+|-----------|----------------|-------------------|---------|
+| Products | Static (`lib/data.ts`) | CMS API | ISR 60s |
+| Projects | Static (`lib/data.ts`) | CMS API | ISR 60s |
+| Articles | Static (`lib/data.ts`) | CMS API | ISR 60s |
+| Globals | Static | CMS API | ISR 300s |
 
 ### Client State (Minimal)
 

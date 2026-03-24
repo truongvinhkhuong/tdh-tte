@@ -89,6 +89,7 @@ pnpm dev:web
 | Website | http://localhost:4000 |
 | CMS Admin | http://localhost:4001/admin |
 | Backend API | http://localhost:4002/api |
+| AI Engine | http://localhost:4003 |
 
 ### 7. Create Admin User
 
@@ -100,14 +101,17 @@ pnpm dev:web
 
 ## Project Commands
 
+> Dự án dùng `Makefile` cho các lệnh phổ biến. `make help` để xem danh sách đầy đủ.
+
 ### Development
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps in development mode |
-| `pnpm dev:web` | Start web frontend only |
-| `pnpm dev:cms` | Start CMS only |
-| `pnpm dev:backend` | Start backend only |
+| Command | Make shortcut | Description |
+|---------|---------------|-------------|
+| `pnpm dev` | `make dev` hoặc `make d` | Start all apps |
+| `pnpm dev:web` | `make dev-web` | Start web frontend (:4000) |
+| `pnpm dev:cms` | `make dev-cms` | Start CMS (:4001) |
+| `pnpm dev:backend` | `make dev-backend` | Start backend (:4002) |
+| `pnpm dev:ai` | `make dev-ai` | Start AI engine (:4003) |
 
 ### Building
 
@@ -120,10 +124,11 @@ pnpm dev:web
 
 ### Database
 
-| Command | Description |
-|---------|-------------|
-| `pnpm db:migrate` | Run database migrations |
-| `pnpm db:migrate:create` | Create new migration |
+| Command | Make shortcut | Description |
+|---------|---------------|-------------|
+| `pnpm db:migrate` | `make db-migrate` | Run database migrations |
+| `docker compose -f docker-compose.dev.yml up -d` | `make db-up` | Start PostgreSQL + Redis |
+| `docker compose -f docker-compose.dev.yml down` | `make db-down` | Stop database containers |
 
 ### Code Quality
 

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { formatSlug } from '../../utils/formatSlug';
 
 export const Industries: CollectionConfig = {
     slug: 'industries',
@@ -21,9 +22,12 @@ export const Industries: CollectionConfig = {
             name: 'slug',
             type: 'text',
             unique: true,
+            hooks: {
+                beforeChange: [formatSlug('name')],
+            },
             admin: {
                 position: 'sidebar',
-                description: 'URL slug (không dịch)',
+                description: 'URL slug (tự động tạo từ tên)',
             },
         },
         {

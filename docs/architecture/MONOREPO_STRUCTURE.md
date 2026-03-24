@@ -12,9 +12,10 @@ This project uses Turborepo for monorepo management with pnpm workspaces. The st
 toanthang/
 |
 +-- apps/
-|   +-- web/                    # Next.js Frontend
-|   +-- cms/                    # Payload CMS
-|   +-- backend/                # NestJS Backend
+|   +-- web/                    # Next.js 16 Frontend (:4000)
+|   +-- cms/                    # Payload CMS 3.70 (:4001)
+|   +-- backend/                # NestJS 10 Backend (:4002)
+|   +-- ai-engine/              # FastAPI AI Engine (:4003) — Python
 |
 +-- packages/
 |   +-- shared-types/           # Shared TypeScript definitions
@@ -25,10 +26,11 @@ toanthang/
 |
 +-- scripts/                    # Deployment scripts
 |
-+-- docker-compose.dev.yml      # Development containers
++-- docker-compose.dev.yml      # Development containers (PostgreSQL, Redis)
 +-- docker-compose.prod.yml     # Production containers
 +-- turbo.json                  # Turborepo configuration
 +-- pnpm-workspace.yaml         # Workspace definition
++-- Makefile                    # Development shortcuts
 +-- package.json                # Root package
 ```
 
@@ -78,6 +80,7 @@ apps/cms/
 |   |   +-- Vacancies.ts
 |   |   +-- Taxonomies/
 |   |       +-- Brands.ts
+|   |       +-- SubBrands.ts
 |   |       +-- ProductCategories.ts
 |   |       +-- Industries.ts
 |   |
@@ -129,6 +132,23 @@ apps/backend/
 +-- tsconfig.json
 ```
 
+### apps/ai-engine
+
+```
+apps/ai-engine/
+|
++-- src/
+|   +-- api/                    # FastAPI routes
+|   +-- config/                 # Settings & configuration
+|   +-- core/                   # RAG engine & LLM logic
+|   +-- ingestion/              # PDF processing pipeline
+|   +-- retrieval/              # Vector search & reranking
+|   +-- main.py                 # Application entry
+|
++-- pyproject.toml              # Python project config
++-- Dockerfile
+```
+
 ---
 
 ## Packages
@@ -151,7 +171,7 @@ packages/shared-types/
 
 | Category | Types |
 |----------|-------|
-| Taxonomies | Brand, ProductCategory, Industry |
+| Taxonomies | Brand, SubBrand, ProductCategory, Industry |
 | Content | Product, Project, Service, Article, Vacancy |
 | Globals | Homepage, AboutPage, ContactPage |
 | API | PaginatedResponse, APIResponse |

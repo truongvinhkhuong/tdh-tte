@@ -92,5 +92,31 @@ export const Projects: CollectionConfig = {
                 description: 'Dịch vụ cung cấp trong dự án',
             },
         },
+        // SEO
+        {
+            name: 'seo',
+            type: 'group',
+            admin: {
+                position: 'sidebar',
+            },
+            fields: [
+                {
+                    name: 'metaTitle',
+                    type: 'text',
+                    localized: true,
+                    admin: {
+                        description: 'Tiêu đề hiển thị trên tab trình duyệt (max 60 ký tự)',
+                    },
+                },
+                {
+                    name: 'metaDescription',
+                    type: 'textarea',
+                    localized: true,
+                    admin: {
+                        description: 'Mô tả cho SEO (max 160 ký tự)',
+                    },
+                },
+            ],
+        },
     ],
 };

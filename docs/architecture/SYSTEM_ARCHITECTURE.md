@@ -2,7 +2,7 @@
 
 ## Overview
 
-The TTE platform is built as a monorepo containing three main applications that work together to provide content management, AI-powered services, and a public-facing website.
+Nền tảng TTE được xây dựng dưới dạng monorepo chứa 4 ứng dụng chính: website công khai (Next.js), hệ thống quản lý nội dung (Payload CMS), backend AI services (NestJS), và AI engine RAG chatbot (FastAPI/Python).
 
 ---
 
@@ -27,12 +27,18 @@ The TTE platform is built as a monorepo containing three main applications that 
                     |                   |                   |
                     +-------------------+-------------------+
                                         |
-                              +---------+---------+
-                              |                   |
-                        +-----+-----+       +-----+-----+
-                        | PostgreSQL|       |   Redis   |
-                        |   :5434   |       |   :6381   |
-                        +-----------+       +-----------+
+                    +-------------------+-------------------+
+                    |                   |                   |
+              +-----+-----+       +-----+-----+       +-----+-----+
+              | PostgreSQL|       |   Redis   |       | AI Engine |
+              |   :5434   |       |   :6381   |       | (FastAPI) |
+              +-----------+       +-----------+       |   :4003   |
+                                                      +-----------+
+                                                            |
+                                                      +-----+-----+
+                                                      |  Qdrant   |
+                                                      | (Vector)  |
+                                                      +-----------+
 ```
 
 ---
@@ -111,6 +117,29 @@ The TTE platform is built as a monorepo containing three main applications that 
 
 ---
 
+### 4. AI Engine (apps/ai-engine)
+
+| Attribute | Value |
+|-----------|-------|
+| Framework | FastAPI (Python 3.11+) |
+| RAG | LlamaIndex + Qdrant |
+| PDF Parser | LlamaParse |
+| Port | 4003 |
+
+**Responsibilities:**
+- RAG chatbot pipeline
+- PDF document ingestion
+- Vector search (Qdrant Cloud)
+- Google Drive knowledge sync
+
+**Key Features:**
+- Bilingual support (EN/VI)
+- Embedding: Voyage 3.5-lite
+- Table-aware PDF parsing
+- Conversation history management
+
+---
+
 ## Data Storage
 
 ### PostgreSQL (Primary Database)
@@ -145,8 +174,19 @@ The TTE platform is built as a monorepo containing three main applications that 
 ```
 [Next.js Frontend] --HTTP/REST--> [NestJS Backend]
                                        |
-                                  /api/ai/generate
-                                  /api/ai/optimize
+                                  /api/ai/generate/article
+                                  /api/ai/optimize/seo
+                                  /api/rag/chat
+```
+
+### Backend to AI Engine
+
+```
+[NestJS Backend] --HTTP/REST--> [FastAPI AI Engine]
+                                     |
+                                /api/chat
+                                /api/ingest
+                                /api/gdrive/sync
 ```
 
 ### Backend to CMS
@@ -205,8 +245,9 @@ The TTE platform is built as a monorepo containing three main applications that 
 
 | Component | Endpoint |
 |-----------|----------|
-| Web | /health |
-| CMS | /api/health |
-| Backend | /api/health |
+| Web | http://localhost:4000 |
+| CMS | http://localhost:4001/api/health |
+| Backend | http://localhost:4002/api/health |
+| AI Engine | http://localhost:4003/health |
 | PostgreSQL | pg_isready |
 | Redis | PING |

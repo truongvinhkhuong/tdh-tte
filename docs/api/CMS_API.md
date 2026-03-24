@@ -2,7 +2,10 @@
 
 ## Overview
 
-The Payload CMS provides a REST API for all collections and globals. The API follows REST conventions and returns JSON responses.
+Payload CMS cung cấp REST API cho tất cả collections và globals. API trả về JSON responses.
+
+> **Source:** `apps/cms/src/payload.config.ts`
+> **Schema chi tiết:** xem [CMS Current State](../cms/CURRENT_STATE.md) và [Data Model](../cms/DATA_MODEL.md)
 
 ---
 
@@ -91,18 +94,21 @@ The following endpoints are publicly accessible:
 ### Where Query Examples
 
 ```
-# Exact match
-?where[status][equals]=published
-
-# Not equal
-?where[type][not_equals]=draft
+# Published products (dùng _status từ Payload versions)
+?where[_status][equals]=published
 
 # Relationship filter
 ?where[brand][equals]=<brand_id>
 
 # Multiple conditions
-?where[status][equals]=published&where[type][equals]=Technical_Solution
+?where[_status][equals]=published&where[contentType][equals]=news
+
+# Not equal
+?where[contentType][not_equals]=tech-hub
 ```
+
+> **Lưu ý:** Collections có `versions: { drafts: true }` (Products, Projects, Articles, Vacancies)
+> sử dụng field `_status` (không phải `status`) với giá trị `draft` hoặc `published`.
 
 ---
 
@@ -120,40 +126,54 @@ The following endpoints are publicly accessible:
 | PATCH | /products/:id | Update product |
 | DELETE | /products/:id | Delete product |
 
-**List Products:**
+**List Published Products:**
 
 ```
-GET /api/products?limit=10&depth=2&where[status][equals]=published
+GET /api/products?limit=10&depth=2&where[_status][equals]=published
 ```
 
-**Response:**
+**Response (depth=2):**
 
 ```json
 {
   "docs": [
     {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "name": "Gas Processing System",
-      "slug": "gas-processing-system",
+      "id": 1,
+      "name": "Hệ Thống Xử Lý Khí",
+      "slug": "he-thong-xu-ly-khi",
       "modelNumber": "GPS-5000",
-      "shortDescription": "High-performance gas processing system",
+      "shortDescription": "Hệ thống xử lý khí công nghiệp hiệu suất cao",
       "brand": {
-        "id": "...",
+        "id": 1,
         "name": "Emerson",
-        "slug": "emerson"
+        "slug": "emerson",
+        "logo": { "id": 10, "url": "/media/emerson-logo.png" }
       },
+      "subBrand": null,
       "category": {
-        "id": "...",
-        "name": "Filtration Systems",
+        "id": 5,
+        "name": "Hệ thống lọc",
         "slug": "filtration"
       },
       "industries": [
-        { "id": "...", "name": "Oil & Gas", "slug": "oil-gas" }
+        { "id": 1, "name": "Dầu khí", "slug": "oil-gas" }
       ],
       "images": [
-        { "id": "...", "url": "/media/image.jpg" }
+        { "id": 20, "url": "/media/gps-5000.jpg", "alt": "GPS-5000" }
       ],
-      "status": "published"
+      "catalogPDF": [],
+      "specifications": [
+        { "label": "Áp suất tối đa", "value": "100", "unit": "Bar" }
+      ],
+      "seo": {
+        "metaTitle": null,
+        "metaDescription": null
+      },
+      "featured": false,
+      "sortOrder": 0,
+      "_status": "published",
+      "createdAt": "2026-01-12T00:00:00.000Z",
+      "updatedAt": "2026-03-24T00:00:00.000Z"
     }
   ],
   "totalDocs": 50,
@@ -199,7 +219,7 @@ GET /api/projects?depth=2&sort=-completionYear
 **List Services:**
 
 ```
-GET /api/services?sort=order
+GET /api/services?sort=name
 ```
 
 ---
@@ -216,17 +236,19 @@ GET /api/services?sort=order
 | PATCH | /articles/:id | Update article |
 | DELETE | /articles/:id | Delete article |
 
-**List Technical Articles:**
+**List Tech Hub articles:**
 
 ```
-GET /api/articles?where[type][equals]=Technical_Solution&sort=-publishedAt
+GET /api/articles?where[contentType][equals]=tech-hub&sort=-publishedAt
 ```
 
 **List News:**
 
 ```
-GET /api/articles?where[type][in]=TTE_Event,Industry_News&sort=-publishedAt
+GET /api/articles?where[contentType][equals]=news&sort=-publishedAt
 ```
+
+> **Lưu ý:** Articles dùng field `contentType` (giá trị: `news`, `tech-hub`) không phải `type`.
 
 ---
 
@@ -242,10 +264,10 @@ GET /api/articles?where[type][in]=TTE_Event,Industry_News&sort=-publishedAt
 | PATCH | /vacancies/:id | Update vacancy |
 | DELETE | /vacancies/:id | Delete vacancy |
 
-**List Open Positions:**
+**List Published Vacancies:**
 
 ```
-GET /api/vacancies?where[status][equals]=open
+GET /api/vacancies?where[_status][equals]=published
 ```
 
 ---
@@ -257,6 +279,16 @@ GET /api/vacancies?where[status][equals]=open
 ```
 GET /api/brands
 GET /api/brands/:id
+```
+
+### Sub-Brands
+
+```
+GET /api/sub-brands
+GET /api/sub-brands/:id
+
+# Lọc sub-brands theo brand
+GET /api/sub-brands?where[parentBrand][equals]=<brand_id>
 ```
 
 ### Product Categories
@@ -286,15 +318,24 @@ GET /api/globals/homepage
 PATCH /api/globals/homepage
 ```
 
-**Response:**
+**Response (depth=2):**
 
 ```json
 {
   "heroTitle": "Welcome",
   "heroSubtitle": "Industrial Solutions",
-  "heroImage": { "id": "...", "url": "/media/hero.jpg" },
-  "featuredProducts": [...],
-  "featuredProjects": [...]
+  "heroBanner": { "id": 1, "url": "/media/hero.jpg", "alt": "Hero" },
+  "featuredProjects": [
+    { "id": 1, "name": "...", "slug": "..." }
+  ],
+  "featuredBrands": [
+    { "id": 1, "name": "Emerson", "slug": "emerson" }
+  ],
+  "seo": {
+    "metaTitle": "...",
+    "metaDescription": "...",
+    "shareImage": null
+  }
 }
 ```
 
@@ -358,7 +399,9 @@ GET /api/globals/homepage?locale=vi
 ```
 
 **Fallback Behavior:**
-If a field is not translated, the default locale (en) value is returned.
+Nếu field chưa được dịch, giá trị locale mặc định (`vi`) sẽ được trả về.
+
+> **Lưu ý:** Default locale là `vi` (không phải `en`). Xem `payload.config.ts:86`.
 
 ---
 

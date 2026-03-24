@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { formatSlug } from '../utils/formatSlug';
 
 export const Services: CollectionConfig = {
     slug: 'services',
@@ -20,10 +21,13 @@ export const Services: CollectionConfig = {
         {
             name: 'slug',
             type: 'text',
-            localized: true,
             unique: true,
+            hooks: {
+                beforeChange: [formatSlug('name')],
+            },
             admin: {
                 position: 'sidebar',
+                description: 'URL slug (tự động tạo từ tên)',
             },
         },
         {

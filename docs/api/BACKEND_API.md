@@ -2,7 +2,9 @@
 
 ## Overview
 
-The NestJS Backend provides AI-powered services for content generation and SEO optimization. It integrates with the CMS and uses a multi-provider AI routing system.
+NestJS Backend cung cấp AI-powered services cho content generation, SEO optimization, và RAG chatbot. Tích hợp CMS qua HTTP và sử dụng multi-provider AI routing.
+
+> **Source code:** `apps/backend/src/` · **Entry:** `apps/backend/src/main.ts`
 
 ---
 
@@ -17,7 +19,7 @@ The NestJS Backend provides AI-powered services for content generation and SEO o
 
 ## Authentication
 
-API requests require authentication via API key:
+API requests yêu cầu API key:
 
 ```
 Authorization: Bearer <API_KEY>
@@ -38,12 +40,23 @@ GET /api/health
 ```json
 {
   "status": "ok",
-  "timestamp": "2026-01-12T00:00:00.000Z",
-  "services": {
-    "database": "connected",
-    "redis": "connected",
-    "cms": "connected"
-  }
+  "timestamp": "2026-01-12T00:00:00.000Z"
+}
+```
+
+### AI Status
+
+```
+GET /api/ai/status
+```
+
+**Response:**
+
+```json
+{
+  "service": "ai",
+  "status": "ready",
+  "providers": ["deepseek", "openai"]
 }
 ```
 
@@ -53,10 +66,10 @@ GET /api/health
 
 ### Generate Article
 
-Generates a complete article with SEO optimization.
+> **Source:** `apps/backend/src/ai/ai.controller.ts`
 
 ```
-POST /api/ai/generate
+POST /api/ai/generate/article
 ```
 
 **Request Body:**
@@ -76,12 +89,12 @@ POST /api/ai/generate
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| topic | string | Yes | Article topic |
+| topic | string | Yes | Chủ đề bài viết |
 | type | enum | Yes | Technical_Solution, TTE_Event, Industry_News |
-| keywords | string[] | Yes | Target keywords (3-10) |
+| keywords | string[] | Yes | Từ khoá mục tiêu (3-10) |
 | language | enum | No | vi, en (default: vi) |
-| targetLength | number | No | Word count (default: 1000) |
-| tone | string | No | Writing tone (default: professional) |
+| targetLength | number | No | Số từ (default: 1000) |
+| tone | string | No | Giọng văn (default: professional) |
 
 **Response:**
 
@@ -89,7 +102,7 @@ POST /api/ai/generate
 {
   "success": true,
   "data": {
-    "title": "Huong dan Lua chon Van Cong nghiep",
+    "title": "Hướng dẫn Lựa chọn Van Công nghiệp",
     "content": "<article content in markdown>",
     "summary": "Article summary (excerpt)",
     "seo": {
@@ -111,10 +124,10 @@ POST /api/ai/generate
 
 ### Optimize SEO
 
-Analyzes content and generates SEO recommendations.
+> **Source:** `apps/backend/src/ai/ai.controller.ts`
 
 ```
-POST /api/ai/optimize
+POST /api/ai/optimize/seo
 ```
 
 **Request Body:**
@@ -146,27 +159,65 @@ POST /api/ai/optimize
 
 ---
 
+## RAG Chatbot
+
+> **Source:** `apps/backend/src/rag/rag.controller.ts`
+> **Guards:** `ChatbotThrottlerGuard`, `PromptInjectionGuard`
+
+### Chat
+
+```
+POST /api/rag/chat
+```
+
+**Request Body:**
+
+```json
+{
+  "question": "Sản phẩm van công nghiệp nào phù hợp cho ngành dầu khí?",
+  "language": "vi",
+  "conversationId": "optional-conversation-id",
+  "sessionId": "client-generated-uuid"
+}
+```
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| question | string | Yes | Câu hỏi (1-500 ký tự) |
+| language | enum | No | vi, en (default: vi) |
+| conversationId | string | No | ID cuộc hội thoại để tiếp tục context |
+| sessionId | string | No | Client-generated UUID cho session tracking |
+
+**Rate Limiting:**
+
+| Scope | Limit | Config env |
+|-------|-------|------------|
+| Per IP per minute | 5 | `CHATBOT_RATE_LIMIT_IP` |
+| Per session per hour | 20 | `CHATBOT_RATE_LIMIT_SESSION` |
+| Global per minute | 100 | `CHATBOT_RATE_LIMIT_GLOBAL` |
+
+---
+
 ## AI Provider Routing
 
-The backend uses an intelligent routing system to optimize cost and quality.
+Backend sử dụng routing system để tối ưu chi phí và chất lượng.
 
-### Routing Logic
+| Stage | Provider | Lý do |
+|-------|----------|-------|
+| Draft | DeepSeek | Chi phí thấp cho bản nháp |
+| Polish | OpenAI | Chất lượng cao cho bản cuối |
+| SEO | DeepSeek | Chi phí thấp cho phân tích |
 
-| Stage | Provider | Reasoning |
-|-------|----------|-----------|
-| Draft | DeepSeek | Cost-effective for initial generation |
-| Polish | OpenAI | High quality for final refinement |
-| SEO | DeepSeek | Cost-effective for analysis |
-
-### Provider Configuration
+**Provider Configuration:**
 
 ```
 DEEPSEEK_API_KEY=<key>
 OPENAI_API_KEY=<key>
 ```
 
-**Fallback Behavior:**
-If primary provider fails, routes to secondary provider.
+**Fallback:** Nếu provider chính fail, tự động chuyển sang provider phụ.
 
 ---
 
@@ -174,11 +225,9 @@ If primary provider fails, routes to secondary provider.
 
 ### Content Generation Queue
 
-Jobs are processed asynchronously via BullMQ.
+Jobs được xử lý bất đồng bộ qua BullMQ + Redis.
 
 **Queue Name:** content-generation
-
-**Job Data:**
 
 ```json
 {
@@ -203,15 +252,25 @@ Jobs are processed asynchronously via BullMQ.
 
 ## Scheduled Tasks
 
-### Daily SEO Audit
+| Task | Schedule | Mô tả |
+|------|----------|-------|
+| Daily SEO Audit | 2:00 AM daily | Phân tích SEO cho tất cả bài viết published |
+| Content Refresh | Sunday 3:00 AM | Cập nhật khuyến nghị nội dung |
 
-- **Schedule:** 2:00 AM daily
-- **Function:** Analyzes all published articles for SEO issues
+---
 
-### Content Refresh
+## Integration with CMS
 
-- **Schedule:** Weekly (Sunday 3:00 AM)
-- **Function:** Updates outdated content recommendations
+Backend giao tiếp với Payload CMS qua HTTP REST API.
+
+> **Source:** `apps/backend/src/payload/payload.service.ts`
+> **Base URL:** `PAYLOAD_PUBLIC_SERVER_URL` hoặc `http://localhost:4001/api`
+
+**Supported operations:**
+- Create article (`POST /api/articles`)
+- Update article (`PATCH /api/articles/:id`)
+- Get articles (`GET /api/articles`)
+- Get single article (`GET /api/articles/:id`)
 
 ---
 
@@ -236,55 +295,27 @@ Jobs are processed asynchronously via BullMQ.
 |------|-------------|
 | VALIDATION_ERROR | Invalid request parameters |
 | AI_GENERATION_FAILED | AI provider error |
-| AI_PROVIDER_UNAVAILABLE | No AI providers available |
-| RATE_LIMIT_EXCEEDED | Too many requests |
-| UNAUTHORIZED | Missing or invalid API key |
-| CMS_CONNECTION_ERROR | Cannot connect to CMS |
+| AI_PROVIDER_UNAVAILABLE | Không có AI provider khả dụng |
+| RATE_LIMIT_EXCEEDED | Vượt quá giới hạn request |
+| UNAUTHORIZED | Thiếu hoặc sai API key |
+| CMS_CONNECTION_ERROR | Không kết nối được CMS |
 
 ---
 
-## Rate Limiting
+## Module Structure
 
-| Endpoint | Limit | Window |
-|----------|-------|--------|
-| /api/ai/generate | 10 | per minute |
-| /api/ai/optimize | 20 | per minute |
-| /api/health | unlimited | - |
-
----
-
-## Integration with CMS
-
-### Publishing Generated Articles
-
-After generating an article, publish directly to CMS:
+> **Source:** `apps/backend/src/app.module.ts`
 
 ```
-POST /api/ai/generate-and-publish
-```
-
-**Request Body:**
-
-```json
-{
-  "topic": "...",
-  "type": "Technical_Solution",
-  "keywords": ["..."],
-  "publish": true,
-  "collection": "articles"
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "articleId": "550e8400-e29b-41d4-a716-446655440000",
-    "slug": "generated-slug",
-    "status": "draft",
-    "previewUrl": "https://cms.toanthang.vn/admin/collections/articles/550e8400-e29b-41d4-a716-446655440000"
-  }
-}
+AppModule
+├── ConfigModule          — Environment configuration
+├── HttpModule            — HTTP client
+├── ScheduleModule        — Cron jobs (@nestjs/schedule)
+├── BullModule            — Job queue (BullMQ + Redis)
+├── RedisModule           — Cache, rate limiting
+├── AIModule              — AI generation (DeepSeek/OpenAI)
+├── AutomationModule      — Scheduled tasks
+├── QueueModule           — Background job processors
+├── PayloadModule         — CMS integration
+└── RAGModule             — RAG chatbot
 ```
