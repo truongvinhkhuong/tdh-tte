@@ -6,14 +6,18 @@ import Link from "next/link"
 import { ArrowRight, Filter, X, ChevronDown, ChevronRight } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 import type { Dictionary } from "@/i18n/get-dictionary"
-import { products, brands, categories, industries } from "@/lib/data"
+import type { Product, Brand, ProductCategory, Industry } from "@tte/shared-types"
 
 interface ProductsListingProps {
     lang: Locale
     dict: Dictionary
+    products: Product[]
+    brands: Brand[]
+    categories: ProductCategory[]
+    industries: Industry[]
 }
 
-export function ProductsListing({ lang, dict }: ProductsListingProps) {
+export function ProductsListing({ lang, dict, products, brands, categories, industries }: ProductsListingProps) {
     const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
     const [selectedSubBrand, setSelectedSubBrand] = useState<string | null>(null)
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)

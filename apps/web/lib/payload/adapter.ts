@@ -1,10 +1,10 @@
 /**
  * Data Adapter
- * 
+ *
  * Provides a unified interface that:
- * - Tries to fetch from CMS API first
+ * - Tries to fetch from CMS API first (with transforms)
  * - Falls back to static data if CMS is unavailable
- * 
+ *
  * This allows gradual migration from static data to CMS.
  */
 
@@ -23,23 +23,52 @@ import type {
     TimelineMilestone,
     Certificate,
     Partner,
+    Locale,
 } from '@tte/shared-types';
 
 import * as cms from './client';
 import * as staticData from '../data';
+import {
+    transformProduct,
+    transformBrand,
+    transformSubBrand,
+    transformProductCategory,
+    transformIndustry,
+    transformProjectSummary,
+} from './transforms';
 
 // Environment check
 const USE_CMS = process.env.NEXT_PUBLIC_USE_CMS === 'true';
 
 // ============================================
-// BRANDS
+// BRANDS (with SubBrands aggregation)
 // ============================================
 
-export async function getBrands(): Promise<Brand[]> {
+export async function getBrands(locale?: Locale): Promise<Brand[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getBrands({ limit: 100 });
-            return res.docs;
+            // Fetch brands and sub-brands in parallel
+            const [brandsRes, subBrandsRes] = await Promise.all([
+                cms.getBrands({ limit: 100, locale }),
+                cms.getSubBrands({ limit: 200, locale }),
+            ]);
+
+            // Group sub-brands by parentBrand ID
+            const subBrandsByParent = new Map<string, any[]>();
+            for (const sb of subBrandsRes.docs) {
+                const parentId = String(
+                    typeof sb.parentBrand === 'number' || typeof sb.parentBrand === 'string'
+                        ? sb.parentBrand
+                        : sb.parentBrand?.id,
+                );
+                if (!subBrandsByParent.has(parentId)) subBrandsByParent.set(parentId, []);
+                subBrandsByParent.get(parentId)!.push(sb);
+            }
+
+            // Transform brands with their sub-brands injected
+            return brandsRes.docs.map((cmsBrand: any) =>
+                transformBrand(cmsBrand, subBrandsByParent.get(String(cmsBrand.id))),
+            );
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -47,10 +76,20 @@ export async function getBrands(): Promise<Brand[]> {
     return staticData.brands;
 }
 
-export async function getBrand(slug: string): Promise<Brand | null> {
+export async function getBrand(slug: string, locale?: Locale): Promise<Brand | null> {
     if (USE_CMS) {
         try {
-            return await cms.getBrand(slug);
+            const cmsBrand = await cms.getBrand(slug, locale);
+            if (!cmsBrand) return null;
+
+            // Fetch sub-brands for this brand
+            const subBrandsRes = await cms.getSubBrands({
+                limit: 50,
+                locale,
+                where: { parentBrand: { equals: (cmsBrand as any).id } },
+            });
+
+            return transformBrand(cmsBrand, subBrandsRes.docs);
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -62,11 +101,11 @@ export async function getBrand(slug: string): Promise<Brand | null> {
 // CATEGORIES
 // ============================================
 
-export async function getCategories(): Promise<ProductCategory[]> {
+export async function getCategories(locale?: Locale): Promise<ProductCategory[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getCategories({ limit: 100 });
-            return res.docs;
+            const res = await cms.getCategories({ limit: 100, locale });
+            return res.docs.map((doc: any) => transformProductCategory(doc));
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -78,11 +117,11 @@ export async function getCategories(): Promise<ProductCategory[]> {
 // INDUSTRIES
 // ============================================
 
-export async function getIndustries(): Promise<Industry[]> {
+export async function getIndustries(locale?: Locale): Promise<Industry[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getIndustries({ limit: 100 });
-            return res.docs;
+            const res = await cms.getIndustries({ limit: 100, locale });
+            return res.docs.map((doc: any) => transformIndustry(doc));
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -94,11 +133,11 @@ export async function getIndustries(): Promise<Industry[]> {
 // PRODUCTS
 // ============================================
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(locale?: Locale): Promise<Product[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getProducts({ limit: 100 });
-            return res.docs;
+            const res = await cms.getProducts({ limit: 100, locale });
+            return res.docs.map((doc: any) => transformProduct(doc));
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -106,10 +145,12 @@ export async function getProducts(): Promise<Product[]> {
     return staticData.products;
 }
 
-export async function getProduct(slug: string): Promise<Product | null> {
+export async function getProduct(slug: string, locale?: Locale): Promise<Product | null> {
     if (USE_CMS) {
         try {
-            return await cms.getProduct(slug);
+            const doc = await cms.getProduct(slug, locale);
+            if (!doc) return null;
+            return transformProduct(doc);
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -121,11 +162,11 @@ export async function getProduct(slug: string): Promise<Product | null> {
 // PROJECTS
 // ============================================
 
-export async function getProjects(): Promise<Project[]> {
+export async function getProjects(locale?: Locale): Promise<Project[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getProjects({ limit: 100 });
-            return res.docs;
+            const res = await cms.getProjects({ limit: 100, locale });
+            return res.docs.map((doc: any) => transformProjectSummary(doc));
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -133,10 +174,12 @@ export async function getProjects(): Promise<Project[]> {
     return staticData.projects;
 }
 
-export async function getProject(slug: string): Promise<Project | null> {
+export async function getProject(slug: string, locale?: Locale): Promise<Project | null> {
     if (USE_CMS) {
         try {
-            return await cms.getProject(slug);
+            const doc = await cms.getProject(slug, locale);
+            if (!doc) return null;
+            return transformProjectSummary(doc);
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }
@@ -148,10 +191,10 @@ export async function getProject(slug: string): Promise<Project | null> {
 // SERVICES
 // ============================================
 
-export async function getServices(): Promise<Service[]> {
+export async function getServices(locale?: Locale): Promise<Service[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getServices({ limit: 100 });
+            const res = await cms.getServices({ limit: 100, locale });
             return res.docs;
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
@@ -160,10 +203,10 @@ export async function getServices(): Promise<Service[]> {
     return staticData.services;
 }
 
-export async function getService(slug: string): Promise<Service | null> {
+export async function getService(slug: string, locale?: Locale): Promise<Service | null> {
     if (USE_CMS) {
         try {
-            return await cms.getService(slug);
+            return await cms.getService(slug, locale);
         } catch (error) {
             console.warn('CMS fetch failed, using static data:', error);
         }

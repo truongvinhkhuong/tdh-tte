@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import type { Locale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { ProductsListing } from "@/components/products/products-listing"
+import { getProducts, getBrands, getCategories, getIndustries } from "@/lib/payload"
 
 export async function generateMetadata({
     params,
@@ -26,9 +27,24 @@ export default async function ProductsPage({
     const { lang } = await params
     const dict = await getDictionary(lang)
 
+    // Fetch all product data in parallel
+    const [products, brands, categories, industries] = await Promise.all([
+        getProducts(lang),
+        getBrands(lang),
+        getCategories(lang),
+        getIndustries(lang),
+    ])
+
     return (
         <main className="pt-20">
-            <ProductsListing lang={lang} dict={dict} />
+            <ProductsListing
+                lang={lang}
+                dict={dict}
+                products={products}
+                brands={brands}
+                categories={categories}
+                industries={industries}
+            />
         </main>
     )
 }

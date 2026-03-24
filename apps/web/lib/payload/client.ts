@@ -21,7 +21,7 @@ import type {
     Locale,
 } from '@tte/shared-types';
 
-const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001';
+const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:4001';
 
 export interface QueryOptions {
     limit?: number;
@@ -226,6 +226,11 @@ export async function getVacancy(slug: string, locale?: Locale): Promise<Vacancy
     return res.docs[0] || null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getSubBrands(options?: QueryOptions): Promise<PayloadResponse<any>> {
+    return fetchPayload<PayloadResponse<any>>('/sub-brands', { depth: 1, ...options });
+}
+
 // ============================================
 // GLOBALS FETCHERS
 // ============================================
@@ -243,4 +248,4 @@ export async function getContactPage(locale?: Locale): Promise<ContactPage> {
 }
 
 // Re-export types for convenience
-export type { PayloadResponse, QueryOptions };
+export type { PayloadResponse };

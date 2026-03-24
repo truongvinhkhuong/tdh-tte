@@ -6,14 +6,15 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { Locale } from "@/i18n/config"
 import type { Dictionary } from "@/i18n/get-dictionary"
-import { products } from "@/lib/data"
+import type { Product } from "@tte/shared-types"
 
 interface ProductsSectionProps {
     lang: Locale
     dict: Dictionary
+    products: Product[]
 }
 
-export function ProductsSection({ lang, dict }: ProductsSectionProps) {
+export function ProductsSection({ lang, dict, products }: ProductsSectionProps) {
     const [isVisible, setIsVisible] = useState(false)
     const ref = useRef(null)
 
