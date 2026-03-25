@@ -8,6 +8,7 @@ from llama_index.core.schema import Document, TextNode
 from llama_parse import LlamaParse
 
 from ..config import Settings
+from .contextual_enricher import ContextualEnricher
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,11 @@ class PDFProcessor:
         self.sentence_splitter = SentenceSplitter(
             chunk_size=settings.chunk_size,
             chunk_overlap=settings.chunk_overlap,
+        )
+
+        # Contextual enrichment (Anthropic's Contextual Retrieval)
+        self._contextual_enricher = (
+            ContextualEnricher(settings) if settings.contextual_enrichment_enabled else None
         )
 
         logger.info("PDF Processor initialized with LlamaParse")
@@ -124,6 +130,15 @@ CRITICAL INSTRUCTIONS:
 
             # Parse documents into nodes
             nodes = self._parse_to_nodes(documents)
+
+            # Contextual enrichment: prepend document-level context to each chunk
+            if self._contextual_enricher and nodes:
+                full_document_text = "\n\n".join(doc.text for doc in documents)
+                nodes = await self._contextual_enricher.enrich_chunks(
+                    chunks=nodes,
+                    full_document_text=full_document_text,
+                    doc_metadata=base_metadata,
+                )
 
             logger.info(f"Extracted {len(nodes)} chunks from {file_path.name}")
             return nodes

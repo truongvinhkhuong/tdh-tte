@@ -77,12 +77,23 @@ class Settings(BaseSettings):
     embedding_dimensions: int = 1024  # voyage-3.5-lite default
 
     # Retrieval Settings
-    retrieval_top_k: int = 5  # Keep low for DeepSeek context limits
-    rerank_top_n: int = 3  # After reranking
+    retrieval_top_k: int = 15  # Wider recall — reranker filters to top_n
+    rerank_enabled: bool = True
+    rerank_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # ~80MB, local, free
+    rerank_top_n: int = 3  # Final count after reranking
+
+    # Hybrid Search (Vector + Keyword)
+    hybrid_search_enabled: bool = True
+    hybrid_vector_weight: float = 0.7  # 70% vector, 30% keyword in fusion scoring
 
     # Chunking Settings
     chunk_size: int = 1024
     chunk_overlap: int = 200
+
+    # Contextual Enrichment (Anthropic's Contextual Retrieval)
+    contextual_enrichment_enabled: bool = True
+    contextual_enrichment_max_doc_length: int = 6000  # chars for document overview sent to LLM
+    contextual_enrichment_batch_size: int = 5  # chunks processed concurrently per batch
 
     @property
     def redis_url(self) -> str:

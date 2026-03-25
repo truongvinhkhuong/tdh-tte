@@ -5,7 +5,6 @@ from typing import Any, Optional
 from llama_index.core import Settings as LlamaSettings
 from llama_index.core import VectorStoreIndex
 from llama_index.core.postprocessor import SimilarityPostprocessor
-from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.schema import NodeWithScore
 from llama_index.embeddings.openai import OpenAIEmbedding
@@ -34,6 +33,8 @@ class RAGEngine:
         self._setup_llm()
         self._setup_vector_store()
         self._query_engine: Optional[RetrieverQueryEngine] = None
+        self._reranker = None  # Lazy-loaded cross-encoder reranker
+        self._keyword_retriever = None  # Lazy-loaded keyword retriever
         logger.info("RAG Engine initialized successfully")
 
     def _setup_llm(self) -> None:
@@ -121,23 +122,71 @@ class RAGEngine:
             )
             logger.info(f"Created new collection: {self.settings.qdrant_collection}")
 
-    def _get_query_engine(self) -> RetrieverQueryEngine:
-        """Get query engine with current configuration."""
-        # Create fresh query engine each time (no caching issues)
-        retriever = VectorIndexRetriever(
+        # Ensure text payload index exists for keyword search (hybrid retrieval)
+        if self.settings.hybrid_search_enabled:
+            self._ensure_text_index()
+
+    def _ensure_text_index(self) -> None:
+        """Create text payload index for keyword search if not exists."""
+        try:
+            self.qdrant_client.create_payload_index(
+                collection_name=self.settings.qdrant_collection,
+                field_name="_node_content",
+                field_schema=models.TextIndexParams(
+                    type="text",
+                    tokenizer=models.TokenizerType.WORD,
+                    min_token_len=2,
+                    max_token_len=30,
+                ),
+            )
+            logger.info("Created text payload index for keyword search")
+        except Exception:
+            # Index already exists or collection is empty — safe to ignore
+            pass
+
+    def _get_retriever(self) -> VectorIndexRetriever:
+        """Get vector retriever with current configuration."""
+        return VectorIndexRetriever(
             index=self.index,
             similarity_top_k=self.settings.retrieval_top_k,
         )
 
-        # Lower similarity threshold to get more results
-        similarity_filter = SimilarityPostprocessor(
-            similarity_cutoff=0.3,  # Lowered from 0.5
-        )
+    def _get_reranker(self):
+        """Lazy-load cross-encoder reranker model (first call downloads ~80MB model)."""
+        if self._reranker is None and self.settings.rerank_enabled:
+            try:
+                from llama_index.postprocessor.sbert_rerank import (
+                    SentenceTransformerRerank,
+                )
 
-        return RetrieverQueryEngine(
-            retriever=retriever,
-            node_postprocessors=[similarity_filter],
-        )
+                self._reranker = SentenceTransformerRerank(
+                    model=self.settings.rerank_model,
+                    top_n=self.settings.rerank_top_n,
+                )
+                logger.info(f"Reranker loaded: {self.settings.rerank_model}")
+            except ImportError:
+                logger.warning(
+                    "sbert-rerank not installed, skipping reranking. "
+                    "Install: pip install llama-index-postprocessor-sbert-rerank"
+                )
+            except Exception as e:
+                logger.warning(f"Failed to load reranker: {e}")
+        return self._reranker
+
+    def _get_keyword_retriever(self):
+        """Lazy-load keyword retriever for hybrid search."""
+        if self._keyword_retriever is None and self.settings.hybrid_search_enabled:
+            try:
+                from ..retrieval.keyword_retriever import QdrantKeywordRetriever
+
+                self._keyword_retriever = QdrantKeywordRetriever(
+                    client=self.async_qdrant_client,
+                    collection_name=self.settings.qdrant_collection,
+                )
+                logger.info("Keyword retriever initialized for hybrid search")
+            except Exception as e:
+                logger.warning(f"Failed to init keyword retriever: {e}")
+        return self._keyword_retriever
 
     async def query(
         self,
@@ -211,19 +260,70 @@ class RAGEngine:
         try:
             # 1. RETRIEVAL STEP
             logger.info(f"Retrieving for question: '{question}'")
-            
-            query_engine_base = self._get_query_engine()
-            retriever = query_engine_base.retriever
-            
-            # Retrieve nodes
+
+            # Vector search
+            retriever = self._get_retriever()
             source_nodes = await retriever.aretrieve(question)
-            
-            logger.info(f"Retrieved {len(source_nodes)} nodes")
+            logger.info(f"Vector search returned {len(source_nodes)} nodes")
+
+            # Apply similarity cutoff to vector results BEFORE fusion
+            # (cosine scores are 0-1 scale, cutoff 0.3 is appropriate here)
+            similarity_filter = SimilarityPostprocessor(similarity_cutoff=0.3)
+            source_nodes = similarity_filter.postprocess_nodes(
+                source_nodes, query_str=question
+            )
+            logger.info(f"After similarity filter: {len(source_nodes)} nodes")
+
+            # Preserve original cosine scores for confidence calculation
+            original_scores = {n.node.node_id: n.score for n in source_nodes}
+
+            # Hybrid search: merge keyword results if enabled
+            keyword_retriever = self._get_keyword_retriever()
+            if keyword_retriever:
+                try:
+                    from ..retrieval.keyword_retriever import fuse_results
+
+                    keyword_nodes = await keyword_retriever.retrieve(
+                        question, top_k=self.settings.retrieval_top_k
+                    )
+                    logger.info(f"Keyword search returned {len(keyword_nodes)} nodes")
+                    source_nodes = fuse_results(
+                        source_nodes,
+                        keyword_nodes,
+                        vector_weight=self.settings.hybrid_vector_weight,
+                        top_k=self.settings.retrieval_top_k,
+                    )
+                    logger.info(f"Fused to {len(source_nodes)} nodes")
+                except Exception as e:
+                    logger.warning(f"Keyword search failed, using vector only: {e}")
+
+            # Reranker (if enabled) — filters to top_n best results
+            reranker = self._get_reranker()
+            if reranker and source_nodes:
+                pre_rerank_count = len(source_nodes)
+                source_nodes = reranker.postprocess_nodes(
+                    source_nodes, query_str=question
+                )
+                logger.info(
+                    f"Reranked {pre_rerank_count} nodes → {len(source_nodes)} top results"
+                )
+
+            # Restore original cosine scores for confidence calculation
+            # (reranker/fusion scores are on different scales)
+            for node in source_nodes:
+                if node.node.node_id in original_scores:
+                    node.score = original_scores[node.node.node_id]
+
+            logger.info(f"Final {len(source_nodes)} nodes after postprocessing")
             if source_nodes:
                 logger.info(f"Top score: {source_nodes[0].score}")
-            
-            # extract nodes for context building
-            context_str = "\n\n".join([n.node.text for n in source_nodes]) if source_nodes else ""
+
+            # Build context from original_text (without prepended contextual info)
+            context_parts = []
+            for n in source_nodes:
+                text = n.node.metadata.get("original_text", n.node.text)
+                context_parts.append(text)
+            context_str = "\n\n".join(context_parts) if context_parts else ""
             
             # 2. GENERATION STEP
             # Build context-aware prompt with retrieved information
@@ -440,11 +540,13 @@ TECHNICAL CONTEXT (Strictly base your answer on this):
 
             if source_key not in seen_sources:
                 seen_sources.add(source_key)
+                # Use original_text (without prepended context) for citation display
+                display_text = metadata.get("original_text", node.node.text)
                 citations.append({
                     "source": metadata.get("file_name", "Unknown"),
                     "page": metadata.get("page_number", "N/A"),
                     "doc_type": metadata.get("doc_type", "general"),
-                    "content_preview": node.node.text[:300] + "..." if len(node.node.text) > 300 else node.node.text,
+                    "content_preview": display_text[:300] + "..." if len(display_text) > 300 else display_text,
                     "relevance_score": round(node.score or 0, 3),
                 })
 

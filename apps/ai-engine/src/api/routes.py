@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from ..config import Settings, get_settings
 from ..core import RAGEngine
-from ..ingestion import GoogleDriveSync, PDFProcessor
+from ..ingestion import GoogleDriveSync, MetadataExtractor, PDFProcessor
 from .models import (
     ChatRequest,
     ChatResponse,
@@ -48,6 +48,13 @@ def get_pdf_processor(
 ) -> PDFProcessor:
     """Get PDF processor instance."""
     return PDFProcessor(settings)
+
+
+def get_metadata_extractor(
+    settings: Annotated[Settings, Depends(get_settings)],
+) -> MetadataExtractor:
+    """Get metadata extractor instance."""
+    return MetadataExtractor(settings)
 
 
 def get_gdrive_sync(
@@ -184,6 +191,7 @@ async def ingest_document(
     file: UploadFile = File(..., description="PDF file to ingest"),
     rag_engine: RAGEngine = Depends(get_rag_engine),
     processor: PDFProcessor = Depends(get_pdf_processor),
+    extractor: MetadataExtractor = Depends(get_metadata_extractor),
 ):
     """
     Ingest a PDF document into the knowledge base.
@@ -218,6 +226,9 @@ async def ingest_document(
                 status_code=400,
                 detail="No content could be extracted from the PDF",
             )
+
+        # Enrich nodes with LLM-extracted metadata (brand, product_type, etc.)
+        nodes = await extractor.enrich_nodes(nodes)
 
         # Add to vector store
         chunks_added = rag_engine.add_documents(nodes)
@@ -255,6 +266,7 @@ async def sync_google_drive(
     gdrive: GoogleDriveSync = Depends(get_gdrive_sync),
     processor: PDFProcessor = Depends(get_pdf_processor),
     rag_engine: RAGEngine = Depends(get_rag_engine),
+    extractor: MetadataExtractor = Depends(get_metadata_extractor),
 ):
     """
     Sync documents from configured Google Drive folder.
@@ -298,6 +310,8 @@ async def sync_google_drive(
                 nodes = await processor.process_bytes(file_bytes, filename)
 
                 if nodes:
+                    # Enrich with LLM-extracted metadata
+                    nodes = await extractor.enrich_nodes(nodes)
                     rag_engine.add_documents(nodes)
                     file_status.status = "completed"
                     file_status.chunks_created = len(nodes)
