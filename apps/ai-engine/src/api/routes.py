@@ -135,37 +135,19 @@ async def chat_stream(
     
     async def generate_stream():
         try:
-            # Check FAQ first
-            from ..core.faq_filter import get_faq_filter
-            faq_filter = get_faq_filter()
-            faq_match = faq_filter.check(request.question, request.language)
-            
-            if faq_match:
-                # FAQ response - send immediately
-                response = faq_filter.get_response(faq_match, request.language)
-                yield f"data: {json.dumps({'type': 'chunk', 'data': response['answer']})}\n\n"
-                yield f"data: {json.dumps({'type': 'done', 'data': {'is_faq': True, 'confidence': 100}})}\n\n"
-                return
-            
-            # For non-FAQ, query RAG engine and stream
-            result = await rag_engine.query(
+            conversation_id = request.conversation_id or str(uuid.uuid4())
+
+            async for event_type, data in rag_engine.stream_query(
                 question=request.question,
                 language=request.language,
                 conversation_history=None,
-            )
-            
-            # Stream the answer in chunks for perceived speed
-            answer = result["answer"]
-            chunk_size = 20  # Characters per chunk
-            
-            for i in range(0, len(answer), chunk_size):
-                chunk = answer[i:i + chunk_size]
-                yield f"data: {json.dumps({'type': 'chunk', 'data': chunk})}\n\n"
-                await asyncio.sleep(0.02)  # Small delay for smooth streaming
-            
-            # Send completion with metadata
-            yield f"data: {json.dumps({'type': 'done', 'data': {'confidence': result['confidence'], 'sources_count': result['sources_count']}})}\n\n"
-            
+            ):
+                if event_type == "token":
+                    yield f"data: {json.dumps({'type': 'chunk', 'data': data})}\n\n"
+                elif event_type == "done":
+                    done_data = {**data, 'conversation_id': conversation_id}
+                    yield f"data: {json.dumps({'type': 'done', 'data': done_data})}\n\n"
+
         except Exception as e:
             logger.error(f"Stream error: {e}")
             yield f"data: {json.dumps({'type': 'error', 'data': str(e)})}\n\n"

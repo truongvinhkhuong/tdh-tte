@@ -213,7 +213,13 @@ HYBRID_SEARCH_ENABLED=true
 CONTEXTUAL_ENRICHMENT_ENABLED=true
 ```
 
-### Response Speed
+### Response Speed & Streaming
+
+**True LLM streaming** đã được implement — tokens từ DeepSeek được stream trực tiếp tới frontend.
+
+- **First token latency:** ~500ms (thời gian từ gửi câu hỏi đến khi thấy chữ đầu tiên)
+- **Endpoint:** `/api/chat/stream` sử dụng `RAGEngine.stream_query()` + `astream_complete()`
+- **Frontend:** Vercel AI SDK v6 `useChat` hook nhận tokens real-time
 
 ```env
 # Giảm nếu cần response nhanh hơn

@@ -388,6 +388,153 @@ class RAGEngine:
         
         return result
     
+    async def stream_query(
+        self,
+        question: str,
+        language: str = "vi",
+        conversation_history: Optional[list[dict]] = None,
+    ):
+        """
+        Stream query — yields (event_type, data) tuples.
+
+        event_type: 'token' | 'done' | 'fallback'
+        Performs retrieval first, then streams LLM generation token by token.
+        """
+        # FAQ pre-filter
+        from .faq_filter import get_faq_filter
+
+        faq_filter = get_faq_filter()
+        faq_match = faq_filter.check(question, language)
+
+        if faq_match:
+            response = faq_filter.get_response(faq_match, language)
+            yield ("token", response["answer"])
+            yield ("done", {"confidence": 100, "sources_count": 0, "citations": [], "is_faq": True})
+            return
+
+        # Semantic cache
+        from .semantic_cache import get_semantic_cache
+
+        semantic_cache = get_semantic_cache()
+        if not semantic_cache.embed_model:
+            semantic_cache.set_embed_model(LlamaSettings.embed_model)
+
+        cached_response = semantic_cache.get(question, language)
+        if cached_response:
+            yield ("token", cached_response["answer"])
+            yield ("done", {
+                "confidence": cached_response.get("confidence", 0),
+                "sources_count": cached_response.get("sources_count", 0),
+                "citations": cached_response.get("citations", []),
+                "from_cache": True,
+            })
+            return
+
+        # Smart model routing
+        from .model_router import get_model_router
+
+        model_router = get_model_router()
+        routing = model_router.route(question)
+
+        custom_llm = None
+        if routing.max_tokens != self.settings.llm_max_tokens:
+            custom_llm = OpenAILike(
+                model=self.settings.llm_model,
+                api_base="https://api.deepseek.com/v1",
+                api_key=self.settings.deepseek_api_key,
+                temperature=self.settings.llm_temperature,
+                max_tokens=routing.max_tokens,
+                is_chat_model=True,
+                context_window=32000,
+            )
+
+        try:
+            # RETRIEVAL (same as query())
+            retriever = self._get_retriever()
+            source_nodes = await retriever.aretrieve(question)
+
+            similarity_filter = SimilarityPostprocessor(similarity_cutoff=0.3)
+            source_nodes = similarity_filter.postprocess_nodes(
+                source_nodes, query_str=question
+            )
+
+            original_scores = {n.node.node_id: n.score for n in source_nodes}
+
+            keyword_retriever = self._get_keyword_retriever()
+            if keyword_retriever:
+                try:
+                    from ..retrieval.keyword_retriever import fuse_results
+
+                    keyword_nodes = await keyword_retriever.retrieve(
+                        question, top_k=self.settings.retrieval_top_k
+                    )
+                    source_nodes = fuse_results(
+                        source_nodes, keyword_nodes,
+                        vector_weight=self.settings.hybrid_vector_weight,
+                        top_k=self.settings.retrieval_top_k,
+                    )
+                except Exception:
+                    pass
+
+            reranker = self._get_reranker()
+            if reranker and source_nodes:
+                source_nodes = reranker.postprocess_nodes(
+                    source_nodes, query_str=question
+                )
+
+            for node in source_nodes:
+                if node.node.node_id in original_scores:
+                    node.score = original_scores[node.node.node_id]
+
+            # Check confidence before streaming
+            confidence = self._calculate_confidence(source_nodes)
+            if confidence < 20.0 or len(source_nodes) == 0:
+                fallback = self._get_fallback_response(language)
+                yield ("token", fallback["answer"])
+                yield ("done", {"confidence": 0, "sources_count": 0, "citations": [], "is_fallback": True})
+                return
+
+            # Build prompt
+            context_parts = []
+            for n in source_nodes:
+                text = n.node.metadata.get("original_text", n.node.text)
+                context_parts.append(text)
+            context_str = "\n\n".join(context_parts)
+            prompt = self._build_prompt_with_context(question, context_str, language, conversation_history)
+
+            llm = custom_llm if custom_llm else LlamaSettings.llm
+
+            # STREAM LLM generation token by token
+            full_response = ""
+            stream_response = await llm.astream_complete(prompt)
+            async for token in stream_response:
+                delta = token.delta
+                if delta:
+                    full_response += delta
+                    yield ("token", delta)
+
+            # Post-processing
+            citations = self._extract_citations(source_nodes)
+            result = {
+                "answer": full_response,
+                "citations": citations,
+                "confidence": confidence,
+                "sources_count": len(source_nodes),
+            }
+            semantic_cache.set(question, language, result)
+
+            yield ("done", {
+                "confidence": confidence,
+                "sources_count": len(source_nodes),
+                "citations": citations,
+            })
+
+        except Exception as e:
+            logger.error(f"Stream query failed: {e}")
+            fallback = self._get_fallback_response(language)
+            yield ("token", fallback["answer"])
+            yield ("done", {"confidence": 0, "sources_count": 0, "citations": [], "is_fallback": True})
+
     async def _query_with_fallback_llm(self, prompt: str) -> Any:
         """Query using OpenAI as fallback LLM."""
         from llama_index.llms.openai import OpenAI as OpenAILLM

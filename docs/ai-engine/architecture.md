@@ -56,7 +56,8 @@ Core engine xử lý query và retrieval.
 
 | Chức năng | Mô tả |
 |-----------|-------|
-| `query()` | Truy vấn knowledge base, trả về answer + citations |
+| `query()` | Truy vấn knowledge base, trả về answer + citations (full response) |
+| `stream_query()` | **True LLM streaming** — yield tokens real-time via `astream_complete()` |
 | `add_documents()` | Thêm documents vào vector store |
 | `health_check()` | Kiểm tra kết nối Qdrant, LLM |
 

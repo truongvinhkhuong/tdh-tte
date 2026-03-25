@@ -99,31 +99,34 @@ Query the technical knowledge base.
 
 #### `POST /api/chat/stream`
 
-Stream chat responses using Server-Sent Events (SSE).
+Stream chat responses using Server-Sent Events (SSE) với **true LLM streaming** — tokens được gửi ngay khi LLM sinh ra, không đợi toàn bộ response.
 
 **Request:** Same as `/api/chat`
 
-**Response:** SSE stream with chunks:
+**Response:** SSE stream with tokens:
 
 ```
-data: {"type": "chunk", "data": "Van Fisher HP..."}
-
-data: {"type": "chunk", "data": " có thông số..."}
-
-data: {"type": "done", "data": {"confidence": 87.5, "sources_count": 3}}
+data: {"type": "chunk", "data": "Van"}
+data: {"type": "chunk", "data": " Fisher"}
+data: {"type": "chunk", "data": " HP"}
+data: {"type": "chunk", "data": " có"}
+data: {"type": "chunk", "data": " thông"}
+...
+data: {"type": "done", "data": {"confidence": 87.5, "sources_count": 3, "citations": [...], "conversation_id": "uuid"}}
 ```
 
 **Event Types:**
 | Type | Description |
 |------|-------------|
-| `chunk` | Partial response text |
-| `done` | Completion with metadata |
+| `chunk` | Token text từ LLM (1-5 ký tự mỗi chunk, real-time) |
+| `done` | Completion metadata: confidence, citations, sources_count, conversation_id |
 | `error` | Error message |
 
 **Features:**
-- FAQ responses sent immediately (one chunk)
-- Non-FAQ responses streamed in 20-char chunks
-- ~500ms perceived latency vs 2000ms for regular endpoint
+- **True token streaming**: Sử dụng `astream_complete()` — tokens từ DeepSeek được forward ngay khi sinh ra
+- FAQ/cached responses gửi ngay (one chunk)
+- First token xuất hiện trong ~500ms (thay vì đợi 2-3s cho toàn bộ response)
+- Done event bao gồm citations array cho frontend hiển thị nguồn trích dẫn
 
 ---
 

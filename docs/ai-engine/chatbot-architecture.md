@@ -91,7 +91,7 @@
 | Component | File | Responsibility |
 |-----------|------|----------------|
 | Routes | `apps/ai-engine/src/api/routes.py` | API endpoints (`/chat`, `/chat/stream`) |
-| RAGEngine | `apps/ai-engine/src/core/rag_engine.py` | Query processing, LLM interaction |
+| RAGEngine | `apps/ai-engine/src/core/rag_engine.py` | Query processing, LLM interaction, `stream_query()` true streaming |
 | FAQFilter | `apps/ai-engine/src/core/faq_filter.py` | FAQ pre-filter (skip LLM) |
 | SemanticCache | `apps/ai-engine/src/core/semantic_cache.py` | Embedding-based caching |
 | ModelRouter | `apps/ai-engine/src/core/model_router.py` | Query complexity routing |
@@ -108,7 +108,8 @@
 - **Cross-encoder reranking** (ms-marco-MiniLM-L-6-v2, local, free)
 - LLM fallback chain (DeepSeek → OpenAI)
 - Programmatic fallback (confidence < 20%)
-- Streaming responses (SSE)
+- **True LLM streaming** (`astream_complete()` — token-by-token, ~500ms first token)
+- **Streaming UI** via Vercel AI SDK v6 (`useChat` + `TextStreamChatTransport`)
 
 ---
 
@@ -206,7 +207,7 @@ Question → FAQ Filter → Semantic Cache → Model Router
 | Semantic Cache | +30% cache hits | Redis persistence, Cosine similarity ≥ 0.92 |
 | Smart Model Routing | -40% LLM costs | Simple/Medium/Complex classification |
 | LLM Fallback | 99.9% uptime | DeepSeek → OpenAI gpt-4o-mini |
-| Streaming (SSE) | ~500ms perceived | `/chat/stream` endpoint |
+| True LLM Streaming | ~500ms first token | `astream_complete()` token-by-token, Vercel AI SDK frontend |
 | Singleton RAGEngine | -500ms/req | Single instance across requests |
 
 ### Projected Cost Savings
