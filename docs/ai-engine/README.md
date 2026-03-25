@@ -17,11 +17,11 @@ AI Engine là Python service cung cấp RAG (Retrieval-Augmented Generation) cho
 
 ### Features
 
-- 📄 **PDF Processing**: LlamaParse cho bảng biểu phức tạp
-- 🔍 **Semantic Search**: Qdrant Cloud với metadata filtering
-- 🤖 **LLM**: DeepSeek với Chain-of-Thought prompts
-- 📁 **Google Drive**: Tự động sync từ folder
-- 🌐 **Bilingual**: Hỗ trợ Tiếng Việt/English
+- **PDF Processing**: LlamaParse cho bảng biểu phức tạp
+- **Semantic Search**: Qdrant Cloud với metadata filtering
+- **LLM**: DeepSeek với Chain-of-Thought prompts
+- **Google Drive**: Tự động sync từ folder
+- **Bilingual**: Hỗ trợ Tiếng Việt/English
 
 ### Tech Stack
 

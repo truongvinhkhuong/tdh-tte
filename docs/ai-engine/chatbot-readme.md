@@ -106,7 +106,7 @@ TTE Chatbot được xây dựng để:
 │         │                          │                                          │
 │         │                ┌─────────▼──────────┐                              │
 │         │                │  Semantic Cache    │                              │
-│         │                │  (cosine ≥ 0.92)   │                              │
+│         │                │  (cosine ≥ 0.96)   │                              │
 │         │                └─────────┬──────────┘                              │
 │         │                          │                                          │
 │         │                ┌─────────▼──────────┐                              │
@@ -680,7 +680,7 @@ vectors_config = models.VectorParams(
 [10] AI Engine: SemanticCache.get()
     → Generate embedding của câu hỏi (Voyage AI)
     → Exact hash match (fast path)
-    → Cosine similarity scan toàn bộ cache (≥ 0.92 → HIT)
+    → Cosine similarity scan toàn bộ cache (≥ 0.96 → HIT)
     → HIT: trả về cached response → bỏ qua bước 11-15
      ↓
 [11] AI Engine: SmartModelRouter.route()
@@ -892,7 +892,7 @@ KEYWORD_PATTERNS = {
 Câu hỏi mới: "Van Fisher DVC6000 áp suất tối đa?"
 Cache có:    "Áp suất làm việc tối đa của Fisher DVC6000 là bao nhiêu?"
 
-Cosine similarity = 0.94 ≥ 0.92 → CACHE HIT
+Cosine similarity = 0.94 ≥ 0.96 → CACHE HIT
 ```
 
 **Cấu trúc lưu trữ:**

@@ -118,7 +118,23 @@ Trích xuất metadata kỹ thuật từ content.
 }
 ```
 
-### 4. Google Drive Sync (`src/ingestion/gdrive_sync.py`)
+### 4. Smart Suggestions (`src/core/suggestion_generator.py`)
+
+Sinh 3 câu hỏi follow-up sau mỗi câu trả lời. Endpoint riêng, async, không block chat flow.
+
+| Chức năng | Mô tả |
+|-----------|-------|
+| `generate()` | Sinh 3 suggestions từ question + answer qua DeepSeek |
+| `_is_fallback_answer()` | Detect fallback response → skip suggestions |
+| `_parse_suggestions()` | Parse JSON array từ LLM output |
+
+**Features:**
+- Redis caching by question hash (TTL 24h)
+- Fallback detection — không sinh suggestions cho response không có nội dung
+- Few-shot prompt bilingual (VI/EN)
+- DeepSeek với `temperature=0.7`, `max_tokens=200`
+
+### 5. Google Drive Sync (`src/ingestion/gdrive_sync.py`)
 
 Đồng bộ tài liệu từ Google Drive.
 
@@ -165,6 +181,7 @@ flowchart LR
     H --> I[Cross-Encoder Reranker top_n=3]
     I --> J[DeepSeek LLM]
     J --> K[Answer + Citations]
+    K -.-> L[Smart Suggestions async]
 ```
 
 **Hybrid Retrieval Pipeline:**
@@ -216,4 +233,10 @@ HYBRID_VECTOR_WEIGHT=0.7   # 70% vector, 30% keyword
 # LLM Configuration
 LLM_MODEL=deepseek-chat
 LLM_TEMPERATURE=0.1     # Low for factual answers
+
+# Smart Suggestions
+SUGGESTIONS_ENABLED=true
+SUGGESTIONS_MAX_TOKENS=200
+SUGGESTIONS_TEMPERATURE=0.7    # Higher for creative follow-ups
+SUGGESTIONS_CACHE_TTL=86400    # 24h cache
 ```

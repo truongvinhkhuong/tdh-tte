@@ -58,6 +58,25 @@ class ChatResponse(BaseModel):
 
 
 # ===========================================
+# Suggestion Models
+# ===========================================
+
+
+class SuggestionRequest(BaseModel):
+    """Request model for follow-up suggestions endpoint."""
+
+    question: str = Field(..., min_length=1, max_length=2000)
+    answer: str = Field(..., min_length=1, max_length=5000)
+    language: str = Field(default="vi", pattern="^(vi|en)$")
+
+
+class SuggestionResponse(BaseModel):
+    """Response model for follow-up suggestions endpoint."""
+
+    suggestions: list[str] = Field(default_factory=list)
+
+
+# ===========================================
 # Ingestion Models
 # ===========================================
 

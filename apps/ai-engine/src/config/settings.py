@@ -95,6 +95,12 @@ class Settings(BaseSettings):
     contextual_enrichment_max_doc_length: int = 6000  # chars for document overview sent to LLM
     contextual_enrichment_batch_size: int = 5  # chunks processed concurrently per batch
 
+    # Smart Suggestions
+    suggestions_enabled: bool = True
+    suggestions_max_tokens: int = 200
+    suggestions_temperature: float = 0.7
+    suggestions_cache_ttl: int = 86400  # 24 hours
+
     @property
     def redis_url(self) -> str:
         """Get Redis connection URL."""

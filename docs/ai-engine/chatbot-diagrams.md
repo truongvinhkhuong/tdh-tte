@@ -52,7 +52,7 @@ graph TB
 
     subgraph AI_ENGINE["AI Engine - FastAPI :4003"]
         FAQ[FAQPreFilter\n7 static entries]
-        SC[SemanticCache\ncosine >= 0.92]
+        SC[SemanticCache\ncosine >= 0.96]
         MR[SmartModelRouter\nSimple/Medium/Complex]
         RE[RAGEngine\nSingleton]
         LLM_DS[DeepSeek LLM\ndeepseek-chat]
@@ -128,7 +128,7 @@ sequenceDiagram
             AI->>AI: SemanticCache.get()
             AI->>DS: embed(question) via Voyage AI
             DS-->>AI: embedding vector
-            alt Semantic Cache HIT (cosine >= 0.92)
+            alt Semantic Cache HIT (cosine >= 0.96)
                 AI-->>BK: answer, from_cache:true
             else Cache MISS
                 AI->>AI: SmartModelRouter.route()
@@ -174,7 +174,7 @@ flowchart TD
     FAQ -- "HIT ~30% queries" --> FAQ_R([Static response\n0ms - confidence 100%])
     FAQ -- "MISS" --> SC
 
-    SC{Semantic Cache\ncosine >= 0.92}
+    SC{Semantic Cache\ncosine >= 0.96}
     SC -- "HIT ~20% queries" --> SC_R([Cached response\n< 10ms])
     SC -- "MISS" --> MR
 
@@ -274,7 +274,7 @@ flowchart TD
 
     SCAN[Scan all cached embeddings\ncosine_similarity for each entry]
 
-    SCAN --> SIM{Max similarity\n>= 0.92?}
+    SCAN --> SIM{Max similarity\n>= 0.96?}
 
     SIM -- "YES" --> INC2[hit_count += 1\nlog SIMILAR HIT]
     INC2 --> RET_S([Return similar response])
@@ -805,7 +805,7 @@ stateDiagram-v2
         SC_LOAD : Load from Redis into memory
         SC_LOAD --> SC_ACTIVE
         SC_ACTIVE : semantic:cache:{md5}\nembedding + response\nTTL=30 days
-        SC_ACTIVE --> SC_HIT : cosine similarity >= 0.92
+        SC_ACTIVE --> SC_HIT : cosine similarity >= 0.96
         SC_HIT : Semantic match found
         SC_HIT --> SC_ACTIVE
         SC_ACTIVE --> SC_EVICT : more than 1000 entries

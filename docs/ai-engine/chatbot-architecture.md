@@ -60,12 +60,15 @@
 |-----------|------|----------------|
 | ChatWidget | `apps/web/components/chat/chat-widget.tsx` | Floating button, window controls, fullscreen toggle |
 | TechnicalChat | `apps/web/components/chat/technical-chat.tsx` | Chat UI, message handling, localStorage persistence |
+| SuggestionChips | `apps/web/components/chat/suggestion-chips.tsx` | Smart follow-up suggestion buttons |
+| useSmartSuggestions | `apps/web/hooks/use-smart-suggestions.ts` | Custom hook: fetch/manage suggestions state |
 
 **Key Features:**
 - Session ID stored in `localStorage` (`tte_chat_session_id`)
 - Messages persisted in `localStorage` (`tte_chat_messages`, max 20)
 - Auto-scroll on new messages
 - ReactMarkdown + remark-gfm for markdown rendering
+- **Smart Suggestions**: 3 follow-up questions after each response (async, separate endpoint)
 
 ---
 
@@ -90,7 +93,7 @@
 
 | Component | File | Responsibility |
 |-----------|------|----------------|
-| Routes | `apps/ai-engine/src/api/routes.py` | API endpoints (`/chat`, `/chat/stream`) |
+| Routes | `apps/ai-engine/src/api/routes.py` | API endpoints (`/chat`, `/chat/stream`, `/chat/suggestions`) |
 | RAGEngine | `apps/ai-engine/src/core/rag_engine.py` | Query processing, LLM interaction, `stream_query()` true streaming |
 | FAQFilter | `apps/ai-engine/src/core/faq_filter.py` | FAQ pre-filter (skip LLM) |
 | SemanticCache | `apps/ai-engine/src/core/semantic_cache.py` | Embedding-based caching |
@@ -99,11 +102,12 @@
 | ContextualEnricher | `apps/ai-engine/src/ingestion/contextual_enricher.py` | Contextual Retrieval — enrich chunks with doc context |
 | MetadataExtractor | `apps/ai-engine/src/ingestion/metadata_extractor.py` | LLM-extracted metadata (brand, product_type, etc.) |
 | QdrantKeywordRetriever | `apps/ai-engine/src/retrieval/keyword_retriever.py` | Keyword search + RRF fusion |
+| SuggestionGenerator | `apps/ai-engine/src/core/suggestion_generator.py` | Smart follow-up suggestions (LLM + Redis cache) |
 
 **RAGEngine Features:**
 - Singleton pattern for performance
 - FAQ pre-filter (7 common questions)
-- Semantic cache (Redis-backed, cosine similarity ≥ 0.92)
+- Semantic cache (Redis-backed, cosine similarity ≥ 0.96)
 - **Hybrid retrieval** (vector + keyword search with RRF fusion)
 - **Cross-encoder reranking** (ms-marco-MiniLM-L-6-v2, local, free)
 - LLM fallback chain (DeepSeek → OpenAI)
@@ -119,17 +123,21 @@
 
 ```
 1. User enters question in TechnicalChat
-2. Frontend sends POST /api/rag/chat with sessionId
+2. Frontend sends POST /api/rag/chat/stream with sessionId
 3. ThrottlerGuard checks rate limits
 4. PromptInjectionGuard validates input
 5. SessionService retrieves conversation history from Redis
 6. CacheService checks for cached response
 7. If cache miss → RAGService calls AI Engine
 8. AI Engine queries Qdrant for relevant documents
-9. RAGEngine builds prompt and calls DeepSeek LLM
+9. RAGEngine builds prompt and streams DeepSeek LLM response
 10. Response cached in Redis (24h TTL)
 11. Session updated with new messages
-12. Response returned to frontend
+12. Streaming response returned to frontend
+13. Frontend: status → "ready" → useSmartSuggestions hook triggers
+14. Frontend calls POST /api/rag/chat/suggestions (async)
+15. AI Engine generates 3 follow-up suggestions
+16. SuggestionChips rendered below the response
 ```
 
 ### Session Management
@@ -138,6 +146,8 @@
 Redis Keys:
 - chat:session:{sessionId} → Conversation history (30min TTL)
 - chat:cache:{hash} → Cached responses (24h TTL)
+- semantic:cache:{hash} → Semantic cache entries (30 days)
+- suggestions:{md5} → Smart suggestions cache (24h TTL)
 ```
 
 ---
@@ -162,6 +172,12 @@ VOYAGEAI_API_KEY=xxx
 EMBEDDING_PROVIDER=voyageai
 QDRANT_URL=xxx
 QDRANT_API_KEY=xxx
+
+# Smart Suggestions
+SUGGESTIONS_ENABLED=true
+SUGGESTIONS_MAX_TOKENS=200
+SUGGESTIONS_TEMPERATURE=0.7
+SUGGESTIONS_CACHE_TTL=86400
 ```
 
 ---
@@ -180,20 +196,28 @@ QDRANT_API_KEY=xxx
 ### Query Processing Pipeline
 
 ```
-Question → FAQ Filter → Semantic Cache → Model Router
-             ↓ (hit)        ↓ (hit)           │
-           Return         Return               ▼
-                                    Vector Search (top_k=15)
-                                          │
-                                    Similarity Filter (≥0.3)
-                                          │
-                                    Keyword Search + RRF Fusion
-                                          │
-                                    Cross-Encoder Reranker (top_n=3)
-                                          │
-                                    DeepSeek LLM → Answer
-                                          │ (fail)
-                                    OpenAI Fallback
+Question → FAQ Filter → Semantic Cache (≥0.96) → Model Router
+             ↓ (hit)        ↓ (hit)                   │
+           Return         Return                       ▼
+                                            Vector Search (top_k=15)
+                                                  │
+                                            Similarity Filter (≥0.3)
+                                                  │
+                                            Keyword Search + RRF Fusion
+                                                  │
+                                            Cross-Encoder Reranker (top_n=3)
+                                                  │
+                                            DeepSeek LLM → Answer
+                                                  │ (fail)
+                                            OpenAI Fallback
+                                                  │
+                                    ┌─────────────┴─────────────┐
+                                    ▼                           ▼ (async)
+                              Return Answer         POST /api/chat/suggestions
+                                                          │
+                                                    SuggestionGenerator
+                                                          │
+                                                    3 Follow-up Questions
 ```
 
 ### Optimization Features
@@ -204,7 +228,8 @@ Question → FAQ Filter → Semantic Cache → Model Router
 | Cross-Encoder Reranking | -18% retrieval errors | ms-marco-MiniLM-L-6-v2 (local, free) |
 | Hybrid Search (BM25) | Better exact match | Qdrant keyword search + RRF fusion |
 | FAQ Pre-filter | -50% LLM calls | 7 common questions, Vietnamese normalization |
-| Semantic Cache | +30% cache hits | Redis persistence, Cosine similarity ≥ 0.92 |
+| Semantic Cache | +30% cache hits | Redis persistence, Cosine similarity ≥ 0.96 |
+| Smart Suggestions | Better engagement | Async endpoint, Redis cache 24h, ~$0.00004/call |
 | Smart Model Routing | -40% LLM costs | Simple/Medium/Complex classification |
 | LLM Fallback | 99.9% uptime | DeepSeek → OpenAI gpt-4o-mini |
 | True LLM Streaming | ~500ms first token | `astream_complete()` token-by-token, Vercel AI SDK frontend |
@@ -238,6 +263,19 @@ At 10,000 queries/day:
 - `MetadataExtractor` đã được tích hợp vào ingestion pipeline (trước đó chưa được gọi)
 - Tự động extract: brand, product_type, pressure_class, size_range, v.v.
 
+### Smart Suggestions (Phase 4) — cải thiện UX engagement
+- Endpoint riêng `POST /api/chat/suggestions` — async, không block chat flow
+- `SuggestionGenerator` sinh 3 câu hỏi follow-up qua DeepSeek (`temperature=0.7`)
+- Redis caching by question hash (TTL 24h) — cùng câu hỏi không gọi LLM lại
+- Fallback detection — skip suggestions cho response "Xin lỗi, tôi chưa tìm thấy..."
+- Frontend: `useSmartSuggestions` hook + `SuggestionChips` component
+- File: `src/core/suggestion_generator.py`
+
+### Semantic Cache Threshold Tuning — giảm false positive cache hits
+- Tăng threshold `0.92 → 0.96` — "van điều khiển" và "van an toàn" không còn bị match nhầm
+- Thêm debug logging cho near-miss cache matches
+- Thêm method `clear_redis_cache()` để xóa cache cũ
+
 ## Future Improvements
 
 ### 1. Expand FAQ Database (Deferred)
@@ -246,5 +284,4 @@ Analyze chat logs after 2-4 weeks of production usage to identify common questio
 
 ### 2. UX Optimizations (Recommended)
 - **Reference Cards:** Convert citation text into clickable UI cards (PDF preview/download).
-- **Smart Suggestions:** Generate 3 follow-up questions after each response.
 

@@ -82,6 +82,12 @@ CONTEXTUAL_ENRICHMENT_ENABLED=true   # Contextual Retrieval cho chunks
 RERANK_ENABLED=true                   # Cross-encoder reranking
 HYBRID_SEARCH_ENABLED=true            # Vector + keyword search fusion
 
+# Optional: Smart Suggestions (all have defaults)
+SUGGESTIONS_ENABLED=true
+SUGGESTIONS_MAX_TOKENS=200
+SUGGESTIONS_TEMPERATURE=0.7
+SUGGESTIONS_CACHE_TTL=86400
+
 # Optional: Google Drive
 GOOGLE_DRIVE_FOLDER_ID=1abc...xyz
 ```

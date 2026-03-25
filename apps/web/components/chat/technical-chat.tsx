@@ -13,6 +13,8 @@ import { TextStreamChatTransport } from "ai";
 import type { UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useSmartSuggestions } from "@/hooks/use-smart-suggestions";
+import { SuggestionChips } from "./suggestion-chips";
 
 // ===========================================
 // Markdown Components
@@ -197,6 +199,14 @@ export function TechnicalChat({
 
     const isLoading = status === "submitted" || status === "streaming";
 
+    // Smart suggestions
+    const {
+        suggestions,
+        isLoading: suggestionsLoading,
+        fetchSuggestions,
+        clearSuggestions,
+    } = useSmartSuggestions({ language });
+
     // Initialize session ID
     useEffect(() => {
         const STORAGE_KEY = "tte_chat_session_id";
@@ -252,15 +262,30 @@ export function TechnicalChat({
         }
     }, []);
 
-    // Auto-scroll on message changes
+    // Auto-scroll on message changes and when suggestions appear
     useEffect(() => {
         scrollToBottom();
-    }, [messages, status, scrollToBottom]);
+        // Delayed scroll to account for async markdown/table rendering
+        const timer = setTimeout(() => scrollToBottom(), 150);
+        return () => clearTimeout(timer);
+    }, [messages, status, suggestions, suggestionsLoading, scrollToBottom]);
+
+    // Fetch smart suggestions when stream completes
+    useEffect(() => {
+        if (status !== "ready" || messages.length < 2) return;
+        const lastUser = [...messages].reverse().find((m) => m.role === "user");
+        const lastAssistant = [...messages].reverse().find((m) => m.role === "assistant");
+        if (lastUser && lastAssistant) {
+            fetchSuggestions(getMessageText(lastUser), getMessageText(lastAssistant));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status]);
 
     // Send message
     const handleSend = () => {
         const question = input.trim();
         if (!question || isLoading) return;
+        clearSuggestions();
         sendMessage({ text: question });
         setInput("");
         setTimeout(() => scrollToBottom(false), 50);
@@ -277,6 +302,7 @@ export function TechnicalChat({
     // Handle suggestion click
     const handleSuggestion = (query: string) => {
         if (isLoading) return;
+        clearSuggestions();
         sendMessage({ text: query });
     };
 
@@ -335,9 +361,9 @@ export function TechnicalChat({
             <CardContent className="flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative bg-slate-50/50">
                 {/* Messages Area */}
                 <ScrollArea className="flex-1 min-h-0" ref={scrollRef}>
-                    <div ref={scrollViewportRef} className="h-full w-full px-4 pb-4">
+                    <div ref={scrollViewportRef} className="w-full px-4 pb-6">
                         {messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full text-center py-20 px-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
+                            <div className="flex flex-col items-center justify-center min-h-full text-center py-20 px-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
                                 <div className="h-24 w-24 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-card border border-blue-50">
                                     <MessageSquare className="h-12 w-12 text-[#4463b1]" />
                                 </div>
@@ -367,6 +393,16 @@ export function TechnicalChat({
                                         language={language}
                                     />
                                 ))}
+                                {/* Smart Suggestions */}
+                                {status === "ready" && (
+                                    <SuggestionChips
+                                        suggestions={suggestions}
+                                        isLoading={suggestionsLoading}
+                                        onSelect={handleSuggestion}
+                                        disabled={isLoading}
+                                        language={language}
+                                    />
+                                )}
                                 {status === "submitted" && (
                                     <div className="flex gap-4 py-2 px-2 animate-in fade-in duration-300">
                                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white border border-blue-100 shadow-sm">
@@ -382,7 +418,7 @@ export function TechnicalChat({
                                         </div>
                                     </div>
                                 )}
-                                <div className="h-4" />
+                                <div className="h-8" />
                             </div>
                         )}
                     </div>

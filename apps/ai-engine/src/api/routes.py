@@ -15,6 +15,8 @@ from .models import (
     Citation,
     HealthResponse,
     IngestionResponse,
+    SuggestionRequest,
+    SuggestionResponse,
     SyncFileInfo,
     SyncRequest,
     SyncResponse,
@@ -161,6 +163,31 @@ async def chat_stream(
             "X-Accel-Buffering": "no",  # Disable nginx buffering
         }
     )
+
+
+@router.post("/chat/suggestions", response_model=SuggestionResponse, tags=["Chat"])
+async def chat_suggestions(
+    request: SuggestionRequest,
+    settings: Annotated[Settings, Depends(get_settings)],
+):
+    """
+    Generate follow-up question suggestions after a chat response.
+
+    Returns 0-3 contextual suggestions. Never raises — returns empty list on failure.
+    """
+    try:
+        from ..core.suggestion_generator import get_suggestion_generator
+
+        generator = get_suggestion_generator(settings)
+        suggestions = await generator.generate(
+            question=request.question,
+            answer=request.answer,
+            language=request.language,
+        )
+        return SuggestionResponse(suggestions=suggestions)
+    except Exception as e:
+        logger.error(f"Suggestion error: {e}")
+        return SuggestionResponse(suggestions=[])
 
 
 # ===========================================

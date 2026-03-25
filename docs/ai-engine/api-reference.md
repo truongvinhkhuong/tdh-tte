@@ -130,6 +130,47 @@ data: {"type": "done", "data": {"confidence": 87.5, "sources_count": 3, "citatio
 
 ---
 
+### Smart Suggestions
+
+#### `POST /api/chat/suggestions`
+
+Sinh 3 câu hỏi follow-up dựa trên câu hỏi và câu trả lời. Endpoint riêng, gọi async sau khi chat response hoàn tất.
+
+**Request:**
+```json
+{
+  "question": "Van Fisher HP chịu được áp suất bao nhiêu?",
+  "answer": "Van điều khiển Fisher HP Series có áp suất làm việc...",
+  "language": "vi"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `question` | string | ✅ | Câu hỏi gốc (1-2000 chars) |
+| `answer` | string | ✅ | Câu trả lời từ chatbot (1-5000 chars) |
+| `language` | string | ❌ | `vi` (default) or `en` |
+
+**Response:**
+```json
+{
+  "suggestions": [
+    "Fisher HP phù hợp ứng dụng nào?",
+    "So sánh Fisher HP với Fisher GX?",
+    "Cách bảo trì van Fisher HP?"
+  ]
+}
+```
+
+**Đặc điểm:**
+- **Never fails**: Luôn trả về `{"suggestions": []}` nếu có lỗi, không bao giờ raise exception
+- **Redis caching**: Cache by question hash, TTL 24h — cùng câu hỏi không gọi LLM lại
+- **Fallback detection**: Tự động detect response "Xin lỗi, tôi chưa tìm thấy..." → return `[]`
+- **Latency**: ~300-500ms (DeepSeek với max_tokens=200)
+- **Cost**: ~$0.00004/call
+
+---
+
 ### Document Ingestion
 
 #### `POST /api/ingest`
@@ -222,6 +263,7 @@ Các endpoint này được expose qua NestJS Backend (port 4002):
 |----------|--------|-------------|
 | `/api/rag/chat` | POST | Chat with knowledge base |
 | `/api/rag/chat/stream` | POST | Stream chat responses (SSE) |
+| `/api/rag/chat/suggestions` | POST | Generate follow-up suggestions |
 | `/api/rag/ingest` | POST | Upload PDF document |
 | `/api/rag/gdrive/sync` | POST | Trigger GDrive sync |
 | `/api/rag/gdrive/status` | GET | GDrive config status |

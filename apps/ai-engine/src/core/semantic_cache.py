@@ -38,7 +38,7 @@ class SemanticCache:
     def __init__(
         self,
         embed_model: Any = None,
-        similarity_threshold: float = 0.92,
+        similarity_threshold: float = 0.96,
         max_entries: int = 1000,
     ):
         self.embed_model = embed_model
@@ -50,12 +50,25 @@ class SemanticCache:
         
         logger.info(f"Semantic cache initialized (threshold={similarity_threshold}, max={max_entries})")
 
+    async def clear_redis_cache(self) -> None:
+        """Clear all semantic cache entries from Redis."""
+        try:
+            from .redis_client import get_redis_client
+            rc = get_redis_client()
+            if rc.is_connected() and rc.client:
+                keys = await rc.client.keys("semantic:cache:*")
+                if keys:
+                    await rc.client.delete(*keys)
+                    logger.info(f"Cleared {len(keys)} semantic cache entries from Redis")
+        except Exception as e:
+            logger.error(f"Failed to clear Redis semantic cache: {e}")
+
     async def load_from_redis(self) -> None:
         """Load cache entries from Redis into memory."""
         try:
             from .redis_client import get_redis_client
             self.redis_client = get_redis_client()
-            
+
             if not self.redis_client.is_connected():
                 logger.warning("Redis client not connected, skipping semantic cache load")
                 return
@@ -162,11 +175,26 @@ class SemanticCache:
             entry = self.cache[best_match[0]]
             entry.hit_count += 1
             logger.info(
-                f"Semantic cache SIMILAR HIT (sim={best_match[1]:.3f}): "
-                f"'{question[:30]}...' ≈ '{entry.question[:30]}...'"
+                f"Semantic cache SIMILAR HIT (sim={best_match[1]:.4f}): "
+                f"'{question[:50]}' ≈ '{entry.question[:50]}'"
             )
             return entry.response
-        
+
+        # Log near-miss for debugging threshold
+        if self.embeddings and query_embedding is not None:
+            all_sims = []
+            for cached_key, cached_embedding in self.embeddings:
+                e = self.cache.get(cached_key)
+                if e and e.language == language:
+                    sim = self._cosine_similarity(query_embedding, cached_embedding)
+                    all_sims.append((sim, e.question[:40]))
+            if all_sims:
+                best = max(all_sims, key=lambda x: x[0])
+                logger.debug(
+                    f"Semantic cache MISS (best_sim={best[0]:.4f}, threshold={self.similarity_threshold}): "
+                    f"'{question[:40]}' vs '{best[1]}'"
+                )
+
         return None
     
     def set(

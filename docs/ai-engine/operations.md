@@ -229,6 +229,36 @@ LLM_MAX_TOKENS=2048
 LLM_TEMPERATURE=0.1
 ```
 
+### Smart Suggestions
+
+```env
+# Bật/tắt smart suggestions
+SUGGESTIONS_ENABLED=true
+
+# Max tokens cho prompt sinh suggestions (thấp = nhanh hơn)
+SUGGESTIONS_MAX_TOKENS=200
+
+# Temperature (0.7 = đủ creative cho follow-up questions)
+SUGGESTIONS_TEMPERATURE=0.7
+
+# Cache TTL (86400 = 24h, giảm nếu cần suggestions đa dạng hơn)
+SUGGESTIONS_CACHE_TTL=86400
+```
+
+### Semantic Cache
+
+```env
+# Threshold cosine similarity cho semantic cache (mặc định 0.96)
+# Tăng nếu gặp false positive (trả về cached response sai)
+# Giảm nếu cache hit rate quá thấp
+# Lưu ý: Cần clear Redis cache sau khi thay đổi threshold
+```
+
+Để clear semantic cache trong Redis:
+```bash
+redis-cli KEYS "semantic:cache:*" | xargs redis-cli DEL
+```
+
 ### Memory Optimization
 
 ```yaml
