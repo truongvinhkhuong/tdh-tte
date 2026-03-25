@@ -198,11 +198,19 @@ Lưu giữ:
 ### Retrieval Quality
 
 ```env
-# Tăng nếu thiếu relevant results
-RETRIEVAL_TOP_K=20
+# Wider recall (mặc định 15, tăng nếu thiếu relevant results)
+RETRIEVAL_TOP_K=15
 
-# Giữ nguyên cho precision
-RERANK_TOP_N=5
+# Reranker giữ lại top N (mặc định 3)
+RERANK_TOP_N=3
+
+# Hybrid search weight (0.7 = 70% vector, 30% keyword)
+HYBRID_VECTOR_WEIGHT=0.7
+
+# Tắt từng feature nếu cần debug
+RERANK_ENABLED=true
+HYBRID_SEARCH_ENABLED=true
+CONTEXTUAL_ENRICHMENT_ENABLED=true
 ```
 
 ### Response Speed
@@ -223,7 +231,23 @@ ai-engine:
   deploy:
     resources:
       limits:
-        memory: 1G
+        memory: 2G      # Reranker model cần ~80MB in memory
       reservations:
-        memory: 512M
+        memory: 1G
+```
+
+### Re-ingestion sau khi thay đổi cấu hình
+
+Khi thay đổi contextual enrichment, chunking, hoặc embedding config, cần re-ingest tất cả tài liệu:
+
+```bash
+# 1. Xóa collection cũ trong Qdrant (qua Qdrant Cloud UI hoặc API)
+
+# 2. Re-sync tất cả documents
+curl -X POST http://localhost:4003/api/gdrive/sync \
+  -H "Content-Type: application/json" \
+  -d '{"force_full_sync": true}'
+
+# 3. Verify vectors count
+curl -s http://localhost:4003/api/health | jq '.vectors_count'
 ```

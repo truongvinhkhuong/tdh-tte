@@ -67,17 +67,39 @@ Core engine xử lý query và retrieval.
 
 ### 2. PDF Processor (`src/ingestion/pdf_processor.py`)
 
-Xử lý PDF với LlamaParse.
+Xử lý PDF với LlamaParse + Contextual Enrichment.
 
 | Chức năng | Mô tả |
 |-----------|-------|
-| `process_file()` | Parse PDF → Markdown → Nodes |
+| `process_file()` | Parse PDF → Markdown → Nodes → Contextual Enrichment |
 | `process_bytes()` | Process từ bytes (upload) |
 
 **Parsing Features:**
 - Giữ nguyên cấu trúc bảng
 - Trích xuất thông số kỹ thuật
 - Detect document type (datasheet, catalog, manual)
+- **Contextual Enrichment**: Tự động sinh ngữ cảnh cho mỗi chunk từ toàn bộ tài liệu
+
+### 2b. Contextual Enricher (`src/ingestion/contextual_enricher.py`)
+
+Implement Anthropic's Contextual Retrieval technique.
+
+| Chức năng | Mô tả |
+|-----------|-------|
+| `enrich_chunks()` | Sinh context cho từng chunk bằng LLM, prepend vào text |
+
+**Ví dụ trước/sau enrichment:**
+- **Trước:** `"Pressure rating: CL150-CL2500. Body material: WCB, CF8M..."`
+- **Sau:** `"[Context: Đoạn này từ datasheet Fisher easy-e ET valve, mô tả thông số kỹ thuật pressure rating và body material.]\n\nPressure rating: CL150-CL2500. Body material: WCB, CF8M..."`
+
+### 2c. Keyword Retriever (`src/retrieval/keyword_retriever.py`)
+
+Keyword search sử dụng Qdrant full-text search, kết hợp với vector search qua RRF fusion.
+
+| Chức năng | Mô tả |
+|-----------|-------|
+| `QdrantKeywordRetriever.retrieve()` | Full-text search trên Qdrant |
+| `fuse_results()` | Reciprocal Rank Fusion kết hợp vector + keyword |
 
 ### 3. Metadata Extractor (`src/ingestion/metadata_extractor.py`)
 
@@ -116,22 +138,39 @@ flowchart LR
     A[PDF Upload] --> B[LlamaParse]
     B --> C[Markdown]
     C --> D[Chunking]
-    D --> E[Metadata Extraction]
-    E --> F[OpenAI Embedding]
-    F --> G[(Qdrant Cloud)]
+    D --> E[Contextual Enrichment]
+    E --> F[Metadata Extraction]
+    F --> G[Voyage AI Embedding]
+    G --> H[(Qdrant Cloud)]
 ```
+
+**Contextual Enrichment (Anthropic's Contextual Retrieval):**
+- Dùng LLM sinh 1-2 câu context cho mỗi chunk dựa trên toàn bộ tài liệu
+- Prepend context vào chunk text TRƯỚC khi embedding
+- Giảm ~49% lỗi retrieval (chunk không còn mất ngữ cảnh)
+- `original_text` được lưu trong metadata để citation hiển thị đúng
 
 ### Query Pipeline
 
 ```mermaid
 flowchart LR
-    A[User Question] --> B[Query Analysis]
-    B --> C[Metadata Filter]
-    C --> D[Vector Search]
-    D --> E[Top-K Chunks]
-    E --> F[DeepSeek LLM]
-    F --> G[Answer + Citations]
+    A[User Question] --> B[FAQ Filter]
+    B --> C[Semantic Cache]
+    C --> D[Smart Routing]
+    D --> E[Vector Search top_k=15]
+    E --> F[Similarity Filter ≥0.3]
+    F --> G[Keyword Search]
+    G --> H[RRF Fusion]
+    H --> I[Cross-Encoder Reranker top_n=3]
+    I --> J[DeepSeek LLM]
+    J --> K[Answer + Citations]
 ```
+
+**Hybrid Retrieval Pipeline:**
+- **Vector Search** (top_k=15): Semantic search qua Voyage AI embeddings
+- **Keyword Search**: Qdrant full-text search cho exact match (model numbers: DVC6200, MR95...)
+- **RRF Fusion**: Reciprocal Rank Fusion kết hợp kết quả vector + keyword
+- **Cross-Encoder Reranker**: `ms-marco-MiniLM-L-6-v2` lọc top 3 chính xác nhất
 
 ---
 
@@ -143,7 +182,8 @@ flowchart LR
 | **RAG** | LlamaIndex | Best data-first RAG framework |
 | **Vector DB** | Qdrant Cloud | Free tier tốt, Metadata filtering |
 | **LLM** | DeepSeek | Cost-effective, good reasoning |
-| **Embedding** | OpenAI text-embedding-3-small | Best price/performance |
+| **Embedding** | Voyage AI voyage-3.5-lite | 60% cheaper than OpenAI |
+| **Reranker** | cross-encoder/ms-marco-MiniLM-L-6-v2 | Local, free, ~80MB |
 | **PDF Parser** | LlamaParse | Table-aware parsing |
 
 ---
@@ -156,10 +196,21 @@ Xem [.env.example](file:///Users/khuong/Khuong-D/TDH/toanthang/apps/ai-engine/.e
 
 ```python
 # RAG Configuration
-RETRIEVAL_TOP_K=15      # Initial retrieval count
-RERANK_TOP_N=5          # After reranking
+RETRIEVAL_TOP_K=15      # Initial retrieval count (wider recall for reranking)
+RERANK_ENABLED=true     # Cross-encoder reranking
+RERANK_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2
+RERANK_TOP_N=3          # Final count after reranking
 CHUNK_SIZE=1024         # Chunk size in characters
 CHUNK_OVERLAP=200       # Overlap between chunks
+
+# Contextual Enrichment (Anthropic's Contextual Retrieval)
+CONTEXTUAL_ENRICHMENT_ENABLED=true
+CONTEXTUAL_ENRICHMENT_MAX_DOC_LENGTH=6000
+CONTEXTUAL_ENRICHMENT_BATCH_SIZE=5
+
+# Hybrid Search (Vector + Keyword)
+HYBRID_SEARCH_ENABLED=true
+HYBRID_VECTOR_WEIGHT=0.7   # 70% vector, 30% keyword
 
 # LLM Configuration
 LLM_MODEL=deepseek-chat

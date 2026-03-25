@@ -363,16 +363,19 @@ POST http://ai-engine:4003/api/chat
 | File | Vai trò |
 |------|---------|
 | `apps/ai-engine/src/main.py` | FastAPI app, CORS, lifespan hooks |
-| `apps/ai-engine/src/api/routes.py` | Tất cả API endpoints |
+| `apps/ai-engine/src/api/routes.py` | Tất cả API endpoints + MetadataExtractor integration |
 | `apps/ai-engine/src/api/models.py` | Pydantic models request/response |
-| `apps/ai-engine/src/core/rag_engine.py` | Xử lý RAG chính |
+| `apps/ai-engine/src/core/rag_engine.py` | Xử lý RAG chính (hybrid search + reranking) |
 | `apps/ai-engine/src/core/faq_filter.py` | FAQ pre-filter |
 | `apps/ai-engine/src/core/semantic_cache.py` | Semantic caching |
 | `apps/ai-engine/src/core/model_router.py` | Smart model routing |
 | `apps/ai-engine/src/core/redis_client.py` | Async Redis client |
-| `apps/ai-engine/src/ingestion/pdf_processor.py` | Xử lý PDF với LlamaParse |
+| `apps/ai-engine/src/ingestion/pdf_processor.py` | Xử lý PDF với LlamaParse + contextual enrichment |
+| `apps/ai-engine/src/ingestion/contextual_enricher.py` | Contextual Retrieval — sinh context cho chunks |
 | `apps/ai-engine/src/ingestion/gdrive_sync.py` | Đồng bộ Google Drive |
-| `apps/ai-engine/src/ingestion/metadata_extractor.py` | Trích xuất metadata tài liệu |
+| `apps/ai-engine/src/ingestion/metadata_extractor.py` | Trích xuất metadata kỹ thuật (brand, product_type, etc.) |
+| `apps/ai-engine/src/retrieval/keyword_retriever.py` | Qdrant keyword search + RRF fusion |
+| `apps/ai-engine/src/retrieval/auto_retriever.py` | Auto-retriever với metadata filtering |
 
 ### Startup Sequence
 
@@ -431,7 +434,7 @@ self.index = VectorStoreIndex.from_vector_store(vector_store)
 
 #### Query Processing Pipeline
 
-Phương thức `query()` thực hiện qua 6 bước:
+Phương thức `query()` thực hiện qua 8 bước:
 
 ```
 Câu hỏi đến
@@ -445,17 +448,27 @@ Câu hỏi đến
     ▼ Bước 3: Smart Model Router
     │          → Xác định độ phức tạp → max_tokens
     │
-    ▼ Bước 4: Retrieval (Qdrant)
-    │          → Top-K=15 vectors → filter similarity ≥ 0.3
+    ▼ Bước 4: Vector Search (Qdrant)
+    │          → Voyage AI embed câu hỏi → cosine search (top_k=15)
+    │          → Similarity filter ≥ 0.3 (trên cosine scores)
     │
-    ▼ Bước 5: Generation (LLM)
-    │          → Build prompt → gọi DeepSeek
+    ▼ Bước 5: Hybrid Search (Keyword + RRF Fusion)
+    │          → Qdrant full-text search cho keyword matching
+    │          → Reciprocal Rank Fusion merge vector + keyword results
+    │
+    ▼ Bước 6: Cross-Encoder Reranking
+    │          → ms-marco-MiniLM-L-6-v2 rerank → top_n=3
+    │          → Restore cosine scores gốc cho confidence calculation
+    │
+    ▼ Bước 7: Generation (LLM)
+    │          → Build prompt (dùng original_text, không có context prefix)
+    │          → Gọi DeepSeek
     │          ├── LỖI → fallback sang OpenAI gpt-4o-mini
     │
-    ▼ Bước 6: Post-processing
-    │          → Tính confidence score
+    ▼ Bước 8: Post-processing
+    │          → Tính confidence score (weighted average cosine scores)
     │          ├── confidence < 20% hoặc 0 sources → fallback response
-    │          → Extract citations
+    │          → Extract citations (dùng original_text cho preview)
     │          → Lưu vào Semantic Cache
     │
     ▼ Trả về response
@@ -464,15 +477,27 @@ Câu hỏi đến
 #### Retrieval Configuration
 
 ```python
+# Bước 4: Vector Search
 retriever = VectorIndexRetriever(
     index=self.index,
-    similarity_top_k=15,   # Lấy 15 chunks liên quan nhất
+    similarity_top_k=15,   # Wider recall cho reranking
+)
+similarity_filter = SimilarityPostprocessor(
+    similarity_cutoff=0.3,   # Áp dụng TRƯỚC fusion (trên cosine scores 0-1)
 )
 
-similarity_filter = SimilarityPostprocessor(
-    similarity_cutoff=0.3,   # Lọc bỏ chunks quá không liên quan
+# Bước 5: Keyword Search + Fusion
+keyword_retriever = QdrantKeywordRetriever(client, collection)
+fused_nodes = fuse_results(vector_nodes, keyword_nodes, vector_weight=0.7)
+
+# Bước 6: Reranking
+reranker = SentenceTransformerRerank(
+    model="cross-encoder/ms-marco-MiniLM-L-6-v2",
+    top_n=3,   # Giữ 3 chunks tốt nhất
 )
 ```
+
+**Lưu ý quan trọng:** Similarity filter được áp dụng TRƯỚC fusion vì cosine scores (0-1) và RRF scores (~0.01) có scale khác nhau. Cosine scores gốc được restore sau reranking để `_calculate_confidence()` tính đúng.
 
 #### Prompt
 
@@ -557,6 +582,11 @@ vectors_config = models.VectorParams(
 | `page_number` | int | Số trang |
 | `total_pages` | int | Tổng số trang |
 | `doc_type` | string | Loại tài liệu (xem bên dưới) |
+| `original_text` | string | Text gốc trước contextual enrichment (cho citation display) |
+| `has_context` | bool | Chunk đã được enriched hay chưa |
+| `brand` | string | Brand name (Fisher, Bettis, etc.) — từ MetadataExtractor |
+| `product_type` | string | Loại sản phẩm (Control Valve, Actuator, etc.) |
+| `pressure_class` | list | Pressure classes (CL150, CL300, etc.) |
 
 **Document types được nhận diện tự động:**
 
@@ -625,21 +655,30 @@ vectors_config = models.VectorParams(
     → Kiểm tra word count
     → Phân loại: SIMPLE (512 tokens) / MEDIUM (1024) / COMPLEX (2048)
      ↓
-[12] AI Engine: Retrieval (Qdrant)
+[12] AI Engine: Retrieval — Vector Search (Qdrant)
     → Voyage AI embed câu hỏi
-    → Qdrant cosine search (top-k=15)
-    → Lọc similarity ≥ 0.3
+    → Qdrant cosine search (top_k=15)
+    → Similarity filter ≥ 0.3 (trên cosine scores)
+    → Lưu cosine scores gốc
+     ↓
+[12b] AI Engine: Retrieval — Keyword Search + RRF Fusion
+    → Qdrant full-text search (keyword matching)
+    → Reciprocal Rank Fusion merge vector + keyword results
+     ↓
+[12c] AI Engine: Retrieval — Cross-Encoder Reranking
+    → ms-marco-MiniLM-L-6-v2 rerank → top_n=3
+    → Restore cosine scores gốc (cho confidence calculation)
      ↓
 [13] AI Engine: Generation (DeepSeek)
     → Build system prompt (VI/EN)
-    → Insert retrieved context
+    → Insert retrieved context (dùng original_text, không có context prefix)
     → Gọi DeepSeek API
     → LỖI → fallback sang OpenAI gpt-4o-mini
      ↓
 [14] AI Engine: Post-processing
-    → Tính confidence score (weighted average)
+    → Tính confidence score (weighted average cosine scores)
     → confidence < 20% → fallback response
-    → Extract citations từ source nodes
+    → Extract citations từ source nodes (dùng original_text cho preview)
     → SemanticCache.set() (fire-and-forget)
      ↓
 [15] Trả về về NestJS Backend
@@ -704,11 +743,22 @@ Connection: keep-alive
     → Content có Markdown (|, ##, **) → MarkdownNodeParser
     → Content thuần text → SentenceSplitter (chunk_size=1024, overlap=200)
      ↓
-[6] RAGEngine.add_documents(nodes)
-    → Voyage AI embed toàn bộ nodes
+[6] Contextual Enrichment (Anthropic's Contextual Retrieval):
+    → Nối toàn bộ document text (all pages)
+    → Với mỗi chunk: LLM sinh 1-2 câu context mô tả ngữ cảnh
+    → Lưu original_text trong metadata
+    → Prepend "[Context: ...]" vào chunk text trước embedding
+    → Batch processing (5 chunks concurrent)
+     ↓
+[7] MetadataExtractor.enrich_nodes():
+    → LLM trích xuất metadata kỹ thuật từ mỗi chunk
+    → brand, product_type, pressure_class, size_range, v.v.
+     ↓
+[8] RAGEngine.add_documents(nodes)
+    → Voyage AI embed toàn bộ nodes (bao gồm context prefix)
     → Lưu vào Qdrant collection
      ↓
-[7] Response: { success, document_id, filename, chunks_created, doc_type }
+[9] Response: { success, document_id, filename, chunks_created, doc_type }
 ```
 
 ### 7.4 Google Drive Sync Flow
@@ -1068,9 +1118,29 @@ LLM_TEMPERATURE=0.1           # Thấp → output ổn định, ít sáng tạo
 LLM_MAX_TOKENS=4096
 EMBEDDING_PROVIDER=voyageai   # 'voyageai' hoặc 'openai'
 EMBEDDING_MODEL=voyage-3.5-lite
-RETRIEVAL_TOP_K=15            # Số chunks lấy từ Qdrant
+RETRIEVAL_TOP_K=15            # Số chunks lấy từ Qdrant (wider recall cho reranking)
 CHUNK_SIZE=1024               # Kích thước mỗi chunk (tokens)
 CHUNK_OVERLAP=200             # Overlap giữa các chunks
+
+# ==================================
+# Contextual Enrichment (Anthropic's Contextual Retrieval)
+# ==================================
+CONTEXTUAL_ENRICHMENT_ENABLED=true      # Sinh context cho mỗi chunk khi ingest
+CONTEXTUAL_ENRICHMENT_MAX_DOC_LENGTH=6000  # Chars document overview gửi LLM
+CONTEXTUAL_ENRICHMENT_BATCH_SIZE=5      # Chunks xử lý song song mỗi batch
+
+# ==================================
+# Reranking (Cross-Encoder)
+# ==================================
+RERANK_ENABLED=true
+RERANK_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2  # Local, ~80MB, miễn phí
+RERANK_TOP_N=3                # Số chunks giữ lại sau reranking
+
+# ==================================
+# Hybrid Search (Vector + Keyword)
+# ==================================
+HYBRID_SEARCH_ENABLED=true
+HYBRID_VECTOR_WEIGHT=0.7     # 70% vector, 30% keyword trong RRF scoring
 
 # ==================================
 # Misc
@@ -1294,20 +1364,28 @@ KEYWORD_PATTERNS["ten_key_moi"] = ["keyword1", "keyword2", "keyword3"]
 
 ## 15. Lộ trình cải tiến
 
-### Ngắn hạn (Q1 2026)
+### Đã hoàn thành (Q1 2026)
+
+- [x] **Contextual Retrieval** — Anthropic's technique: LLM sinh ngữ cảnh cho mỗi chunk trước khi embedding (~49% giảm lỗi retrieval)
+- [x] **Cross-Encoder Reranking** — ms-marco-MiniLM-L-6-v2 local reranker (thêm ~18% giảm lỗi)
+- [x] **BM25 Hybrid Search** — Qdrant keyword search + RRF fusion (cải thiện exact match cho model numbers)
+- [x] **MetadataExtractor Integration** — Tự động extract metadata kỹ thuật khi ingest (brand, product_type, pressure_class...)
+- [x] **Streaming Responses** — SSE endpoint `/chat/stream` đã implement
+
+### Ngắn hạn (Q2 2026)
 
 - [ ] **Mở rộng FAQ** — Phân tích logs sau 4 tuần, tăng từ 7 lên 30-50 entries
 - [ ] **Admin UI** — Giao diện quản lý tài liệu, xem analytics (FAQ hit rate, cache hit rate)
 - [ ] **Smart Suggestions** — Gợi ý 3 câu hỏi liên quan sau mỗi câu trả lời
-
-### Trung hạn (Q2 2026)
-
-- [ ] **Streaming UI** — Hiển thị text từng ký tự như ChatGPT (SSE đã có ở backend, cần implement frontend)
 - [ ] **Reference Cards** — Chuyển citations thành UI cards có thể click (xem preview PDF)
-- [ ] **Context Window mở rộng** — Tăng từ 3 lên 5 conversation turns
-- [ ] **Reranking** — Thêm cross-encoder reranking sau retrieval để cải thiện relevance
 
-### Dài hạn (Q3 2026+)
+### Trung hạn (Q3 2026)
+
+- [ ] **Streaming UI** — Frontend hiển thị text từng ký tự (backend SSE đã sẵn sàng)
+- [ ] **Context Window mở rộng** — Tăng từ 3 lên 5 conversation turns
+- [ ] **Domain-specific Reranker** — Fine-tune cross-encoder trên dữ liệu Oil & Gas
+
+### Dài hạn (Q4 2026+)
 
 - [ ] **Multi-modal** — Hỗ trợ câu hỏi kèm ảnh (sơ đồ kỹ thuật)
 - [ ] **Fine-tuning** — Fine-tune embedding model trên domain Oil & Gas
@@ -1323,17 +1401,21 @@ apps/ai-engine/
 ├── src/
 │   ├── api/
 │   │   ├── models.py          # Pydantic request/response models
-│   │   └── routes.py          # FastAPI endpoints
+│   │   └── routes.py          # FastAPI endpoints + MetadataExtractor integration
 │   ├── core/
 │   │   ├── faq_filter.py      # FAQ pre-filter (7 entries)
 │   │   ├── model_router.py    # Smart model routing
-│   │   ├── rag_engine.py      # Core RAG engine (499 LOC)
+│   │   ├── rag_engine.py      # Core RAG engine (hybrid search + reranking)
 │   │   ├── redis_client.py    # Async Redis wrapper
 │   │   └── semantic_cache.py  # Embedding-based cache
 │   ├── ingestion/
+│   │   ├── contextual_enricher.py  # Contextual Retrieval (Anthropic's technique)
 │   │   ├── gdrive_sync.py     # Google Drive integration
-│   │   ├── metadata_extractor.py
-│   │   └── pdf_processor.py   # LlamaParse PDF processing
+│   │   ├── metadata_extractor.py   # LLM-extracted metadata (brand, product_type, etc.)
+│   │   └── pdf_processor.py   # LlamaParse PDF processing + contextual enrichment
+│   ├── retrieval/
+│   │   ├── auto_retriever.py  # Auto-retriever with metadata filtering
+│   │   └── keyword_retriever.py    # Qdrant keyword search + RRF fusion
 │   ├── config/                # Settings (pydantic-settings)
 │   └── main.py                # FastAPI app entry point
 ├── .env.example

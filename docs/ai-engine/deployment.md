@@ -9,7 +9,7 @@ Hướng dẫn triển khai AI Engine cho production.
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
 | **Python** | 3.11 | 3.11+ |
-| **RAM** | 512MB | 1GB |
+| **RAM** | 1GB | 2GB (reranker model ~80MB in memory) |
 | **Storage** | 1GB | 5GB |
 | **Docker** | 24.0+ | Latest |
 
@@ -70,11 +70,17 @@ cp .env.example .env
 DEEPSEEK_API_KEY=sk-xxx
 OPENAI_API_KEY=sk-xxx
 LLAMA_CLOUD_API_KEY=llx-xxx
+VOYAGEAI_API_KEY=pa-xxx
 
 # Qdrant Cloud
 QDRANT_URL=https://xxx.aws.cloud.qdrant.io:6333
 QDRANT_API_KEY=xxx
 QDRANT_COLLECTION=tte_knowledge_base
+
+# Retrieval Enhancements (tất cả có default, chỉ cần set nếu muốn thay đổi)
+CONTEXTUAL_ENRICHMENT_ENABLED=true   # Contextual Retrieval cho chunks
+RERANK_ENABLED=true                   # Cross-encoder reranking
+HYBRID_SEARCH_ENABLED=true            # Vector + keyword search fusion
 
 # Optional: Google Drive
 GOOGLE_DRIVE_FOLDER_ID=1abc...xyz
@@ -127,9 +133,14 @@ cd apps/ai-engine
 # Install dependencies
 pip install -e ".[dev]"
 
+# Install reranking dependencies (cross-encoder model ~80MB, downloads on first query)
+pip install "llama-index-postprocessor-sbert-rerank>=0.5.0" "sentence-transformers>=3.0.0"
+
 # Run development server
 uvicorn src.main:app --reload --port 4003
 ```
+
+> **Lưu ý:** Lần đầu query sau khởi động, reranker model sẽ tự download (~80MB). Sau đó được cache local.
 
 ---
 
