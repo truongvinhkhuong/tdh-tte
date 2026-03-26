@@ -89,11 +89,11 @@ export const Products: CollectionConfig = {
                                 },
                                 {
                                     name: 'value',
-                                    type: 'text',
+                                    type: 'textarea',
                                     localized: true,
                                     required: true,
                                     admin: {
-                                        description: 'VD: "100"',
+                                        description: 'VD: "100" hoặc "Bronze: 400 psi at 150°F/250 psi at 400°F"',
                                     },
                                 },
                                 {

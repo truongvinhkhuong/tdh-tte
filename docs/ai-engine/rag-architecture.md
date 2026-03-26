@@ -8,43 +8,43 @@ Tài liệu phân tích chi tiết kiến trúc RAG (Retrieval-Augmented Generat
 
 ```mermaid
 graph TB
-    User(["Người dùng"])
+    User["Người dùng"]
 
     subgraph Frontend["FRONTEND — Next.js 16"]
-        CW["ChatWidget"]
-        TC["TechnicalChat"]
-        SDK["Vercel AI SDK v6"]
-        LS["localStorage"]
-        SS["useSmartSuggestions"]
+        CW["ChatWidget — Floating UI"]
+        TC["TechnicalChat — useChat hook"]
+        SDK["Vercel AI SDK v6\nTextStreamChatTransport"]
+        LS["localStorage\nsession_id, messages x20"]
+        SS["useSmartSuggestions\n→ SuggestionChips"]
         CW --> TC --> SDK
         TC --> LS
         TC --> SS
     end
 
     subgraph Backend["BACKEND — NestJS 10"]
-        TG["ThrottlerGuard"]
+        TG["ThrottlerGuard\nIP: 5/min · Session: 20/hr · Global: 100/min"]
         PIG["PromptInjection Guard"]
         RC["RAGController"]
-        SVC["Session + Cache Service"]
+        SVC["SessionService + CacheService\nRedis"]
         TG --> PIG --> RC --> SVC
     end
 
     subgraph AIEngine["AI ENGINE — FastAPI"]
-        Routes["/api/chat · /stream · /suggestions"]
+        Routes["/api/chat\n/api/chat/stream\n/api/chat/suggestions"]
         RAG["RAGEngine — Singleton"]
-        Routes --> RAG
+        Pipeline["FAQ Filter → Semantic Cache → Model Router\n↓\nVector Search + Keyword Search → RRF Fusion\n↓\nCross-Encoder Reranker\n↓\nDeepSeek LLM Stream → OpenAI Fallback"]
+        Routes --> RAG --> Pipeline
     end
 
     subgraph Storage["STORAGE LAYER"]
-        Redis[("Redis")]
-        Qdrant[("Qdrant Cloud")]
+        Redis["Redis\nsemantic:cache:* — 30d\nsuggestions:* — 24h\nchat:session:* — 30min\nchat:cache:* — 24h"]
+        Qdrant["Qdrant Cloud\nVector Embeddings — 1024d, Cosine\nText Payload Index — Keyword\nMetadata Payload — brand, type..."]
     end
 
     User --> Frontend
-    Frontend -->|"SSE stream + suggestions"| Backend
+    Frontend -->|"POST /api/rag/chat/stream SSE\nPOST /api/rag/chat/suggestions"| Backend
     Backend -->|"HTTP — cache miss"| AIEngine
-    AIEngine --> Redis
-    AIEngine --> Qdrant
+    AIEngine --> Storage
     Backend --> Redis
 
     style Frontend fill:#dbeafe,stroke:#2563eb
@@ -53,12 +53,7 @@ graph TB
     style Storage fill:#f3e8ff,stroke:#7c3aed
 ```
 
-| Layer | Components | Chi tiết |
-|-------|-----------|----------|
-| **Frontend** | ChatWidget, TechnicalChat, Vercel AI SDK v6 | useChat + TextStreamChatTransport, localStorage (session_id, messages x20), SuggestionChips |
-| **Backend** | ThrottlerGuard, PromptInjection Guard, RAGController | Rate limit: IP 5/min, Session 20/hr, Global 100/min |
-| **AI Engine** | RAGEngine (Singleton), Routes | /api/chat, /api/chat/stream, /api/chat/suggestions |
-| **Storage** | Redis, Qdrant Cloud | semantic:cache 30d, suggestions 24h, session 30min, cache 24h · Vectors 1024d Cosine + Text Index |
+
 
 ---
 
@@ -72,14 +67,22 @@ Toàn bộ pipeline được chia thành **2 giai đoạn chính**: **Ingestion*
 
 ```mermaid
 graph LR
-    PDF["PDF Upload"]
-    GDrive["Google Drive"]
-    Parse["LlamaParse"]
-    Chunk["Chunking"]
-    Meta["MetadataExtractor"]
-    Enrich["Contextual Enrichment"]
-    Embed["Embedding"]
-    Store[("Qdrant Cloud")]
+    subgraph Input["Nguồn tài liệu"]
+        PDF["PDF Upload\nPOST /api/ingest"]
+        GDrive["Google Drive\nAuto-sync"]
+    end
+
+    Parse["LlamaParse\nAI Parse → Markdown\nGiữ bảng, heading, format"]
+
+    Chunk["Chunking\n1024 tokens, overlap 200"]
+
+    Meta["MetadataExtractor\nLLM extract: brand,\nproduct_type, pressure_class..."]
+
+    Enrich["Contextual Enrichment\nLLM sinh context/chunk\nBatch: 5 concurrent"]
+
+    Embed["Embedding\nVoyage AI voyage-3.5-lite\n1024 dimensions"]
+
+    Store[("Qdrant Cloud\nVector Store")]
 
     PDF --> Parse
     GDrive --> Parse
@@ -89,30 +92,36 @@ graph LR
     Enrich --> Embed
     Embed --> Store
 
-    style Parse fill:#d1fae5,stroke:#059669
-    style Enrich fill:#d1fae5,stroke:#059669
+    style Input fill:#fef3c7,stroke:#d97706
     style Store fill:#f3e8ff,stroke:#7c3aed
 ```
 
-| Bước | Module | Chi tiết |
-|------|--------|----------|
-| **PDF Upload** | POST /api/ingest | Upload trực tiếp hoặc Google Drive auto-sync |
-| **LlamaParse** | AI Parse → Markdown | Giữ bảng, heading, format nguyên vẹn. Đơn vị: PSI, bar, mm |
-| **Chunking** | MarkdownNodeParser / SentenceSplitter | 1024 tokens, overlap 200. Markdown-aware nếu có bảng/heading |
-| **MetadataExtractor** | DeepSeek LLM (T=0.0) | Extract: brand, product_type, pressure_class, size_range, certification... |
-| **Contextual Enrichment** | DeepSeek LLM (T=0.0, 256 tokens) | Prepend document context vào mỗi chunk. Batch 5 concurrent |
-| **Embedding** | Voyage AI voyage-3.5-lite | 1024 dimensions |
-| **Qdrant Cloud** | Vector Store | HNSW index + Text payload index cho keyword search |
 
-#### 1.1 Chunking — Chia nhỏ tài liệu
+
+#### 1.1 PDF Parsing — LlamaParse
 
 ```mermaid
 graph TD
-    Doc["Markdown Document"]
+    PDF["Fisher_HP_Datasheet.pdf\nKỹ thuật, bảng biểu phức tạp"]
+    LP["LlamaParse — AI\n\nSystem Prompt:\nTechnical document for industrial equipment\nPRESERVE ALL TABLES"]
+    Out["Markdown Output\nBảng, heading, format nguyên vẹn\nĐơn vị: PSI, bar, mm\nCertifications: API, ISO"]
+
+    PDF --> LP --> Out
+
+    style LP fill:#d1fae5,stroke:#059669
+```
+
+
+
+#### 1.2 Chunking — Chia nhỏ tài liệu
+
+```mermaid
+graph TD
+    Doc["Markdown Document — vd: 50 trang"]
     Check{"Có bảng/heading?"}
-    MDP["MarkdownNodeParser"]
-    SS["SentenceSplitter"]
-    Chunks["Chunks — 1024 tokens, overlap 200"]
+    MDP["MarkdownNodeParser\nChia theo cấu trúc"]
+    SS["SentenceSplitter\nChia theo câu"]
+    Chunks["Chunks — 1024 tokens, overlap 200\n\nChunk 1: Fisher HP Series có áp suất...\nChunk 2: Bảng thông số Cv values...\n..."]
 
     Doc --> Check
     Check -->|YES| MDP
@@ -123,26 +132,30 @@ graph TD
     style Check fill:#fef3c7,stroke:#d97706
 ```
 
-#### 1.2 Contextual Enrichment — Giàu hóa ngữ cảnh
 
-Kỹ thuật **Contextual Retrieval** từ Anthropic — giải quyết vấn đề chunk mất ngữ cảnh.
+
+#### 1.3 Contextual Enrichment — Giàu hóa ngữ cảnh
+
+Đây là kỹ thuật **Contextual Retrieval** từ Anthropic — giải quyết vấn đề chunk mất ngữ cảnh.
 
 ```mermaid
 graph TD
-    subgraph Problem["VẤN ĐỀ"]
-        Raw["Chunk gốc — thiếu ngữ cảnh"]
-        Issue["Embedding không biết thuộc sản phẩm nào"]
+    subgraph Problem["VẤN ĐỀ: Chunk mất ngữ cảnh"]
+        Raw["Chunk gốc:\nÁp suất làm việc tối đa: 4150 PSI\nNhiệt độ: -46°C đến 593°C\nVật liệu body: WCB, CF8M, CF3M"]
+        Issue["Embedding KHÔNG biết đây là\nthông số của sản phẩm nào!\n→ Hỏi Fisher HP pressure rating → có thể miss"]
         Raw --> Issue
     end
 
-    subgraph Solution["GIẢI PHÁP — giảm ~49% lỗi retrieval"]
-        FullDoc["Full Document — 6000 chars đầu"]
+    subgraph Solution["GIẢI PHÁP: Contextual Enrichment"]
+        FullDoc["Full Document\n6000 chars đầu"]
         ChunkIn["Chunk gốc"]
-        LLM["DeepSeek LLM — T=0.0"]
-        Enriched["Chunk + Context prefix"]
+        LLM["DeepSeek LLM\nT=0.0, max_tokens=256"]
+        Enriched["Chunk sau enrich:\n\nCONTEXT: This chunk is from Fisher HP\nSeries control valve datasheet, section:\nTechnical Specifications. Product: Fisher\nHP globe valve for high-pressure applications.\n\nÁp suất làm việc tối đa: 4150 PSI\nNhiệt độ: -46°C đến 593°C\nVật liệu body: WCB, CF8M, CF3M"]
+        Result["Embedding BIẾT đây là Fisher HP\n→ Tìm chính xác khi hỏi Fisher HP pressure\nKẾT QUẢ: giảm ~49% lỗi retrieval"]
+
         FullDoc --> LLM
         ChunkIn --> LLM
-        LLM --> Enriched
+        LLM --> Enriched --> Result
     end
 
     Problem -.->|"Giải quyết bằng"| Solution
@@ -151,15 +164,30 @@ graph TD
     style Solution fill:#d1fae5,stroke:#059669
 ```
 
-**Trước và sau enrichment:**
 
-| | Trước | Sau |
-|---|-------|-----|
-| **Chunk** | "Áp suất tối đa: 4150 PSI, Nhiệt độ: -46°C đến 593°C" | "[Context: Fisher HP Series control valve datasheet, Technical Specifications] Áp suất tối đa: 4150 PSI..." |
-| **Embedding hiểu** | Thông số kỹ thuật chung chung | Thông số của Fisher HP control valve |
-| **Search** | Có thể miss khi hỏi "Fisher HP pressure" | Tìm chính xác |
 
-> **Lưu ý:** `original_text` lưu riêng trong metadata → citation hiển thị KHÔNG có `[Context: ...]`. Nếu LLM fail → dùng chunk gốc (graceful degradation).
+**Lưu ý kỹ thuật:**
+
+- `original_text` được lưu riêng trong metadata → hiển thị citation KHÔNG có phần `[Context: ...]`
+- Batch processing: 5 chunks xử lý đồng thời (`asyncio.gather`)
+- Nếu LLM fail cho chunk nào → dùng chunk gốc (graceful degradation)
+
+#### 1.4 Metadata Extraction — Trích xuất metadata có cấu trúc
+
+```mermaid
+graph LR
+    Chunk["Chunk text"]
+    ME["MetadataExtractor\nDeepSeek LLM — T=0.0"]
+    JSON["Structured JSON\n\nbrand: Fisher\nproduct_series: HP Series\nproduct_type: Control Valve\npressure_class: CL2500\nsize_range: 1 inch - 24 inch\nconnection_type: Flanged\nbody_material: WCB, CF8M\ntemperature_range: -46°C to 593°C\napplication: Oil and Gas, Refining\ncertification: API 6D, API 607"]
+    Store[("Qdrant\nMetadata payload\n→ Filtered search")]
+
+    Chunk --> ME --> JSON --> Store
+
+    style ME fill:#d1fae5,stroke:#059669
+    style Store fill:#f3e8ff,stroke:#7c3aed
+```
+
+
 
 ---
 
@@ -167,69 +195,76 @@ graph TD
 
 ```mermaid
 graph TD
-    Q(["Câu hỏi"])
+    Q["Câu hỏi: Van Fisher HP có thông số áp suất bao nhiêu?"]
 
-    subgraph P1["PHASE 1 — FAQ Pre-Filter"]
-        FAQ_N["Normalize tiếng Việt"]
-        FAQ_Check{"FAQ match?"}
-        FAQ_Hit["Static response — confidence 100%"]
-        FAQ_N --> FAQ_Check
-        FAQ_Check -->|"HIT"| FAQ_Hit
+    subgraph P1["PHASE 1: FAQ Pre-Filter — ~50% LLM calls skip"]
+        FAQ_N["normalize → van fisher hp..."]
+        FAQ_DB["FAQ Database ~50 entries\nTTE là gì? · Liên hệ? · Giờ làm việc?"]
+        FAQ_Check{"Match?"}
+        FAQ_Hit["Return static response\nconfidence=100%, skip pipeline"]
+        FAQ_N --> FAQ_DB --> FAQ_Check
+        FAQ_Check -->|"YES"| FAQ_Hit
     end
 
-    subgraph P2["PHASE 2 — Semantic Cache"]
-        SC_Embed["Embed → vector 1024-dim"]
-        SC_Check{"Cosine ≥ 0.96?"}
-        SC_Hit["Cached response"]
-        SC_Embed --> SC_Check
+    subgraph P2["PHASE 2: Semantic Cache — +30% cache hit"]
+        SC_Embed["Embed câu hỏi → vector 1024-dim"]
+        SC_Compare["Cosine similarity vs cache:\nFisher HP pressure? → 0.97 HIT\nVan an toàn Fisher? → 0.89 MISS\nBettis actuator spec? → 0.42 MISS"]
+        SC_Check{"sim ≥ 0.96?"}
+        SC_Hit["Return cached response"]
+        SC_Note["Tại sao 0.96 thay vì 0.92?\nvan điều khiển vs van an toàn ≈ 0.93-0.95\n→ 0.92 gây false positive"]
+        SC_Embed --> SC_Compare --> SC_Check
         SC_Check -->|"HIT"| SC_Hit
+        SC_Note ~~~ SC_Check
     end
 
-    subgraph P3["PHASE 3 — Smart Model Routing"]
-        MR["Phân loại độ phức tạp"]
-        MR_S["SIMPLE — 512 tokens"]
-        MR_M["MEDIUM — 1024 tokens"]
-        MR_C["COMPLEX — 2048 tokens"]
-        MR --> MR_S
-        MR --> MR_M
-        MR --> MR_C
+    subgraph P3["PHASE 3: Smart Model Routing — ~40% giảm chi phí LLM"]
+        MR_Classify["Phân loại độ phức tạp"]
+        MR_Simple["SIMPLE — 512 tokens\nFisher GX là gì?\n≤8 words"]
+        MR_Medium["MEDIUM — 1024 tokens\nVan HP áp suất bao nhiêu?\n1 keyword"]
+        MR_Complex["COMPLEX — 2048 tokens\nSo sánh Fisher GX và DVC6200...\n≥2 keywords + >30 words"]
+        MR_Classify --> MR_Simple
+        MR_Classify --> MR_Medium
+        MR_Classify --> MR_Complex
     end
 
-    subgraph P4["PHASE 4 — Hybrid Retrieval"]
-        VS["Vector Search — Qdrant ANN top_k=15"]
-        KS["Keyword Search — Qdrant Full-text"]
-        SF["Similarity Filter ≥ 0.3"]
-        SW["Stop-word removal"]
-        RRF["RRF Fusion — 70% vector, 30% keyword"]
+    subgraph P4["PHASE 4: Hybrid Retrieval"]
+        QE["Query Embedding — Voyage AI"]
+        VS["VECTOR SEARCH\nQdrant ANN, top_k=15"]
+        KS["KEYWORD SEARCH\nQdrant Full-text, top_k=15"]
+        SF["Similarity Filter ≥0.3"]
+        SW["Stop-word removal — EN+VI"]
+        RRF["Reciprocal Rank Fusion\nscore = 0.7/k+rank_v + 0.3/k+rank_k\n70% vector · 30% keyword\nDeduplicate by node_id"]
 
-        VS --> SF --> RRF
-        KS --> SW --> RRF
+        QE --> VS --> SF --> RRF
+        QE --> KS --> SW --> RRF
     end
 
-    subgraph P5["PHASE 5 — Cross-Encoder Reranking"]
-        RE_In["15 candidates"]
-        RE_Model["ms-marco-MiniLM-L-6-v2 — LOCAL"]
-        RE_Out["Top 3 documents"]
+    subgraph P5["PHASE 5: Cross-Encoder Reranking — thêm ~18% giảm lỗi"]
+        RE_In["15 candidates từ hybrid retrieval"]
+        RE_Model["ms-marco-MiniLM-L-6-v2\nCross-Encoder: encode query + doc CÙNG LÚC\nChạy LOCAL, ~80MB, $0 cost"]
+        RE_Out["Top 3 documents chính xác nhất\nRestore original cosine scores"]
         RE_In --> RE_Model --> RE_Out
     end
 
-    subgraph P6["PHASE 6 — LLM Generation"]
-        CC{"confidence ≥ 20%?"}
-        FB["Fallback message"]
-        DS["DeepSeek LLM — stream"]
-        OAI["OpenAI gpt-4o-mini"]
-        STATIC["Static fallback"]
+    subgraph P6["PHASE 6: LLM Generation + Streaming"]
+        CC{"confidence ≥ 20%\nAND sources > 0?"}
+        FB["Fallback: Xin lỗi, tôi chưa tìm thấy..."]
+        CTX["Context Building\noriginal_text — không Context prefix\nJoin 3 chunks"]
+        DS["DeepSeek LLM — primary\nT=0.1, max_tokens routed\nastream_complete → token-by-token\nFirst token: ~500ms"]
+        OAI["OpenAI gpt-4o-mini — fallback\nT=0.1"]
+        STATIC["Static fallback message + contact info"]
         CC -->|"NO"| FB
-        CC -->|"YES"| DS
+        CC -->|"YES"| CTX --> DS
         DS -->|"fail"| OAI
         OAI -->|"fail"| STATIC
     end
 
-    subgraph P7["PHASE 7 — Post-Processing"]
-        CIT["Extract Citations"]
-        CONF["Calculate Confidence"]
-        CACHE["Cache — Semantic 30d, NestJS 24h"]
-        CIT --> CONF --> CACHE
+    subgraph P7["PHASE 7: Post-Processing + Caching"]
+        CIT["Extract Citations\nsource, page, doc_type, preview, score\nDeduplicate by file_name + page"]
+        CONF["Calculate Confidence\nWeighted avg cosine scores\nWeight = 1/rank+1, cap 95%"]
+        CACHE["Cache to Semantic Cache — 30d\nCache to NestJS layer — 24h"]
+        RETURN["Return:\nanswer, citations, confidence, sources_count"]
+        CIT --> CONF --> CACHE --> RETURN
     end
 
     Q --> P1
@@ -250,22 +285,18 @@ graph TD
     style P7 fill:#f3e8ff,stroke:#7c3aed
 ```
 
-| Phase | Module | Impact | Chi tiết |
-|-------|--------|--------|----------|
-| **1. FAQ Pre-Filter** | FAQPreFilter | ~50% LLM calls skip | ~50 entries, Vietnamese diacritic normalization, exact + keyword match |
-| **2. Semantic Cache** | SemanticCache | +30% cache hit | Cosine ≥ 0.96 (tránh false positive), Redis 30d, LRU 1000 entries |
-| **3. Model Routing** | SmartModelRouter | ~40% giảm chi phí LLM | SIMPLE ≤8 words → 512 tokens, COMPLEX ≥2 keywords → 2048 tokens |
-| **4. Hybrid Retrieval** | VectorIndexRetriever + QdrantKeywordRetriever | Better recall | RRF Fusion: `score = 0.7/(k+rank_v) + 0.3/(k+rank_k)` |
-| **5. Reranking** | ms-marco-MiniLM-L-6-v2 | thêm ~18% giảm lỗi | Cross-encoder LOCAL, ~80MB, $0 cost. 15 → 3 results |
-| **6. LLM Generation** | DeepSeek → OpenAI fallback | ~500ms first token | astream_complete() token-by-token, SSE streaming |
-| **7. Post-Processing** | Citations + Confidence + Cache | | Weighted avg cosine scores, cap 95%, deduplicate by file+page |
 
-**Tại sao Hybrid Search?**
-- **Vector**: tốt cho ngữ nghĩa ("van chịu áp lực cao" → Fisher HP)
-- **Keyword**: tốt cho exact match ("DVC6200" → đúng model number)
 
-**Tại sao threshold 0.96?**
-- "van điều khiển" vs "van an toàn" ≈ 0.93-0.95 → 0.92 gây false positive cache hit
+**Tại sao Hybrid Search (Phase 4)?**
+
+- **Vector search**: tốt cho câu hỏi ngữ nghĩa ("van chịu áp lực cao" → Fisher HP)
+- **Keyword search**: tốt cho exact match ("DVC6200" → đúng model number)
+- **RRF Fusion**: kết hợp ưu điểm của cả hai
+
+**Bi-encoder vs Cross-encoder (Phase 5):**
+
+- Bi-encoder: `encode(query)` · `encode(doc)` → nhanh nhưng kém chính xác
+- Cross-encoder: `encode(query + doc cùng lúc)` → chậm hơn nhưng chính xác hơn nhiều
 
 ---
 
@@ -273,67 +304,82 @@ graph TD
 
 ```mermaid
 graph TD
-    Trigger(["Stream xong — status = ready"])
-    Req["POST /api/chat/suggestions"]
+    Trigger["Frontend detect status = ready\nStream xong"]
+    Req["POST /api/chat/suggestions\nbody: question, answer, language"]
 
-    FB_Check{"Fallback answer?"}
-    FB_Return["return empty list"]
+    FB_Check{"answer chứa\nXin lỗi, tôi chưa tìm thấy\nhoặc I apologize?"}
+    FB_Return["return empty list\nKhông gợi ý cho fallback"]
 
-    Cache_Check{"Redis cache hit?"}
+    Cache_Check{"Redis cache\nsuggestions:md5 of q+lang"}
     Cache_Hit["return cached suggestions"]
 
-    LLM["DeepSeek LLM — T=0.7, 200 tokens"]
-    Validate["Validate: max 3, dưới 80 ký tự"]
-    Save["Cache to Redis — 24h"]
-    Chips(["SuggestionChips — 3 nút bấm"])
+    LLM["DeepSeek LLM\nT=0.7 creative, max_tokens=200\n\nPrompt few-shot:\nGợi ý 3 câu hỏi tiếp theo:\n1 câu đi sâu hơn\n1 câu so sánh/mở rộng\n1 câu ứng dụng thực tế"]
+
+    Validate["Validation\nMax 3 items · Mỗi câu dưới 80 ký tự\nKhông trùng câu hỏi gốc\nJSON parse + regex fallback"]
+
+    Save["Cache to Redis — 24h TTL"]
+
+    Result["Return 3 suggestions:\nFisher HP phù hợp ứng dụng nào?\nSo sánh Fisher HP với DVC6200?\nCách bảo trì van Fisher HP?"]
+
+    Chips["SuggestionChips\n3 nút bấm, fade-in animation\nClick → gửi câu hỏi mới"]
 
     Trigger --> Req --> FB_Check
     FB_Check -->|"YES"| FB_Return
     FB_Check -->|"NO"| Cache_Check
-    Cache_Check -->|"HIT"| Cache_Hit --> Chips
-    Cache_Check -->|"MISS"| LLM --> Validate --> Save --> Chips
+    Cache_Check -->|"HIT"| Cache_Hit
+    Cache_Check -->|"MISS"| LLM --> Validate --> Save --> Result --> Chips
+    Cache_Hit --> Chips
 
     style Trigger fill:#dbeafe,stroke:#2563eb
     style LLM fill:#d1fae5,stroke:#059669
     style Chips fill:#fef3c7,stroke:#d97706
 ```
 
-| Chi tiết | Giá trị |
-|----------|---------|
-| **Endpoint** | POST /api/chat/suggestions (async, tách biệt chat flow) |
-| **Prompt** | Few-shot: 1 câu đi sâu, 1 câu so sánh, 1 câu ứng dụng thực tế |
-| **Fallback detection** | Skip nếu answer chứa "Xin lỗi, tôi chưa tìm thấy" / "I apologize" |
-| **Error handling** | NEVER throws → return `[]` → UI ẩn suggestions |
-| **Chi phí** | ~$0.00004/call |
+
+
+> **Error handling**: NEVER throws → return `[]` → UI ẩn suggestions
+> **Chi phí**: ~$0.00004/call
 
 ---
 
 ## Singleton Pattern — Module Registry
 
-Tất cả core module dùng Singleton pattern để tránh re-initialization (~500ms/request).
+Tất cả core module dùng Singleton pattern để tránh re-initialization.
 
 ```mermaid
 graph LR
-    subgraph Registry["MODULE REGISTRY — Singletons"]
-        F1["get_rag_engine()"] --> M1["RAGEngine"]
-        F2["get_faq_filter()"] --> M2["FAQPreFilter"]
-        F3["get_semantic_cache()"] --> M3["SemanticCache"]
-        F4["get_model_router()"] --> M4["SmartModelRouter"]
-        F5["get_suggestion_generator()"] --> M5["SuggestionGenerator"]
-        F6["get_redis_client()"] --> M6["RedisClient"]
+    subgraph Registry["MODULE REGISTRY — Singletons — tiết kiệm ~500ms/request"]
+
+        F1["get_rag_engine()"]
+        M1["RAGEngine\nQdrant clients · VectorStoreIndex\nReranker lazy · KeywordRetriever lazy"]
+
+        F2["get_faq_filter()"]
+        M2["FAQPreFilter\n~50 FAQ entries bilingual\nVietnamese normalization"]
+
+        F3["get_semantic_cache()"]
+        M3["SemanticCache\nIn-memory + Redis backup\n1000 max entries LRU · Cosine ≥ 0.96"]
+
+        F4["get_model_router()"]
+        M4["SmartModelRouter\nComplexity classification\nToken limit routing"]
+
+        F5["get_suggestion_generator()"]
+        M5["SuggestionGenerator\nDeepSeek T=0.7\nRedis cache 24h"]
+
+        F6["get_redis_client()"]
+        M6["RedisClient\nAsync aioredis\nAuto-reconnect"]
+
+        F1 --> M1
+        F2 --> M2
+        F3 --> M3
+        F4 --> M4
+        F5 --> M5
+        F6 --> M6
     end
 
     style Registry fill:#f8fafc,stroke:#64748b
 ```
 
-| Factory | Class | Nội dung |
-|---------|-------|----------|
-| `get_rag_engine()` | RAGEngine | Qdrant clients, VectorStoreIndex, Reranker (lazy), KeywordRetriever (lazy) |
-| `get_faq_filter()` | FAQPreFilter | ~50 FAQ entries bilingual, Vietnamese normalization |
-| `get_semantic_cache()` | SemanticCache | In-memory + Redis backup, 1000 max entries LRU, Cosine ≥ 0.96 |
-| `get_model_router()` | SmartModelRouter | Complexity classification, Token limit routing |
-| `get_suggestion_generator()` | SuggestionGenerator | DeepSeek T=0.7, Redis cache 24h |
-| `get_redis_client()` | RedisClient | Async aioredis, Auto-reconnect |
+
 
 ---
 
@@ -341,14 +387,19 @@ graph LR
 
 ```mermaid
 graph TD
-    AI["AI ENGINE — FastAPI"]
+    AI["AI ENGINE\nFastAPI"]
 
-    DS["DeepSeek API"]
-    VA["Voyage AI API"]
-    RD[("Redis")]
-    QD[("Qdrant Cloud")]
-    LC["LlamaCloud"]
-    GD["Google Drive API"]
+    DS["DeepSeek API\nChat LLM · Enrichment\nSuggestion · Metadata\nFallback: OpenAI gpt-4o-mini"]
+
+    VA["Voyage AI API\nEmbedding 1024 dims\nvoyage-3.5-lite\nFallback: OpenAI embed-3-small"]
+
+    RD["Redis\nCache — semantic 30d, suggestion 24h\nSession 30min · Response 24h"]
+
+    QD["Qdrant Cloud\nVector Store ANN\nBM25 Full-text Index"]
+
+    LC["LlamaCloud\nPDF Parse — LlamaParse\nTables · 1000 pages/day free"]
+
+    GD["Google Drive API\nService Account\nAuto-sync PDFs\nIncremental by modified_time"]
 
     AI --> DS
     AI --> VA
@@ -366,14 +417,7 @@ graph TD
     style GD fill:#f1f5f9,stroke:#94a3b8
 ```
 
-| Service | Mục đích | Fallback |
-|---------|---------|----------|
-| **DeepSeek API** | Chat LLM, Enrichment, Suggestion, Metadata | OpenAI gpt-4o-mini |
-| **Voyage AI API** | Embedding 1024 dims (voyage-3.5-lite) | OpenAI text-embedding-3-small |
-| **Redis** | Semantic cache 30d, Suggestion 24h, Session 30min, Response 24h | In-memory only |
-| **Qdrant Cloud** | Vector Store (ANN) + BM25 Full-text Index | N/A (required) |
-| **LlamaCloud** | PDF Parse via LlamaParse, 1000 pages/day free | N/A |
-| **Google Drive API** | Auto-sync PDFs, incremental by modified_time | Optional |
+
 
 ---
 
@@ -381,22 +425,32 @@ graph TD
 
 ```mermaid
 graph LR
-    B["TRƯỚC: ~$400/tháng"]
-    L1["FAQ Filter: -50% LLM"]
-    L2["Semantic Cache: +30% hit"]
-    L3["Model Routing: -40% tokens"]
-    L4["Voyage AI: -60% embedding"]
-    L5["Local Reranker: $0"]
-    L6["Suggestions: $0.00004/call"]
-    A["SAU: ~$140/tháng"]
+    subgraph Before["Không tối ưu"]
+        B["~$400/tháng\n10,000 queries/ngày"]
+    end
 
-    B --> L1 --> L2 --> L3 --> L4 --> L5 --> L6 --> A
+    subgraph Layers["6 tầng tối ưu hóa"]
+        L1["Layer 1: FAQ Filter\n-50% LLM calls\n5,000 queries skip"]
+        L2["Layer 2: Semantic Cache\n+30% cache hit\n1,500 queries cached"]
+        L3["Layer 3: Model Routing\n-40% tokens output\nSIMPLE 40% · MEDIUM 45% · COMPLEX 15%"]
+        L4["Layer 4: Voyage AI Embedding\n-60% embedding cost"]
+        L5["Layer 5: Local Reranker\n$0 cost\nChạy local, 80MB RAM"]
+        L6["Layer 6: Smart Suggestions\n~$0.00004/call"]
+        L1 --> L2 --> L3 --> L4 --> L5 --> L6
+    end
 
-    style B fill:#fee2e2,stroke:#dc2626
-    style A fill:#d1fae5,stroke:#059669
+    subgraph After["Sau tối ưu"]
+        A["~$140/tháng\nTiết kiệm ~65%"]
+    end
+
+    Before --> Layers --> After
+
+    style Before fill:#fee2e2,stroke:#dc2626
+    style After fill:#d1fae5,stroke:#059669
+    style Layers fill:#f8fafc,stroke:#64748b
 ```
 
-> **10,000 queries/ngày — tiết kiệm ~65%**: FAQ skip 5,000 → Semantic cache 1,500 → Model routing giảm 40% tokens → Voyage AI embedding 60% rẻ hơn → Reranker chạy local $0 → Suggestions ~$0.00004/call
+
 
 ---
 
@@ -404,12 +458,17 @@ graph LR
 
 ```mermaid
 graph TD
-    BL["Baseline — 100% retrieval errors"]
-    CE["+ Contextual Enrichment: GIẢM 49%"]
-    RR["+ Cross-Encoder Reranking: THÊM 18%"]
-    HS["+ Hybrid Search BM25: exact match"]
-    SC["+ Semantic Cache: 0.92 → 0.96"]
-    TOTAL["Tổng: ~67% giảm lỗi"]
+    BL["Baseline\nVector search only\n100% retrieval errors"]
+
+    CE["+ Contextual Enrichment — Phase 1\nGIẢM 49% lỗi\nChunk biết thuộc tài liệu nào, sản phẩm nào"]
+
+    RR["+ Cross-Encoder Reranking — Phase 2\nTHÊM 18% giảm lỗi\nTop 15 → Top 3 chính xác nhất"]
+
+    HS["+ Hybrid Search / BM25 — Phase 3\nCẢI THIỆN exact match\nModel numbers: DVC6200, MR95 tìm chính xác"]
+
+    SC["+ Semantic Cache Tuning\n0.92 → 0.96\nvan điều khiển ≠ van an toàn\nGiảm false positive cache hits"]
+
+    TOTAL["Tổng cải thiện retrieval\n~67% giảm lỗi so với baseline"]
 
     BL --> CE --> RR --> HS --> SC --> TOTAL
 
@@ -421,12 +480,7 @@ graph TD
     style TOTAL fill:#dbeafe,stroke:#2563eb
 ```
 
-| Cải tiến | Impact | Chi tiết |
-|----------|--------|----------|
-| **Contextual Enrichment** | -49% lỗi retrieval | Chunk biết thuộc tài liệu nào, sản phẩm nào |
-| **Cross-Encoder Reranking** | thêm -18% lỗi | ms-marco-MiniLM-L-6-v2, local, $0. Top 15 → Top 3 |
-| **Hybrid Search / BM25** | cải thiện exact match | Model numbers (DVC6200, MR95) tìm được chính xác |
-| **Semantic Cache Tuning** | giảm false positive | "van điều khiển" ≠ "van an toàn" (sim ≈ 0.93-0.95) |
+
 
 ---
 
@@ -434,31 +488,37 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph Point["QDRANT POINT"]
+    subgraph Point["QDRANT POINT STRUCTURE"]
         ID["id: uuid-v4"]
-        VEC["vector: 1024 dimensions"]
+        VEC["vector: 0.0123, -0.0456, ..., 0.0789\n1024 dimensions"]
 
-        subgraph Payload["Payload"]
-            NC["_node_content — searchable"]
-            OT["original_text — for display"]
+        subgraph Payload["payload"]
+            NC["_node_content — searchable\nContext: Fisher HP Series... Áp suất tối đa: 4150 PSI..."]
+            OT["original_text — display\nÁp suất làm việc tối đa: 4150 PSI..."]
 
             subgraph DocMeta["Document Metadata"]
-                FN["file_name"]
-                PL["page_label"]
-                DT["doc_type"]
+                FN["file_name: Fisher_HP_Datasheet.pdf"]
+                PL["page_label: 3"]
+                DT["doc_type: datasheet"]
             end
 
-            subgraph ExtMeta["Extracted Metadata"]
-                BR["brand · product_series · product_type"]
-                PC["pressure_class · size_range · connection_type"]
-                BM["body_material · temperature_range"]
-                AP["application · certification"]
+            subgraph ExtMeta["Extracted Metadata — LLM"]
+                BR["brand: Fisher"]
+                PS["product_series: HP Series"]
+                PT["product_type: Control Valve"]
+                PC["pressure_class: CL2500"]
+                SR["size_range: 1 inch - 24 inch"]
+                CTN["connection_type: Flanged"]
+                BM["body_material: WCB, CF8M"]
+                TR["temperature_range: -46°C to 593°C"]
+                AP["application: Oil and Gas, Refining"]
+                CERT["certification: API 6D, API 607"]
             end
         end
 
         subgraph Indexes["Indexes"]
-            VI["Vector — HNSW, Cosine"]
-            TI["Text — _node_content, word tokenizer"]
+            VI["Vector index — HNSW, Cosine distance"]
+            TI["Text payload index — _node_content, word tokenizer"]
         end
     end
 
@@ -469,19 +529,7 @@ graph TD
     style Indexes fill:#fef3c7,stroke:#d97706
 ```
 
-**Ví dụ payload đầy đủ:**
 
-| Field | Value |
-|-------|-------|
-| `_node_content` | `[Context: Fisher HP Series...] Áp suất tối đa: 4150 PSI...` |
-| `original_text` | `Áp suất làm việc tối đa: 4150 PSI...` |
-| `file_name` | `Fisher_HP_Datasheet.pdf` |
-| `page_label` | `3` |
-| `doc_type` | `datasheet` |
-| `brand` | `Fisher` |
-| `product_type` | `Control Valve` |
-| `pressure_class` | `CL2500` |
-| `certification` | `API 6D, API 607` |
 
 ---
 
@@ -489,24 +537,31 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    participant FE as Frontend
-    participant BE as NestJS
-    participant AI as AI Engine
+    participant FE as Frontend — useChat
+    participant BE as NestJS — Proxy
+    participant AI as AI Engine — FastAPI
 
     FE->>BE: POST /api/rag/chat/stream
     BE->>AI: POST /api/chat/stream
 
-    Note over AI: Retrieval Phase 1-5 (~200-500ms)
+    Note over AI: Retrieval Phase 1-5\n~200-500ms
+
     Note over AI: astream_complete()
 
     AI-->>BE: SSE chunk: Van
     BE-->>FE: SSE chunk: Van
+    Note over FE: render Van
+
     AI-->>BE: SSE chunk: Fisher
     BE-->>FE: SSE chunk: Fisher
+    Note over FE: render Van Fisher
+
     AI-->>BE: SSE chunk: HP...
     BE-->>FE: SSE chunk: HP...
+    Note over FE: render Van Fisher HP...
+
     AI-->>BE: SSE done + metadata
-    BE-->>FE: SSE done + confidence + citations
+    BE-->>FE: SSE done — confidence, citations
 
     Note over FE: status = ready
 
@@ -519,6 +574,8 @@ sequenceDiagram
     Note over FE: Render SuggestionChips
 ```
 
+
+
 > **Headers**: `X-Accel-Buffering: no` (disable Nginx buffering)
 > **Format**: `data: {"type":"chunk|done|error","data":"..."}\n\n`
 
@@ -528,29 +585,28 @@ sequenceDiagram
 
 ```mermaid
 graph TD
-    Q(["Query"])
-    DS["DeepSeek LLM — primary"]
-    OAI["OpenAI gpt-4o-mini — fallback"]
-    STATIC["Static fallback message"]
-    OK1(["Return answer"])
-    OK2(["Return answer"])
+    Q["Query"]
+    DS["DeepSeek LLM\nPrimary, cost-effective"]
+    OAI["OpenAI gpt-4o-mini\nFallback"]
+    STATIC["Static Fallback Message\n\nVI: Xin lỗi, tôi chưa tìm thấy thông tin này\ntrong tài liệu kỹ thuật. Vui lòng liên hệ TTE\nđể được tư vấn trực tiếp.\n\nEN: I apologize, I could not find this information\nin the technical documentation. Please contact\nTTE for direct assistance.\n\nconfidence: 0%, is_fallback: true"]
+    OK1["Return answer"]
+    OK2["Return answer"]
+    PROG["Programmatic Fallback\nconfidence under 20% OR sources = 0\n→ Không để LLM tự đoán khi context không đủ"]
 
     Q --> DS
     DS -->|"success"| OK1
-    DS -->|"fail"| OAI
+    DS -->|"fail — API error, timeout, rate limit"| OAI
     OAI -->|"success"| OK2
     OAI -->|"fail"| STATIC
+    Q -.-> PROG -.-> STATIC
 
     style DS fill:#d1fae5,stroke:#059669
     style OAI fill:#fef3c7,stroke:#d97706
     style STATIC fill:#fee2e2,stroke:#dc2626
+    style PROG fill:#f1f5f9,stroke:#94a3b8
 ```
 
-| Fallback | Trigger | Response |
-|----------|---------|----------|
-| **DeepSeek → OpenAI** | API error, timeout, rate limit | Chuyển sang gpt-4o-mini |
-| **Programmatic** | confidence < 20% OR sources = 0 | Static message + contact info |
-| **Static message** | Cả 2 LLM fail | VI: "Xin lỗi, tôi chưa tìm thấy..." / EN: "I apologize..." |
+
 
 ---
 
@@ -581,3 +637,4 @@ apps/ai-engine/
 │       ├── keyword_retriever.py             # Qdrant full-text + RRF fusion
 │       └── auto_retriever.py                # LLM-powered metadata filtering
 ```
+
