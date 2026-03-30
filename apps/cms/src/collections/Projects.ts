@@ -19,7 +19,12 @@ export const Projects: CollectionConfig = {
             name: 'name',
             type: 'text',
             localized: true,
-            required: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tên dự án (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',
@@ -34,6 +39,29 @@ export const Projects: CollectionConfig = {
             },
         },
         {
+            name: 'shortDescription',
+            type: 'textarea',
+            localized: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Mô tả ngắn (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
+            admin: {
+                description: 'Mô tả ngắn (~150 ký tự) hiển thị trên card và SEO',
+            },
+        },
+        {
+            name: 'heroImage',
+            type: 'upload',
+            relationTo: 'media',
+            required: true,
+            admin: {
+                description: 'Ảnh đại diện hiển thị trên card danh sách và trang chi tiết',
+            },
+        },
+        {
             name: 'client',
             type: 'text',
         },
@@ -41,6 +69,16 @@ export const Projects: CollectionConfig = {
             name: 'location',
             type: 'text',
             localized: true,
+        },
+        {
+            name: 'industry',
+            type: 'relationship',
+            relationTo: 'industries',
+            required: true,
+            admin: {
+                position: 'sidebar',
+                description: 'Ngành công nghiệp (dùng để lọc và hiển thị badge)',
+            },
         },
         {
             name: 'completionYear',

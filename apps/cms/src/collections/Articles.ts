@@ -33,7 +33,12 @@ export const Articles: CollectionConfig = {
             label: 'Tiêu đề',
             type: 'text',
             localized: true,
-            required: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tiêu đề (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',

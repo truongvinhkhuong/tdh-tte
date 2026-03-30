@@ -16,7 +16,12 @@ export const Services: CollectionConfig = {
             name: 'name',
             type: 'text',
             localized: true,
-            required: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tên dịch vụ (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',

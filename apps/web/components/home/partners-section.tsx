@@ -82,11 +82,15 @@ export function PartnersSection({ lang, dict }: PartnersSectionProps) {
                                     <div className="w-28 h-20 sm:w-36 sm:h-24 md:w-48 md:h-32 lg:w-56 lg:h-36 bg-white rounded-lg md:rounded-xl shadow-sm md:shadow-md hover:shadow-2xl transition-all duration-300 flex items-center justify-center p-2 sm:p-3 md:p-4 lg:p-5 border border-gray-100 hover:border-[#364fa1]/40 hover:scale-110 cursor-pointer">
                                         <div className="relative w-full h-full">
                                             <Image
-                                                src={partner.logo}
+                                                src={partner.logo || '/brands/placeholder-logo.svg'}
                                                 alt={partner.name}
                                                 fill
                                                 className="object-contain transition-transform duration-300"
                                                 sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 192px, 224px"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.src = '/brands/placeholder-logo.svg';
+                                                }}
                                             />
                                         </div>
                                     </div>

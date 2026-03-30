@@ -23,6 +23,7 @@ export function Footer({ lang, dict }: FooterProps) {
         { label: dict.footer.links.services, href: `/${lang}/services` },
         { label: dict.footer.links.projects, href: `/${lang}/projects` },
         { label: dict.footer.links.blog, href: `/${lang}/news` },
+        { label: dict.footer.links.careers, href: `/${lang}/careers` },
       ],
     },
     {

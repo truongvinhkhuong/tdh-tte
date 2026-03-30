@@ -195,13 +195,112 @@
     },
     "careers": {
         "title": "Careers",
-        "subtitle": "Join the Toan Thang Engineering team",
+        "subtitle": "Join Toan Thang Engineering — Where engineering meets passion",
         "positions": "Open Positions",
         "department": "Department",
         "location": "Location",
         "deadline": "Application Deadline",
         "apply": "Apply Now",
-        "noPositions": "No positions are currently available"
+        "noPositions": "No positions are currently available",
+        "lifeAtTTE": {
+            "title": "Life at TTE",
+            "subtitle": "We build a work culture where every individual can grow and create real impact",
+            "purpose": {
+                "label": "Our Purpose",
+                "title": "We exist to solve the most complex engineering challenges in Vietnam's industrial sector",
+                "body": "For over 30 years, every engineer at TTE has played an essential role in ensuring the safety and performance of refineries, drilling rigs, and energy systems across Vietnam."
+            },
+            "values": {
+                "label": "Our Values",
+                "items": [
+                    { "icon": "integrity",  "title": "Integrity",    "desc": "Transparency in every commitment to clients and partners" },
+                    { "icon": "excellence", "title": "Excellence",   "desc": "We don't stop at good enough — we pursue the highest standard" },
+                    { "icon": "innovation", "title": "Innovation",   "desc": "Applying advanced technology to create better solutions" },
+                    { "icon": "teamwork",   "title": "Teamwork",     "desc": "Collective strength overcomes every challenge" },
+                    { "icon": "safety",     "title": "Safety",       "desc": "Safety is the top priority in every task" },
+                    { "icon": "ownership",  "title": "Ownership",    "desc": "Own your work — every person is accountable for results" }
+                ]
+            },
+            "people": {
+                "label": "Our People",
+                "body": "TTE brings together over 100 engineers and specialists trained by world-leading manufacturers like Emerson, Flowserve, and Cooper. We are proud of our continuous learning environment and clear growth opportunities."
+            },
+            "women": {
+                "label": "Women at TTE",
+                "body": "TTE is committed to building an equal and inclusive environment. We create conditions for female engineers to advance and take on technical leadership roles."
+            },
+            "testimonials": [
+                { "name": "Nguyen Minh Khoa",  "role": "Mechanical Engineer, 8 years",  "quote": "TTE gave me the chance to work directly on national-scale projects like NSRP. The knowledge I accumulated here cannot be learned in any classroom." },
+                { "name": "Tran Thi Thu Ha",   "role": "Control Engineer, 5 years",     "quote": "The environment at TTE is very open. I was supported to obtain international certifications and lead independent projects after just 2 years." },
+                { "name": "Le Cong Dinh",      "role": "Project Manager, 12 years",     "quote": "From a young engineer to project manager — TTE is where I grew up professionally. The company always invests in people, not just technology." }
+            ]
+        },
+        "whyTTE": {
+            "title": "Why Choose TTE?",
+            "subtitle": "We provide the environment for you to become the best version of yourself",
+            "benefits": [
+                { "icon": "salary",   "title": "Competitive Compensation", "desc": "Merit-based salary, performance bonuses, and project bonuses" },
+                { "icon": "health",   "title": "Comprehensive Insurance",  "desc": "Premium health insurance for you and your family" },
+                { "icon": "training", "title": "In-Depth Training",        "desc": "International certifications from Emerson, Flowserve; training at partner facilities" },
+                { "icon": "career",   "title": "Clear Career Path",        "desc": "Defined roadmap from junior to senior engineer and management" },
+                { "icon": "travel",   "title": "Travel & Team Building",   "desc": "Annual trips and regular team bonding programs" },
+                { "icon": "flexible", "title": "Flexible Environment",     "desc": "Flexible hours, modern workspace in HCM City and Vung Tau" }
+            ],
+            "cultureHighlight": "A work culture where everyone's voice is heard — from new engineers to the board of directors."
+        },
+        "joinUs": {
+            "title": "Join Us",
+            "subtitle": "Find the right position and start your journey at TTE",
+            "searchPlaceholder": "Search positions...",
+            "filterAll": "All departments",
+            "noMatch": "No positions match your search",
+            "teams": {
+                "label": "Meet Our Teams",
+                "items": [
+                    { "name": "Mechanical Engineering",   "count": "30+ engineers",  "desc": "Valves, pumps, compressors — deep expertise in oil & gas mechanical equipment" },
+                    { "name": "Instrumentation & Control","count": "20+ engineers",  "desc": "DCS, PLC, measurement, industrial process automation" },
+                    { "name": "Field Services",           "count": "25+ engineers",  "desc": "Maintenance, overhaul, commissioning at project sites" },
+                    { "name": "Project Management",       "count": "10+ PMs",        "desc": "Coordinating projects from design to acceptance" },
+                    { "name": "Technical Sales",          "count": "15+ specialists","desc": "Technical sales consulting, customer development" },
+                    { "name": "Operations & Support",     "count": "15+ staff",      "desc": "Warehousing, logistics, administrative support for engineering" }
+                ]
+            },
+            "locations": {
+                "label": "Our Locations",
+                "items": [
+                    { "city": "Ho Chi Minh City", "role": "Headquarters",  "desc": "Main office in District 1 — Business, projects, engineering" },
+                    { "city": "Vung Tau",          "role": "TTS Workshop", "desc": "Service workshop — Field engineering, Emerson ASP" },
+                    { "city": "Quang Ngai",        "role": "CSC Workshop", "desc": "Flowserve Certified Seals Center — Seal specialist" }
+                ]
+            },
+            "hiringProcess": {
+                "label": "Hiring Process",
+                "steps": [
+                    { "step": "01", "title": "Apply",               "desc": "Send your CV to hr@toanthang.vn or apply directly" },
+                    { "step": "02", "title": "CV Review",           "desc": "HR reviews within 3–5 business days" },
+                    { "step": "03", "title": "First Interview",     "desc": "Initial screening via phone or video call" },
+                    { "step": "04", "title": "Technical Interview", "desc": "In-person meeting with the technical team lead" },
+                    { "step": "05", "title": "Offer",               "desc": "Receive and discuss your offer details" },
+                    { "step": "06", "title": "Onboarding",          "desc": "30-day onboarding program designed for new employees" }
+                ]
+            },
+            "openRolesTitle": "Open Positions",
+            "contactHR": "Couldn't find a suitable position?",
+            "contactHRDesc": "Send us your CV for future consideration",
+            "contactHRButton": "Send Your CV"
+        },
+        "cta": {
+            "title": "Build Your Engineering Career at TTE",
+            "subtitle": "Over 100 engineers and specialists working together to create real impact for Vietnam's energy industry",
+            "lifeLabel": "Life at TTE",
+            "lifeDesc": "Culture, people and work environment",
+            "whyLabel": "Why TTE",
+            "whyDesc": "Benefits, career path and growth opportunities",
+            "jobsLabel": "Open Positions",
+            "jobsDesc": "View all current opportunities",
+            "primaryCta": "Explore Career Opportunities",
+            "secondaryCta": "Learn More About TTE"
+        }
     },
     "contact": {
         "title": "Contact Us",
@@ -232,6 +331,7 @@
             "services": "Services",
             "projects": "Projects",
             "blog": "Blog",
+            "careers": "Careers",
             "contact": "Contact",
             "faq": "FAQ",
             "guide": "Guide",

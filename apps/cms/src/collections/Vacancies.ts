@@ -15,7 +15,12 @@ export const Vacancies: CollectionConfig = {
             name: 'position',
             type: 'text',
             localized: true,
-            required: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tên vị trí (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',

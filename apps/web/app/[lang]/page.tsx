@@ -9,6 +9,7 @@ import { ProjectsSection } from "@/components/home/projects-section"
 import { CustomersSection } from "@/components/shared/customers-section"
 import { PartnersSection } from "@/components/home/partners-section"
 import { NewsSection } from "@/components/home/news-section"
+import { CareerCtaSection } from "@/components/home/career-cta-section"
 import { ContactSection } from "@/components/home/contact-section"
 
 export default async function HomePage({
@@ -32,6 +33,7 @@ export default async function HomePage({
             <CustomersSection lang={lang} dict={dict} variant="home" />
             <PartnersSection lang={lang} dict={dict} />
             <NewsSection lang={lang} dict={dict} />
+            <CareerCtaSection lang={lang} dict={dict} />
             <ContactSection lang={lang} dict={dict} />
         </main>
     )

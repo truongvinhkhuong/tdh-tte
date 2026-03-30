@@ -86,11 +86,15 @@ export function CustomersSection({ lang, dict, variant = 'home' }: CustomersSect
                                 <div className="w-40 h-28 md:w-56 md:h-36 lg:w-64 lg:h-40 bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 flex items-center justify-center p-4 md:p-5 border border-gray-100 hover:border-[#364fa1]/40 hover:scale-110 cursor-pointer">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src={customer.logo}
+                                            src={customer.logo || '/brands/placeholder-logo.svg'}
                                             alt={customer.name}
                                             fill
                                             className="object-contain transition-transform duration-300"
                                             sizes="(max-width: 768px) 160px, (max-width: 1024px) 224px, 256px"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = '/brands/placeholder-logo.svg';
+                                            }}
                                         />
                                     </div>
                                 </div>

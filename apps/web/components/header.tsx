@@ -15,27 +15,16 @@ interface HeaderProps {
 export function Header({ lang, dict }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false)
-      } else {
-        setIsVisible(true)
-      }
-
-      setIsScrolled(currentScrollY > 20)
-      setLastScrollY(currentScrollY)
+      setIsScrolled(window.scrollY > 20)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   const navItems = [
     { label: dict.nav.home, href: `/${lang}` },
@@ -45,14 +34,14 @@ export function Header({ lang, dict }: HeaderProps) {
     { label: dict.nav.projects, href: `/${lang}/projects` },
     { label: dict.nav.techHub, href: `/${lang}/tech-hub` },
     { label: dict.nav.news, href: `/${lang}/news` },
+    { label: dict.nav.careers, href: `/${lang}/careers` },
   ]
 
   const otherLang = lang === 'vi' ? 'en' : 'vi'
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'
-        } ${isScrolled
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${isScrolled
           ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200/50 py-2'
           : 'bg-gradient-to-b from-[#2B54A7]/95 via-[#2B54A7]/90 to-[#2B54A7]/85 backdrop-blur-md shadow-xl py-3'
         }`}

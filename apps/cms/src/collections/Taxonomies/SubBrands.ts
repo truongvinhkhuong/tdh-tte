@@ -15,8 +15,13 @@ export const SubBrands: CollectionConfig = {
         {
             name: 'name',
             type: 'text',
-            required: true,
             localized: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tên sub-brand (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',

@@ -26,7 +26,12 @@ export const Products: CollectionConfig = {
                             name: 'name',
                             type: 'text',
                             localized: true,
-                            required: true,
+                            validate: (value, { req }) => {
+                                if (req.locale === 'vi' && !value) {
+                                    return 'Tên sản phẩm (tiếng Việt) là bắt buộc'
+                                }
+                                return true
+                            },
                         },
                         {
                             name: 'modelNumber',
@@ -82,7 +87,12 @@ export const Products: CollectionConfig = {
                                     name: 'label',
                                     type: 'text',
                                     localized: true,
-                                    required: true,
+                                    validate: (value, { req }) => {
+                                        if (req.locale === 'vi' && !value) {
+                                            return 'Tên thông số (tiếng Việt) là bắt buộc'
+                                        }
+                                        return true
+                                    },
                                     admin: {
                                         description: 'VD: "Áp suất tối đa"',
                                     },
@@ -91,7 +101,12 @@ export const Products: CollectionConfig = {
                                     name: 'value',
                                     type: 'textarea',
                                     localized: true,
-                                    required: true,
+                                    validate: (value, { req }) => {
+                                        if (req.locale === 'vi' && !value) {
+                                            return 'Giá trị thông số (tiếng Việt) là bắt buộc'
+                                        }
+                                        return true
+                                    },
                                     admin: {
                                         description: 'VD: "100" hoặc "Bronze: 400 psi at 150°F/250 psi at 400°F"',
                                     },

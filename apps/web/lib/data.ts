@@ -22,7 +22,7 @@ export const brands: Brand[] = [
         id: '1',
         slug: 'emerson',
         name: 'Emerson',
-        logo: '/brands/emerson-logo.png',
+        logo: '/brands/placeholder-logo.svg',
         description: 'Global technology and engineering company',
         subBrands: [
             { id: '1-1', slug: 'fisher', name: 'Fisher' },
@@ -42,7 +42,7 @@ export const brands: Brand[] = [
         id: '2',
         slug: 'flowserve',
         name: 'Flowserve',
-        logo: '/brands/flowserve-logo.png',
+        logo: '/brands/placeholder-logo.svg',
         description: 'Leading provider of flow control products',
         subBrands: [
             { id: '2-1', slug: 'pumps', name: 'PUMPS' },
@@ -54,7 +54,7 @@ export const brands: Brand[] = [
         id: '3',
         slug: 'pleuger',
         name: 'Pleuger',
-        logo: '/brands/pleuger-logo.png',
+        logo: '/brands/placeholder-logo.svg',
         description: 'Submersible pump solutions',
         subBrands: [
             { id: '3-1', slug: 'submersible-pump', name: 'Submersible Pump' },
@@ -64,7 +64,7 @@ export const brands: Brand[] = [
         id: '5',
         slug: 'cooper',
         name: 'Cooper',
-        logo: '/brands/cooper-logo.png',
+        logo: '/brands/placeholder-logo.svg',
         description: 'Machinery services provider',
         subBrands: [
             { id: '5-1', slug: 'machinery-services', name: 'Machinery Services for Reciprocating Compressor and Engine' },
@@ -74,7 +74,7 @@ export const brands: Brand[] = [
         id: '6',
         slug: 'boustead-int-heater',
         name: 'Boustead Int. Heater (BIH)',
-        logo: '/brands/bih-logo.png',
+        logo: '/brands/placeholder-logo.svg',
         description: 'Industrial heater solutions',
     },
 ];
@@ -1018,7 +1018,7 @@ export const vacancies: Vacancy[] = [
             'Du lịch hàng năm',
             'Đào tạo chuyên môn',
         ],
-        deadline: '2025-02-28',
+        deadline: '2026-06-30',
         contactEmail: 'hr@toanthang.vn',
     },
     {
@@ -1039,7 +1039,7 @@ export const vacancies: Vacancy[] = [
             'Bảo hiểm cao cấp',
             'Cơ hội thăng tiến',
         ],
-        deadline: '2025-03-15',
+        deadline: '2026-07-31',
         contactEmail: 'hr@toanthang.vn',
     },
 ];

@@ -16,7 +16,12 @@ export const Industries: CollectionConfig = {
             name: 'name',
             type: 'text',
             localized: true,
-            required: true,
+            validate: (value, { req }) => {
+                if (req.locale === 'vi' && !value) {
+                    return 'Tên ngành (tiếng Việt) là bắt buộc'
+                }
+                return true
+            },
         },
         {
             name: 'slug',

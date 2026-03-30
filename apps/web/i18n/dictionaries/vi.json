@@ -195,13 +195,112 @@
     },
     "careers": {
         "title": "Tuyển dụng",
-        "subtitle": "Gia nhập đội ngũ Toàn Thắng Engineering",
+        "subtitle": "Gia nhập đội ngũ Toàn Thắng Engineering — Nơi kỹ thuật gặp gỡ đam mê",
         "positions": "Vị trí đang tuyển",
         "department": "Phòng ban",
         "location": "Địa điểm",
         "deadline": "Hạn nộp hồ sơ",
         "apply": "Ứng tuyển ngay",
-        "noPositions": "Hiện tại không có vị trí nào đang tuyển"
+        "noPositions": "Hiện tại không có vị trí nào đang tuyển",
+        "lifeAtTTE": {
+            "title": "Làm việc tại TTE",
+            "subtitle": "Chúng tôi xây dựng văn hóa làm việc nơi mỗi cá nhân đều có thể phát triển và tạo ra tác động thực sự",
+            "purpose": {
+                "label": "Sứ mệnh của chúng tôi",
+                "title": "Chúng tôi tồn tại để giải quyết những thách thức kỹ thuật phức tạp nhất của ngành công nghiệp Việt Nam",
+                "body": "Hơn 30 năm qua, mỗi kỹ sư tại TTE đều đóng vai trò thiết yếu trong việc đảm bảo an toàn và hiệu suất cho các nhà máy lọc dầu, giàn khoan và hệ thống năng lượng trên khắp Việt Nam."
+            },
+            "values": {
+                "label": "Giá trị cốt lõi",
+                "items": [
+                    { "icon": "integrity",  "title": "Chính trực",   "desc": "Minh bạch trong mọi cam kết với khách hàng và đối tác" },
+                    { "icon": "excellence", "title": "Xuất sắc",     "desc": "Không dừng lại ở mức đủ — chúng tôi theo đuổi tiêu chuẩn cao nhất" },
+                    { "icon": "innovation", "title": "Đổi mới",      "desc": "Ứng dụng công nghệ tiên tiến để tạo ra giải pháp tốt hơn" },
+                    { "icon": "teamwork",   "title": "Đồng đội",     "desc": "Sức mạnh tập thể vượt qua mọi thách thức" },
+                    { "icon": "safety",     "title": "An toàn",      "desc": "An toàn là ưu tiên số một trong từng công việc" },
+                    { "icon": "ownership",  "title": "Trách nhiệm",  "desc": "Làm chủ công việc — mỗi người chịu trách nhiệm về kết quả" }
+                ]
+            },
+            "people": {
+                "label": "Con người chúng tôi",
+                "body": "TTE quy tụ hơn 100 kỹ sư và chuyên gia được đào tạo bởi các hãng hàng đầu thế giới như Emerson, Flowserve, Cooper. Chúng tôi tự hào về môi trường học hỏi liên tục và cơ hội phát triển rõ ràng."
+            },
+            "women": {
+                "label": "Phụ nữ tại TTE",
+                "body": "TTE cam kết xây dựng môi trường bình đẳng và hòa nhập. Chúng tôi tạo điều kiện để các kỹ sư nữ thăng tiến và đảm nhiệm các vị trí lãnh đạo kỹ thuật."
+            },
+            "testimonials": [
+                { "name": "Nguyễn Minh Khoa",  "role": "Kỹ sư Cơ khí, 8 năm",       "quote": "TTE cho tôi cơ hội làm việc trực tiếp trên các dự án tầm cỡ quốc gia như NSRP. Kiến thức tôi tích lũy ở đây không trường nào dạy được." },
+                { "name": "Trần Thị Thu Hà",   "role": "Kỹ sư Điều khiển, 5 năm",   "quote": "Môi trường ở TTE rất cởi mở. Tôi được hỗ trợ học thêm chứng chỉ quốc tế và phụ trách dự án độc lập chỉ sau 2 năm." },
+                { "name": "Lê Công Định",       "role": "Quản lý Dự án, 12 năm",     "quote": "Từ kỹ sư trẻ đến quản lý dự án — TTE là nơi tôi trưởng thành. Công ty luôn đầu tư vào con người thay vì chỉ vào công nghệ." }
+            ]
+        },
+        "whyTTE": {
+            "title": "Tại sao chọn TTE?",
+            "subtitle": "Chúng tôi cung cấp môi trường để bạn trở thành phiên bản tốt nhất của mình",
+            "benefits": [
+                { "icon": "salary",   "title": "Thu nhập cạnh tranh",   "desc": "Lương thưởng cạnh tranh theo năng lực, thưởng hiệu suất và thưởng dự án" },
+                { "icon": "health",   "title": "Bảo hiểm toàn diện",    "desc": "Bảo hiểm sức khỏe cao cấp cho bản thân và gia đình" },
+                { "icon": "training", "title": "Đào tạo chuyên sâu",    "desc": "Chứng chỉ quốc tế từ Emerson, Flowserve; đào tạo tại nhà máy đối tác" },
+                { "icon": "career",   "title": "Lộ trình thăng tiến",   "desc": "Roadmap rõ ràng từ kỹ sư junior đến senior và quản lý" },
+                { "icon": "travel",   "title": "Du lịch & Team Building","desc": "Du lịch hàng năm, các chương trình gắn kết đội ngũ thường xuyên" },
+                { "icon": "flexible", "title": "Môi trường linh hoạt",  "desc": "Giờ làm linh hoạt, không gian làm việc hiện đại tại TP.HCM và Vũng Tàu" }
+            ],
+            "cultureHighlight": "Văn hóa làm việc nơi ý kiến của mọi người đều được lắng nghe — từ kỹ sư mới đến ban giám đốc."
+        },
+        "joinUs": {
+            "title": "Tham gia cùng chúng tôi",
+            "subtitle": "Tìm vị trí phù hợp và bắt đầu hành trình của bạn tại TTE",
+            "searchPlaceholder": "Tìm kiếm vị trí...",
+            "filterAll": "Tất cả phòng ban",
+            "noMatch": "Không có vị trí phù hợp với tìm kiếm của bạn",
+            "teams": {
+                "label": "Gặp gỡ các nhóm của chúng tôi",
+                "items": [
+                    { "name": "Kỹ thuật Cơ khí",      "count": "30+ kỹ sư",     "desc": "Van, bơm, máy nén khí — chuyên sâu thiết bị cơ khí cho dầu khí" },
+                    { "name": "Kỹ thuật Điều khiển",   "count": "20+ kỹ sư",     "desc": "DCS, PLC, đo lường, tự động hóa quy trình công nghiệp" },
+                    { "name": "Dịch vụ Kỹ thuật",      "count": "25+ kỹ sư",     "desc": "Bảo trì, đại tu, commissioning tại công trường" },
+                    { "name": "Quản lý Dự án",          "count": "10+ PM",        "desc": "Điều phối dự án từ thiết kế đến nghiệm thu" },
+                    { "name": "Kinh doanh Kỹ thuật",   "count": "15+ chuyên viên","desc": "Tư vấn bán hàng kỹ thuật, phát triển khách hàng" },
+                    { "name": "Vận hành & Hỗ trợ",     "count": "15+ nhân viên", "desc": "Kho vận, logistics, hành chính hỗ trợ kỹ thuật" }
+                ]
+            },
+            "locations": {
+                "label": "Địa điểm làm việc",
+                "items": [
+                    { "city": "TP. Hồ Chí Minh", "role": "Trụ sở chính", "desc": "Văn phòng chính tại Q.1 — Kinh doanh, dự án, kỹ thuật" },
+                    { "city": "Vũng Tàu",         "role": "Xưởng TTS",   "desc": "Xưởng sửa chữa — Kỹ thuật dịch vụ, Emerson ASP" },
+                    { "city": "Quảng Ngãi",       "role": "Xưởng CSC",   "desc": "Flowserve Certified Seals Center — Chuyên về seal" }
+                ]
+            },
+            "hiringProcess": {
+                "label": "Quy trình tuyển dụng",
+                "steps": [
+                    { "step": "01", "title": "Nộp hồ sơ",             "desc": "Gửi CV qua email hr@toanthang.vn hoặc nộp trực tiếp" },
+                    { "step": "02", "title": "Sàng lọc hồ sơ",        "desc": "HR review trong vòng 3–5 ngày làm việc" },
+                    { "step": "03", "title": "Phỏng vấn vòng 1",      "desc": "Phỏng vấn sơ bộ qua điện thoại hoặc video call" },
+                    { "step": "04", "title": "Phỏng vấn chuyên môn",  "desc": "Gặp trực tiếp với trưởng nhóm kỹ thuật" },
+                    { "step": "05", "title": "Đề nghị tuyển dụng",    "desc": "Nhận offer và thảo luận chi tiết về điều kiện" },
+                    { "step": "06", "title": "Onboarding",             "desc": "Chương trình hội nhập 30 ngày dành riêng cho nhân viên mới" }
+                ]
+            },
+            "openRolesTitle": "Vị trí đang tuyển",
+            "contactHR": "Không tìm thấy vị trí phù hợp?",
+            "contactHRDesc": "Gửi CV của bạn để chúng tôi xem xét trong tương lai",
+            "contactHRButton": "Gửi CV ngay"
+        },
+        "cta": {
+            "title": "Xây dựng sự nghiệp kỹ thuật của bạn tại TTE",
+            "subtitle": "Hơn 100 kỹ sư và chuyên gia đang cùng nhau tạo ra tác động thực sự cho ngành năng lượng Việt Nam",
+            "lifeLabel": "Cuộc sống tại TTE",
+            "lifeDesc": "Văn hóa, con người và môi trường làm việc",
+            "whyLabel": "Tại sao chọn TTE",
+            "whyDesc": "Phúc lợi, lộ trình sự nghiệp và cơ hội phát triển",
+            "jobsLabel": "Vị trí đang tuyển",
+            "jobsDesc": "Xem tất cả cơ hội hiện tại",
+            "primaryCta": "Xem cơ hội nghề nghiệp",
+            "secondaryCta": "Tìm hiểu thêm về TTE"
+        }
     },
     "contact": {
         "title": "Liên hệ với chúng tôi",
@@ -232,6 +331,7 @@
             "services": "Dịch vụ",
             "projects": "Dự án",
             "blog": "Blog",
+            "careers": "Tuyển dụng",
             "contact": "Liên hệ",
             "faq": "FAQ",
             "guide": "Hướng dẫn",
