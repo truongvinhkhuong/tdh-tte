@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
 
 from ..config import Settings, get_settings
 from ..core import RAGEngine
@@ -41,7 +42,18 @@ def get_rag_engine(
     global _rag_engine_instance
     if _rag_engine_instance is None:
         logger.info("Creating RAGEngine singleton instance")
-        _rag_engine_instance = RAGEngine(settings)
+        try:
+            _rag_engine_instance = RAGEngine(settings)
+        except (ResponseHandlingException, UnexpectedResponse) as exc:
+            logger.error("Qdrant connection failed while initializing RAGEngine: %s", exc)
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "Qdrant is unreachable or misconfigured. Verify QDRANT_URL is the "
+                    "cluster REST endpoint from Qdrant Cloud, including port :6333, "
+                    "and that QDRANT_API_KEY has access to the cluster."
+                ),
+            ) from exc
     return _rag_engine_instance
 
 
@@ -90,7 +102,7 @@ async def chat(
         result = await rag_engine.query(
             question=request.question,
             language=request.language,
-            conversation_history=None,  # TODO: Implement history retrieval
+            conversation_history=request.conversation_history,
         )
 
         # Convert citations to response model
@@ -142,7 +154,7 @@ async def chat_stream(
             async for event_type, data in rag_engine.stream_query(
                 question=request.question,
                 language=request.language,
-                conversation_history=None,
+                conversation_history=request.conversation_history,
             ):
                 if event_type == "token":
                     yield f"data: {json.dumps({'type': 'chunk', 'data': data})}\n\n"
@@ -290,7 +302,21 @@ async def sync_google_drive(
 
     try:
         # Get file list
-        since = None if request.force_full_sync else None  # TODO: Track last sync
+        from ..core.redis_client import get_redis_client
+
+        redis = get_redis_client()
+        last_sync_key = "gdrive:last_sync"
+        since = None
+
+        if not request.force_full_sync and redis.is_connected():
+            last_sync_value = await redis.get(last_sync_key)
+            if last_sync_value:
+                try:
+                    from datetime import datetime
+
+                    since = datetime.fromisoformat(last_sync_value.replace("Z", "+00:00"))
+                except ValueError:
+                    logger.warning("Invalid stored Google Drive sync timestamp, running full sync")
         files = await gdrive.list_files(since_timestamp=since)
 
         response = SyncResponse(
@@ -342,6 +368,11 @@ async def sync_google_drive(
             f"created {total_chunks} chunks"
         )
 
+        if redis.is_connected():
+            from datetime import datetime, timezone
+
+            await redis.set(last_sync_key, datetime.now(timezone.utc).isoformat())
+
         return response
 
     except Exception as e:
@@ -378,8 +409,8 @@ async def health_check(
     Returns service status and connection information.
     """
     try:
-        # Check RAG engine
-        rag_engine = RAGEngine(settings)
+        # Check RAG engine singleton instead of reinitializing on every health request.
+        rag_engine = get_rag_engine(settings)
         rag_health = await rag_engine.health_check()
 
         # Check Google Drive

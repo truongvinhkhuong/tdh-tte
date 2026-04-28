@@ -135,9 +135,6 @@ export function ChatWidget({
 
                             <TechnicalChat
                                 language={language}
-                                apiUrl={process.env.NEXT_PUBLIC_BACKEND_URL
-                                    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rag/chat`
-                                    : "/api/rag/chat"}
                                 className="h-full border-0 shadow-none rounded-none"
                             />
                         </div>

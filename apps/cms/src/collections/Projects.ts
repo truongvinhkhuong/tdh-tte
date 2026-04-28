@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { formatSlug } from '../utils/formatSlug';
+import { requiredInVietnamese } from '../utils/validators';
 
 export const Projects: CollectionConfig = {
     slug: 'projects',
@@ -19,12 +20,7 @@ export const Projects: CollectionConfig = {
             name: 'name',
             type: 'text',
             localized: true,
-            validate: (value, { req }) => {
-                if (req.locale === 'vi' && !value) {
-                    return 'Tên dự án (tiếng Việt) là bắt buộc'
-                }
-                return true
-            },
+            validate: requiredInVietnamese('Tên dự án (tiếng Việt) là bắt buộc'),
         },
         {
             name: 'slug',
@@ -42,12 +38,7 @@ export const Projects: CollectionConfig = {
             name: 'shortDescription',
             type: 'textarea',
             localized: true,
-            validate: (value, { req }) => {
-                if (req.locale === 'vi' && !value) {
-                    return 'Mô tả ngắn (tiếng Việt) là bắt buộc'
-                }
-                return true
-            },
+            validate: requiredInVietnamese('Mô tả ngắn (tiếng Việt) là bắt buộc'),
             admin: {
                 description: 'Mô tả ngắn (~150 ký tự) hiển thị trên card và SEO',
             },

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { ProductsListing } from "@/components/products/products-listing"
 import { getProducts, getBrands, getCategories, getIndustries } from "@/lib/payload"
@@ -7,9 +7,10 @@ import { getProducts, getBrands, getCategories, getIndustries } from "@/lib/payl
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }): Promise<Metadata> {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
 
     return {
         title: lang === 'vi' ? 'Sản Phẩm' : 'Products',
@@ -22,9 +23,10 @@ export async function generateMetadata({
 export default async function ProductsPage({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
 
     // Fetch all product data in parallel

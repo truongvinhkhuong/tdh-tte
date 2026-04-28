@@ -24,6 +24,11 @@ export interface ChatResponse {
     sourcesCount: number;
 }
 
+export interface ConversationMessage {
+    role: 'user' | 'assistant';
+    content: string;
+}
+
 export interface IngestionResponse {
     success: boolean;
     documentId: string;
@@ -97,6 +102,7 @@ export class RAGService implements OnModuleInit {
         question: string,
         language: 'vi' | 'en' = 'vi',
         conversationId?: string,
+        conversationHistory?: ConversationMessage[],
     ): Promise<ChatResponse> {
         try {
             const response = await firstValueFrom(
@@ -105,6 +111,7 @@ export class RAGService implements OnModuleInit {
                         question,
                         language,
                         conversation_id: conversationId,
+                        conversation_history: conversationHistory,
                     })
                     .pipe(
                         timeout(this.requestTimeout),
@@ -129,6 +136,59 @@ export class RAGService implements OnModuleInit {
         } catch (error) {
             this.logger.error(`RAG chat failed: ${error.message}`);
             throw new Error(`RAG chat failed: ${error.message}`);
+        }
+    }
+
+    /**
+     * Open a streaming chat request to the AI Engine.
+     */
+    async streamChat(
+        question: string,
+        language: 'vi' | 'en' = 'vi',
+        conversationId?: string,
+        conversationHistory?: ConversationMessage[],
+    ): Promise<Response> {
+        const response = await fetch(`${this.aiEngineUrl}/api/chat/stream`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question,
+                language,
+                conversation_id: conversationId,
+                conversation_history: conversationHistory,
+            }),
+        });
+
+        if (!response.ok || !response.body) {
+            throw new Error(`AI Engine returned ${response.status}`);
+        }
+
+        return response;
+    }
+
+    /**
+     * Generate follow-up suggestions for the latest chat exchange.
+     */
+    async getSuggestions(
+        question: string,
+        answer: string,
+        language: 'vi' | 'en' = 'vi',
+    ): Promise<string[]> {
+        try {
+            const response = await firstValueFrom(
+                this.http
+                    .post(`${this.aiEngineUrl}/api/chat/suggestions`, {
+                        question,
+                        answer,
+                        language,
+                    })
+                    .pipe(timeout(30000)),
+            );
+
+            return response.data?.suggestions || [];
+        } catch (error) {
+            this.logger.warn(`Suggestion request failed: ${error.message}`);
+            return [];
         }
     }
 

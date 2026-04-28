@@ -27,6 +27,10 @@ class ChatRequest(BaseModel):
         pattern="^(vi|en)$",
         description="Response language: 'vi' for Vietnamese, 'en' for English",
     )
+    conversation_history: list[dict[str, str]] = Field(
+        default_factory=list,
+        description="Recent chat messages for context continuity",
+    )
 
 
 class Citation(BaseModel):

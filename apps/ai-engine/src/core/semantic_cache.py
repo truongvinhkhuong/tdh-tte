@@ -56,10 +56,12 @@ class SemanticCache:
             from .redis_client import get_redis_client
             rc = get_redis_client()
             if rc.is_connected() and rc.client:
-                keys = await rc.client.keys("semantic:cache:*")
-                if keys:
-                    await rc.client.delete(*keys)
-                    logger.info(f"Cleared {len(keys)} semantic cache entries from Redis")
+                deleted_count = 0
+                async for key_batch in self._scan_redis_keys(rc.client, "semantic:cache:*"):
+                    if key_batch:
+                        deleted_count += await rc.client.delete(*key_batch)
+                if deleted_count:
+                    logger.info(f"Cleared {deleted_count} semantic cache entries from Redis")
         except Exception as e:
             logger.error(f"Failed to clear Redis semantic cache: {e}")
 
@@ -73,8 +75,14 @@ class SemanticCache:
                 logger.warning("Redis client not connected, skipping semantic cache load")
                 return
 
-            # Get all keys
-            keys = await self.redis_client.client.keys("semantic:cache:*")
+            keys = [
+                key
+                async for key_batch in self._scan_redis_keys(
+                    self.redis_client.client,
+                    "semantic:cache:*",
+                )
+                for key in key_batch
+            ]
             if not keys:
                 logger.info("No semantic cache found in Redis")
                 return
@@ -107,6 +115,20 @@ class SemanticCache:
     def set_embed_model(self, embed_model: Any) -> None:
         """Set embedding model (called after RAG engine init)."""
         self.embed_model = embed_model
+
+    async def _scan_redis_keys(self, client: Any, pattern: str, count: int = 100):
+        """Yield Redis keys in batches without blocking Redis like KEYS does."""
+        cursor = 0
+        while True:
+            cursor, keys = await client.scan(
+                cursor=cursor,
+                match=pattern,
+                count=count,
+            )
+            if keys:
+                yield keys
+            if cursor == 0:
+                break
     
     def _get_embedding(self, text: str) -> Optional[np.ndarray]:
         """Get embedding for text."""
@@ -287,9 +309,9 @@ class SemanticCache:
         
         # Clear Redis keys
         if self.redis_client and self.redis_client.is_connected():
-            # Note: This pattern matching deletion is inefficient for large datasets
-            # but acceptable for semantic cache size (<1000)
-            pass  # TODO: Implement Redis clear if needed
+            import asyncio
+
+            asyncio.create_task(self.clear_redis_cache())
             
         logger.info("Semantic cache cleared")
 

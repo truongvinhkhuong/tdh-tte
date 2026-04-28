@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { formatSlug } from '../utils/formatSlug';
+import { requiredInVietnamese } from '../utils/validators';
 
 export const Products: CollectionConfig = {
     slug: 'products',
@@ -26,12 +27,7 @@ export const Products: CollectionConfig = {
                             name: 'name',
                             type: 'text',
                             localized: true,
-                            validate: (value, { req }) => {
-                                if (req.locale === 'vi' && !value) {
-                                    return 'Tên sản phẩm (tiếng Việt) là bắt buộc'
-                                }
-                                return true
-                            },
+                            validate: requiredInVietnamese('Tên sản phẩm (tiếng Việt) là bắt buộc'),
                         },
                         {
                             name: 'modelNumber',
@@ -87,12 +83,7 @@ export const Products: CollectionConfig = {
                                     name: 'label',
                                     type: 'text',
                                     localized: true,
-                                    validate: (value, { req }) => {
-                                        if (req.locale === 'vi' && !value) {
-                                            return 'Tên thông số (tiếng Việt) là bắt buộc'
-                                        }
-                                        return true
-                                    },
+                                    validate: requiredInVietnamese('Tên thông số (tiếng Việt) là bắt buộc'),
                                     admin: {
                                         description: 'VD: "Áp suất tối đa"',
                                     },
@@ -101,12 +92,7 @@ export const Products: CollectionConfig = {
                                     name: 'value',
                                     type: 'textarea',
                                     localized: true,
-                                    validate: (value, { req }) => {
-                                        if (req.locale === 'vi' && !value) {
-                                            return 'Giá trị thông số (tiếng Việt) là bắt buộc'
-                                        }
-                                        return true
-                                    },
+                                    validate: requiredInVietnamese('Giá trị thông số (tiếng Việt) là bắt buộc'),
                                     admin: {
                                         description: 'VD: "100" hoặc "Bronze: 400 psi at 150°F/250 psi at 400°F"',
                                     },

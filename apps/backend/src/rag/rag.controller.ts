@@ -10,11 +10,13 @@ import {
     HttpStatus,
     Logger,
     Ip,
+    Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IsString, IsOptional, IsIn, IsBoolean, MaxLength, MinLength } from 'class-validator';
-import { RAGService } from './rag.service';
-import { ChatbotSessionService, ChatMessage } from './chatbot-session.service';
+import type { Response } from 'express';
+import { RAGService, type ChatResponse } from './rag.service';
+import { ChatbotSessionService } from './chatbot-session.service';
 import { ChatbotCacheService } from './chatbot-cache.service';
 import { ChatbotThrottlerGuard } from '../common/guards/chatbot-throttler.guard';
 import { PromptInjectionGuard } from '../common/guards/prompt-injection.guard';
@@ -47,6 +49,23 @@ class SyncDto {
     @IsOptional()
     @IsBoolean()
     forceFullSync?: boolean;
+}
+
+class SuggestionDto {
+    @IsString()
+    @MinLength(1)
+    @MaxLength(500)
+    question: string;
+
+    @IsString()
+    @MinLength(1)
+    @MaxLength(5000)
+    answer: string;
+
+    @IsOptional()
+    @IsString()
+    @IsIn(['vi', 'en'])
+    language?: 'vi' | 'en';
 }
 
 // ===========================================
@@ -132,6 +151,7 @@ export class RAGController {
                 dto.question,
                 language,
                 dto.conversationId,
+                history.map(({ role, content }) => ({ role, content })),
             );
 
             // 4. Save messages to session
@@ -183,9 +203,7 @@ export class RAGController {
      */
     @Post('chat/stream')
     @UseGuards(ChatbotThrottlerGuard, PromptInjectionGuard)
-    async chatStream(@Body() dto: ChatDto, @Ip() ip: string) {
-        const { Readable } = await import('stream');
-
+    async chatStream(@Body() dto: ChatDto, @Ip() ip: string, @Res() res: Response) {
         // Validate question
         if (!dto.question || dto.question.trim().length === 0) {
             throw new HttpException('Question is required', HttpStatus.BAD_REQUEST);
@@ -202,61 +220,121 @@ export class RAGController {
         const sessionId = dto.sessionId || 'anonymous';
 
         try {
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache, no-transform');
+            res.setHeader('Connection', 'keep-alive');
+            res.setHeader('X-Accel-Buffering', 'no');
+
             // Check cache first
             const cachedResponse = await this.cacheService.getCachedResponse(dto.question, language);
 
             if (cachedResponse) {
                 this.logger.log(`Stream Cache HIT for session ${sessionId}`);
-                // Return cached response as single chunk
-                const chunks = [
-                    `data: ${JSON.stringify({ type: 'chunk', data: cachedResponse.answer })}\n\n`,
-                    `data: ${JSON.stringify({ type: 'done', data: { cached: true, confidence: cachedResponse.confidence } })}\n\n`,
-                ];
-
-                return {
-                    headers: {
-                        'Content-Type': 'text/event-stream',
-                        'Cache-Control': 'no-cache',
-                        'Connection': 'keep-alive',
-                    },
-                    body: chunks.join(''),
-                };
+                res.write(`data: ${JSON.stringify({ type: 'chunk', data: cachedResponse.answer })}\n\n`);
+                res.write(`data: ${JSON.stringify({ type: 'done', data: { cached: true, confidence: cachedResponse.confidence } })}\n\n`);
+                res.end();
+                return;
             }
 
-            // Proxy streaming from AI Engine
-            const aiEngineUrl = process.env.AI_ENGINE_URL || 'http://localhost:8000';
-            const response = await fetch(`${aiEngineUrl}/api/chat/stream`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    question: dto.question,
-                    language,
-                    conversation_id: dto.conversationId,
-                }),
-            });
+            const history = await this.sessionService.getRecentHistory(sessionId, 3);
+            const response = await this.ragService.streamChat(
+                dto.question,
+                language,
+                dto.conversationId,
+                history.map(({ role, content }) => ({ role, content })),
+            );
 
-            if (!response.ok) {
-                throw new Error(`AI Engine returned ${response.status}`);
+            const reader = response.body!.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let fullAnswer = '';
+            let doneData: Record<string, unknown> = {};
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const events = buffer.split('\n\n');
+                buffer = events.pop() || '';
+
+                for (const event of events) {
+                    if (!event.trim()) continue;
+                    res.write(`${event}\n\n`);
+
+                    const dataLine = event
+                        .split('\n')
+                        .find((line) => line.startsWith('data: '));
+                    if (!dataLine) continue;
+
+                    try {
+                        const parsed = JSON.parse(dataLine.slice(6));
+                        if (parsed.type === 'chunk') {
+                            fullAnswer += parsed.data || '';
+                        }
+                        if (parsed.type === 'done') {
+                            doneData = parsed.data || {};
+                        }
+                    } catch {
+                        // Keep proxying even if one event cannot be parsed locally.
+                    }
+                }
             }
 
-            // Return streaming response headers info
-            // The actual streaming is handled by the frontend calling AI Engine directly
-            // or through nginx proxy
-            return {
-                streamUrl: `${aiEngineUrl}/api/chat/stream`,
-                headers: {
-                    'Content-Type': 'text/event-stream',
-                    'Cache-Control': 'no-cache',
-                },
-            };
+            if (buffer.trim()) {
+                res.write(`${buffer}\n\n`);
+            }
+
+            if (fullAnswer) {
+                await this.sessionService.saveMessage(sessionId, {
+                    role: 'user',
+                    content: dto.question,
+                    timestamp: Date.now(),
+                });
+
+                await this.sessionService.saveMessage(sessionId, {
+                    role: 'assistant',
+                    content: fullAnswer,
+                    timestamp: Date.now(),
+                });
+
+                await this.cacheService.cacheResponse(dto.question, language, {
+                    answer: fullAnswer,
+                    citations: (Array.isArray(doneData.citations)
+                        ? doneData.citations
+                        : []) as ChatResponse['citations'],
+                    confidence: (doneData.confidence as number) || 0,
+                    conversationId: (doneData.conversation_id as string) || dto.conversationId || '',
+                    sourcesCount: (doneData.sources_count as number) || 0,
+                });
+            }
+
+            res.end();
 
         } catch (error) {
             this.logger.error(`Stream error: ${error.message}`);
-            throw new HttpException(
-                { success: false, error: 'Streaming unavailable' },
-                HttpStatus.SERVICE_UNAVAILABLE,
-            );
+            if (!res.headersSent) {
+                res.status(HttpStatus.SERVICE_UNAVAILABLE);
+            }
+            res.write(`data: ${JSON.stringify({ type: 'error', data: 'Streaming unavailable' })}\n\n`);
+            res.end();
         }
+    }
+
+    /**
+     * POST /api/rag/chat/suggestions
+     * Generate follow-up suggestions via the secured backend path.
+     */
+    @Post('chat/suggestions')
+    @UseGuards(ChatbotThrottlerGuard)
+    async suggestions(@Body() dto: SuggestionDto) {
+        const suggestions = await this.ragService.getSuggestions(
+            dto.question,
+            dto.answer,
+            dto.language || 'vi',
+        );
+
+        return { suggestions };
     }
 
     // ===========================================
@@ -394,4 +472,3 @@ export class RAGController {
         };
     }
 }
-

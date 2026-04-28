@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const AI_ENGINE_URL = process.env.AI_ENGINE_URL || "http://localhost:4003";
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4002";
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        // Call AI Engine directly (or via NestJS backend)
-        const response = await fetch(`${AI_ENGINE_URL}/api/chat`, {
+        const response = await fetch(`${BACKEND_URL}/api/rag/chat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -15,7 +14,8 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 question: body.question,
                 language: body.language || "vi",
-                conversation_id: body.conversationId,
+                conversationId: body.conversationId,
+                sessionId: body.sessionId,
             }),
         });
 
@@ -31,13 +31,8 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            data: {
-                answer: data.answer,
-                citations: data.citations || [],
-                confidence: data.confidence,
-                conversation_id: data.conversation_id,
-                sources_count: data.sources_count || 0,
-            },
+            data: data.data,
+            cached: data.cached || false,
         });
     } catch (error) {
         console.error("Chat API error:", error);

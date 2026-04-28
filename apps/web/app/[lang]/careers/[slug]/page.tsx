@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, MapPin, Calendar, Briefcase, Clock, CheckCircle, Mail } from "lucide-react"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { vacancies } from "@/lib/data"
 
@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }): Promise<Metadata> {
     const { slug } = await params
     const vacancy = vacancies.find((v) => v.slug === slug)
@@ -33,9 +33,10 @@ export async function generateMetadata({
 export default async function VacancyDetailPage({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }) {
-    const { lang, slug } = await params
+    const { lang: rawLang, slug } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
     const vacancy = vacancies.find((v) => v.slug === slug)
 

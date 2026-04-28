@@ -1,4 +1,4 @@
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { getProducts } from "@/lib/payload"
 import { HeroSection } from "@/components/home/hero-section"
@@ -15,9 +15,10 @@ import { ContactSection } from "@/components/home/contact-section"
 export default async function HomePage({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const [dict, products] = await Promise.all([
         getDictionary(lang),
         getProducts(lang),

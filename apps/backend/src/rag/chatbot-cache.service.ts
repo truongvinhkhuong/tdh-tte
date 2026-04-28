@@ -117,8 +117,22 @@ export class ChatbotCacheService {
      */
     async getCacheStats(): Promise<{ keyCount: number }> {
         try {
-            const keys = await this.redis.keys('chat:cache:*');
-            return { keyCount: keys.length };
+            let cursor = '0';
+            let keyCount = 0;
+
+            do {
+                const [nextCursor, keys] = await this.redis.scan(
+                    cursor,
+                    'MATCH',
+                    'chat:cache:*',
+                    'COUNT',
+                    100,
+                );
+                cursor = nextCursor;
+                keyCount += keys.length;
+            } while (cursor !== '0');
+
+            return { keyCount };
         } catch (error) {
             return { keyCount: 0 };
         }

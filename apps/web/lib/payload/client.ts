@@ -114,7 +114,7 @@ export async function getProducts(options?: QueryOptions): Promise<PayloadRespon
 
 export async function getProduct(slug: string, locale?: Locale): Promise<Product | null> {
     const res = await fetchPayload<PayloadResponse<Product>>('/products', {
-        where: { slug: { equals: slug } },
+        where: { slug: { equals: slug }, _status: { equals: 'published' } },
         depth: 2,
         limit: 1,
         locale,
@@ -128,7 +128,7 @@ export async function getProjects(options?: QueryOptions): Promise<PayloadRespon
 
 export async function getProject(slug: string, locale?: Locale): Promise<Project | null> {
     const res = await fetchPayload<PayloadResponse<Project>>('/projects', {
-        where: { slug: { equals: slug } },
+        where: { slug: { equals: slug }, _status: { equals: 'published' } },
         depth: 2,
         limit: 1,
         locale,
@@ -157,9 +157,10 @@ export interface ArticleQueryOptions extends QueryOptions {
 
 export async function getArticles(options?: ArticleQueryOptions): Promise<PayloadResponse<Article>> {
     const { contentType, newsCategory, techCategory, ...rest } = options || {};
+    const { where: baseWhere, ...queryOptions } = rest;
     
     // Build where clause based on filters
-    let where: Record<string, unknown> | undefined;
+    let where: Record<string, unknown> | undefined = baseWhere;
     
     if (contentType) {
         where = { ...where, contentType: { equals: contentType } };
@@ -175,7 +176,7 @@ export async function getArticles(options?: ArticleQueryOptions): Promise<Payloa
         depth: 1,
         where,
         sort: '-publishedAt',
-        ...rest
+        ...queryOptions
     });
 }
 
@@ -205,7 +206,7 @@ export async function getTechHubArticles(options?: QueryOptions & { category?: '
 
 export async function getArticle(slug: string, locale?: Locale): Promise<Article | null> {
     const res = await fetchPayload<PayloadResponse<Article>>('/articles', {
-        where: { slug: { equals: slug } },
+        where: { slug: { equals: slug }, _status: { equals: 'published' } },
         depth: 2,
         limit: 1,
         locale,
@@ -226,7 +227,6 @@ export async function getVacancy(slug: string, locale?: Locale): Promise<Vacancy
     return res.docs[0] || null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getSubBrands(options?: QueryOptions): Promise<PayloadResponse<any>> {
     return fetchPayload<PayloadResponse<any>>('/sub-brands', { depth: 1, ...options });
 }

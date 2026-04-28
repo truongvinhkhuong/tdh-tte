@@ -1,14 +1,15 @@
 import type { Metadata } from "next"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { ContactSection } from "@/components/home/contact-section"
 
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }): Promise<Metadata> {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
 
     return {
         title: lang === 'vi' ? 'Liên Hệ' : 'Contact',
@@ -21,9 +22,10 @@ export async function generateMetadata({
 export default async function ContactPage({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
 
     return (

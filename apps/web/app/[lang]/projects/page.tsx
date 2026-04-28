@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { ProjectsHero } from "@/components/projects/projects-hero"
 import { ProjectsListing } from "@/components/projects/projects-listing"
@@ -7,9 +7,10 @@ import { ProjectsListing } from "@/components/projects/projects-listing"
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }): Promise<Metadata> {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
 
     return {
         title: lang === 'vi' ? 'Dự Án' : 'Projects',
@@ -22,9 +23,10 @@ export async function generateMetadata({
 export default async function ProjectsPage({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
 
     return (

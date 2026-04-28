@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { formatSlug } from '../utils/formatSlug';
+import { requiredInVietnamese } from '../utils/validators';
 
 /**
  * Unified Articles Collection
@@ -33,12 +34,7 @@ export const Articles: CollectionConfig = {
             label: 'Tiêu đề',
             type: 'text',
             localized: true,
-            validate: (value, { req }) => {
-                if (req.locale === 'vi' && !value) {
-                    return 'Tiêu đề (tiếng Việt) là bắt buộc'
-                }
-                return true
-            },
+            validate: requiredInVietnamese('Tiêu đề (tiếng Việt) là bắt buộc'),
         },
         {
             name: 'slug',

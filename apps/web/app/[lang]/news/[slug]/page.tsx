@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Calendar, User, Building2, Handshake, Globe } from "lucide-react"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { newsArticles } from "@/lib/data"
 
@@ -16,9 +16,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }): Promise<Metadata> {
-    const { lang, slug } = await params
+    const { lang: rawLang, slug } = await params
+    const lang = normalizeLocale(rawLang)
     const article = newsArticles.find((a) => a.slug === slug)
 
     if (!article) {
@@ -34,9 +35,10 @@ export async function generateMetadata({
 export default async function NewsArticlePage({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }) {
-    const { lang, slug } = await params
+    const { lang: rawLang, slug } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
     const article = newsArticles.find((a) => a.slug === slug)
 

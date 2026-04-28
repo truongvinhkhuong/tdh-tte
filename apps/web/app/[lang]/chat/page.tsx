@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { TechnicalChat } from "@/components/chat";
+import { normalizeLocale } from "@/i18n/config";
 
 export const metadata: Metadata = {
     title: "Tư vấn Kỹ thuật | TTE",
@@ -12,7 +13,8 @@ interface PageProps {
 }
 
 export default async function ChatPage({ params }: PageProps) {
-    const { lang } = await params;
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang);
     const language = lang === "en" ? "en" : "vi";
 
     return (
@@ -35,7 +37,6 @@ export default async function ChatPage({ params }: PageProps) {
                 {/* Chat Component */}
                 <TechnicalChat
                     language={language as "vi" | "en"}
-                    apiUrl="/api/rag/chat"
                     className="shadow-lg"
                 />
 

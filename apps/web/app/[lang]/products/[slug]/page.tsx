@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { getProducts, getProduct } from "@/lib/payload"
 import { ProductDetail } from "@/components/products/product-detail"
@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }): Promise<Metadata> {
-    const { lang, slug } = await params
+    const { lang: rawLang, slug } = await params
+    const lang = normalizeLocale(rawLang)
     const product = await getProduct(slug, lang)
 
     if (!product) {
@@ -35,9 +36,10 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
     params,
 }: {
-    params: Promise<{ lang: Locale; slug: string }>
+    params: Promise<{ lang: string; slug: string }>
 }) {
-    const { lang, slug } = await params
+    const { lang: rawLang, slug } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
     const product = await getProduct(slug, lang)
 

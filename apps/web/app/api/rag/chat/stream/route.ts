@@ -1,6 +1,6 @@
 import { createTextStreamResponse } from "ai";
 
-const AI_ENGINE_URL = process.env.AI_ENGINE_URL || "http://localhost:4003";
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4002";
 
 export async function POST(req: Request) {
     const body = await req.json();
@@ -19,27 +19,28 @@ export async function POST(req: Request) {
         });
     }
 
-    const aiResponse = await fetch(`${AI_ENGINE_URL}/api/chat/stream`, {
+    const backendResponse = await fetch(`${BACKEND_URL}/api/rag/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             question,
             language: options.language || "vi",
-            conversation_id: options.conversationId,
+            conversationId: options.conversationId,
+            sessionId: options.sessionId,
         }),
     });
 
-    if (!aiResponse.ok || !aiResponse.body) {
+    if (!backendResponse.ok || !backendResponse.body) {
         return new Response(
-            JSON.stringify({ error: "AI Engine stream failed" }),
+            JSON.stringify({ error: "Backend stream failed" }),
             { status: 502, headers: { "Content-Type": "application/json" } }
         );
     }
 
-    // Transform AI Engine SSE → plain text stream for TextStreamChatTransport
+    // Transform backend SSE → plain text stream for TextStreamChatTransport.
     const textStream = new ReadableStream<string>({
         async start(controller) {
-            const reader = aiResponse.body!.getReader();
+            const reader = backendResponse.body!.getReader();
             const decoder = new TextDecoder();
             let buffer = "";
 

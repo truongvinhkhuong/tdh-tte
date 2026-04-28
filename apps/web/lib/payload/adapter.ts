@@ -39,6 +39,20 @@ import {
 
 // Environment check
 const USE_CMS = process.env.NEXT_PUBLIC_USE_CMS === 'true';
+const DEFAULT_LIST_LIMIT = 48;
+
+type ListOptions = {
+    limit?: number;
+    page?: number;
+};
+
+function publishedWhere(extra?: Record<string, unknown>): Record<string, unknown> {
+    return { _status: { equals: 'published' }, ...extra };
+}
+
+function logCmsFallback(resource: string, error: unknown): void {
+    console.warn(`[CMS degraded] Failed to fetch ${resource}; using static fallback.`, error);
+}
 
 // ============================================
 // BRANDS (with SubBrands aggregation)
@@ -133,13 +147,18 @@ export async function getIndustries(locale?: Locale): Promise<Industry[]> {
 // PRODUCTS
 // ============================================
 
-export async function getProducts(locale?: Locale): Promise<Product[]> {
+export async function getProducts(locale?: Locale, options: ListOptions = {}): Promise<Product[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getProducts({ limit: 100, locale });
+            const res = await cms.getProducts({
+                limit: options.limit ?? DEFAULT_LIST_LIMIT,
+                page: options.page,
+                locale,
+                where: publishedWhere(),
+            });
             return res.docs.map((doc: any) => transformProduct(doc));
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback('products', error);
         }
     }
     return staticData.products;
@@ -152,7 +171,7 @@ export async function getProduct(slug: string, locale?: Locale): Promise<Product
             if (!doc) return null;
             return transformProduct(doc);
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback(`product:${slug}`, error);
         }
     }
     return staticData.products.find(p => p.slug === slug) || null;
@@ -162,13 +181,18 @@ export async function getProduct(slug: string, locale?: Locale): Promise<Product
 // PROJECTS
 // ============================================
 
-export async function getProjects(locale?: Locale): Promise<Project[]> {
+export async function getProjects(locale?: Locale, options: ListOptions = {}): Promise<Project[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getProjects({ limit: 100, locale });
+            const res = await cms.getProjects({
+                limit: options.limit ?? DEFAULT_LIST_LIMIT,
+                page: options.page,
+                locale,
+                where: publishedWhere(),
+            });
             return res.docs.map((doc: any) => transformProjectSummary(doc));
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback('projects', error);
         }
     }
     return staticData.projects;
@@ -181,7 +205,7 @@ export async function getProject(slug: string, locale?: Locale): Promise<Project
             if (!doc) return null;
             return transformProjectSummary(doc);
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback(`project:${slug}`, error);
         }
     }
     return staticData.projects.find(p => p.slug === slug) || null;
@@ -221,13 +245,17 @@ export async function getService(slug: string, locale?: Locale): Promise<Service
 /**
  * Get all articles from CMS or static data
  */
-export async function getArticles(): Promise<Article[]> {
+export async function getArticles(options: ListOptions = {}): Promise<Article[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getArticles({ limit: 100 });
+            const res = await cms.getArticles({
+                limit: options.limit ?? DEFAULT_LIST_LIMIT,
+                page: options.page,
+                where: publishedWhere(),
+            });
             return res.docs;
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback('articles', error);
         }
     }
     // Combine static data
@@ -237,13 +265,17 @@ export async function getArticles(): Promise<Article[]> {
 /**
  * Get Tech Hub articles (solutions, whitepapers, case studies)
  */
-export async function getTechArticles(): Promise<TechArticle[] | Article[]> {
+export async function getTechArticles(options: ListOptions = {}): Promise<TechArticle[] | Article[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getTechHubArticles({ limit: 100 });
+            const res = await cms.getTechHubArticles({
+                limit: options.limit ?? DEFAULT_LIST_LIMIT,
+                page: options.page,
+                where: publishedWhere(),
+            });
             return res.docs;
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback('tech articles', error);
         }
     }
     return staticData.techArticles;
@@ -252,13 +284,17 @@ export async function getTechArticles(): Promise<TechArticle[] | Article[]> {
 /**
  * Get News articles (company, partner, industry news)
  */
-export async function getNewsArticles(): Promise<NewsArticle[] | Article[]> {
+export async function getNewsArticles(options: ListOptions = {}): Promise<NewsArticle[] | Article[]> {
     if (USE_CMS) {
         try {
-            const res = await cms.getNewsArticles({ limit: 100 });
+            const res = await cms.getNewsArticles({
+                limit: options.limit ?? DEFAULT_LIST_LIMIT,
+                page: options.page,
+                where: publishedWhere(),
+            });
             return res.docs;
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback('news articles', error);
         }
     }
     return staticData.newsArticles;
@@ -272,7 +308,7 @@ export async function getArticle(slug: string): Promise<TechArticle | NewsArticl
         try {
             return await cms.getArticle(slug);
         } catch (error) {
-            console.warn('CMS fetch failed, using static data:', error);
+            logCmsFallback(`article:${slug}`, error);
         }
     }
     return (

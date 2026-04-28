@@ -5,7 +5,7 @@ import {
     DollarSign, Heart, GraduationCap, TrendingUp, Plane, Clock,
     Building2, ChevronRight, Home, Briefcase,
 } from "lucide-react"
-import type { Locale } from "@/i18n/config"
+import { normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { vacancies } from "@/lib/data"
 import { CareersJobList } from "@/components/careers/careers-job-list"
@@ -13,9 +13,10 @@ import { CareersJobList } from "@/components/careers/careers-job-list"
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }): Promise<Metadata> {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     return {
         title: lang === "vi" ? "Tuyển Dụng | Toàn Thắng Engineering" : "Careers | Toan Thang Engineering",
         description:
@@ -48,9 +49,10 @@ const BG_PATTERN = `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBo
 export default async function CareersPage({
     params,
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
 
     const today = new Date()

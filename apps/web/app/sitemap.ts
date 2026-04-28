@@ -1,27 +1,40 @@
 import { MetadataRoute } from 'next'
-import { products, projects, services, newsArticles, techArticles, vacancies } from '@/lib/data'
+import {
+    getNewsArticles,
+    getProducts,
+    getProjects,
+    getServices,
+    getTechArticles,
+    getVacancies,
+} from '@/lib/payload'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://toanthang.vn'
+const LOCALES = ['vi', 'en'] as const
 
 type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
-interface SitemapEntry {
-    url: string
-    lastModified: Date
-    changeFrequency: ChangeFrequency
-    priority: number
-    alternates: {
-        languages: {
-            vi: string
-            en: string
-        }
+function localizedEntry(
+    locale: (typeof LOCALES)[number],
+    path: string,
+    lastModified: Date,
+    changeFrequency: ChangeFrequency,
+    priority: number,
+) {
+    return {
+        url: `${BASE_URL}/${locale}${path}`,
+        lastModified,
+        changeFrequency,
+        priority,
+        alternates: {
+            languages: {
+                vi: `${BASE_URL}/vi${path}`,
+                en: `${BASE_URL}/en${path}`,
+            },
+        },
     }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-    const locales = ['vi', 'en']
-
-    // Static pages
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPages = [
         '',
         '/products',
@@ -34,115 +47,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/careers',
     ]
 
-    const staticEntries: SitemapEntry[] = locales.flatMap((locale) =>
-        staticPages.map((page) => ({
-            url: `${BASE_URL}/${locale}${page}`,
-            lastModified: new Date(),
-            changeFrequency: (page === '' ? 'daily' : 'weekly') as ChangeFrequency,
-            priority: page === '' ? 1 : 0.8,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi${page}`,
-                    en: `${BASE_URL}/en${page}`,
-                },
-            },
-        }))
+    const [products, projects, services, newsArticles, techArticles, vacancies] = await Promise.all([
+        getProducts('vi', { limit: 1000 }),
+        getProjects('vi', { limit: 1000 }),
+        getServices('vi'),
+        getNewsArticles({ limit: 1000 }),
+        getTechArticles({ limit: 1000 }),
+        getVacancies(),
+    ])
+
+    const staticEntries = LOCALES.flatMap((locale) =>
+        staticPages.map((page) =>
+            localizedEntry(locale, page, new Date(), page === '' ? 'daily' : 'weekly', page === '' ? 1 : 0.8)
+        )
     )
 
-    // Product pages
-    const productEntries = locales.flatMap((locale) =>
-        products.map((product) => ({
-            url: `${BASE_URL}/${locale}/products/${product.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.7,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/products/${product.slug}`,
-                    en: `${BASE_URL}/en/products/${product.slug}`,
-                },
-            },
-        }))
+    const productEntries = LOCALES.flatMap((locale) =>
+        products.map((product) =>
+            localizedEntry(locale, `/products/${product.slug}`, new Date(product.updatedAt || Date.now()), 'monthly', 0.7)
+        )
     )
 
-    // Project pages
-    const projectEntries = locales.flatMap((locale) =>
-        projects.map((project) => ({
-            url: `${BASE_URL}/${locale}/projects/${project.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.7,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/projects/${project.slug}`,
-                    en: `${BASE_URL}/en/projects/${project.slug}`,
-                },
-            },
-        }))
+    const projectEntries = LOCALES.flatMap((locale) =>
+        projects.map((project) =>
+            localizedEntry(locale, `/projects/${project.slug}`, new Date(project.updatedAt || Date.now()), 'monthly', 0.7)
+        )
     )
 
-    // Service pages
-    const serviceEntries = locales.flatMap((locale) =>
-        services.map((service) => ({
-            url: `${BASE_URL}/${locale}/services/${service.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/services/${service.slug}`,
-                    en: `${BASE_URL}/en/services/${service.slug}`,
-                },
-            },
-        }))
+    const serviceEntries = LOCALES.flatMap((locale) =>
+        services.map((service) =>
+            localizedEntry(locale, `/services/${service.slug}`, new Date(service.updatedAt || Date.now()), 'monthly', 0.6)
+        )
     )
 
-    // News articles
-    const newsEntries = locales.flatMap((locale) =>
-        newsArticles.map((article) => ({
-            url: `${BASE_URL}/${locale}/news/${article.slug}`,
-            lastModified: new Date(article.publishedAt),
-            changeFrequency: 'yearly' as const,
-            priority: 0.5,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/news/${article.slug}`,
-                    en: `${BASE_URL}/en/news/${article.slug}`,
-                },
-            },
-        }))
+    const newsEntries = LOCALES.flatMap((locale) =>
+        newsArticles.map((article) =>
+            localizedEntry(locale, `/news/${article.slug}`, new Date(article.publishedAt || Date.now()), 'yearly', 0.5)
+        )
     )
 
-    // Tech articles
-    const techEntries = locales.flatMap((locale) =>
-        techArticles.map((article) => ({
-            url: `${BASE_URL}/${locale}/tech-hub/${article.slug}`,
-            lastModified: new Date(article.publishedAt),
-            changeFrequency: 'yearly' as const,
-            priority: 0.5,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/tech-hub/${article.slug}`,
-                    en: `${BASE_URL}/en/tech-hub/${article.slug}`,
-                },
-            },
-        }))
+    const techEntries = LOCALES.flatMap((locale) =>
+        techArticles.map((article) =>
+            localizedEntry(locale, `/tech-hub/${article.slug}`, new Date(article.publishedAt || Date.now()), 'yearly', 0.5)
+        )
     )
 
-    // Career pages
-    const careerEntries = locales.flatMap((locale) =>
-        vacancies.map((vacancy) => ({
-            url: `${BASE_URL}/${locale}/careers/${vacancy.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly' as const,
-            priority: 0.6,
-            alternates: {
-                languages: {
-                    vi: `${BASE_URL}/vi/careers/${vacancy.slug}`,
-                    en: `${BASE_URL}/en/careers/${vacancy.slug}`,
-                },
-            },
-        }))
+    const careerEntries = LOCALES.flatMap((locale) =>
+        vacancies.map((vacancy) =>
+            localizedEntry(locale, `/careers/${vacancy.slug}`, new Date(vacancy.updatedAt || Date.now()), 'weekly', 0.6)
+        )
     )
 
     return [

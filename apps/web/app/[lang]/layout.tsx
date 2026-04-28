@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { i18n, type Locale } from "@/i18n/config"
+import { i18n, normalizeLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params
 }: {
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }): Promise<Metadata> {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://toanthang.vn'
 
     const titles = {
@@ -96,9 +97,10 @@ export default async function LocaleLayout({
     params,
 }: {
     children: React.ReactNode
-    params: Promise<{ lang: Locale }>
+    params: Promise<{ lang: string }>
 }) {
-    const { lang } = await params
+    const { lang: rawLang } = await params
+    const lang = normalizeLocale(rawLang)
     const dict = await getDictionary(lang)
 
     return (

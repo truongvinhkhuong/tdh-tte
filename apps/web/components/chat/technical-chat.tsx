@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Send, Bot, User, Loader2, MessageSquare, Sparkles, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -157,7 +157,6 @@ function ChatMessageItem({
 // ===========================================
 
 interface TechnicalChatProps {
-    apiUrl?: string;
     language?: "vi" | "en";
     className?: string;
 }
@@ -174,11 +173,12 @@ export function TechnicalChat({
     const [initialMessagesLoaded, setInitialMessagesLoaded] = useState(false);
 
     // Memoize transport to avoid re-creating on every render
-    const [transport] = useState(
+    const transport = useMemo(
         () => new TextStreamChatTransport({
             api: "/api/rag/chat/stream",
-            body: { language },
-        })
+            body: { language, sessionId: sessionId || undefined },
+        }),
+        [language, sessionId]
     );
 
     const {
@@ -278,7 +278,6 @@ export function TechnicalChat({
         if (lastUser && lastAssistant) {
             fetchSuggestions(getMessageText(lastUser), getMessageText(lastAssistant));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
 
     // Send message

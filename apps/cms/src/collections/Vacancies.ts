@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { requiredInVietnamese } from '../utils/validators';
 
 export const Vacancies: CollectionConfig = {
     slug: 'vacancies',
@@ -15,12 +16,7 @@ export const Vacancies: CollectionConfig = {
             name: 'position',
             type: 'text',
             localized: true,
-            validate: (value, { req }) => {
-                if (req.locale === 'vi' && !value) {
-                    return 'Tên vị trí (tiếng Việt) là bắt buộc'
-                }
-                return true
-            },
+            validate: requiredInVietnamese('Tên vị trí (tiếng Việt) là bắt buộc'),
         },
         {
             name: 'slug',
