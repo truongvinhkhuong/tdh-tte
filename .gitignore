@@ -42,6 +42,9 @@ yarn-error.log*
 coverage
 .nyc_output
 test_qdrant.py
+__pycache__/
+*.py[cod]
+*$py.class
 
 # Generated files
 *.tsbuildinfo
